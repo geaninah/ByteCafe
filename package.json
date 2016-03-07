@@ -4,7 +4,8 @@
   "description": "### File-structrure  - app/ - contains the core functionality  - config/ - contains configuration files (don't push contents to git)  - html/ - contains the web content files  - node_modules/ - modules used by node  - server.js - byte cafe main program  - package.json - npm configuration",
   "main": "server.js",
   "dependencies": {
-    "express": "^4.13.4"
+    "express": "^4.13.4",
+    "morgan": "^1.7.0"
   },
   "devDependencies": {},
   "scripts": {
