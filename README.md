@@ -7,3 +7,5 @@
  - node_modules/ - modules used by node
  - server.js - byte cafe main program
  - package.json - npm configuration
+
+Remember to `npm update` after cloning

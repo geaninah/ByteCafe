@@ -7,10 +7,8 @@ var app = express();
 var port = process.env.PORT || 8080;
 app.use(morgan("dev"));
 
-// test page
-app.get("/", function(req, res) {
-  res.end("Hello world!");
-});
+// setup routes
+require("./app/routes.js")(app);
 
 // start server
 app.listen(port);
