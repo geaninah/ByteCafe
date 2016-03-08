@@ -1,0 +1,130 @@
+#header img {
+	max-width: 250px;
+	height: auto;
+}
+
+.container {
+	padding-top:100px;
+}
+
+#demonstration img {
+	width:100%;
+	height: auto;
+}
+
+#login {
+	width: 100%;
+	border-radius: 10px;
+	background-color: #aa764e;
+	color: #fff;
+	font-size: 1.3em;
+}
+
+#login:hover {
+	background-color: #ba7658;
+}
+
+#submitForgotPass {
+	background-color: #aa764e;
+	color: #fff;
+}
+
+#submitForgotPass:hover {
+	background-color: #ba7658;
+}
+
+#login1 {
+	width: 100%;
+	border-radius: 10px;
+	background-color: #aa764e;
+	color: #fff;
+	font-size: 1.3em;
+}
+
+#login1:hover {
+	background-color: #ba7658;
+}
+
+#FP_link {
+	padding-left:0px;
+	padding-right: 0px;
+}
+
+#FP_link button{
+	float:right;
+	padding-bottom: 10px;
+}
+
+#reg-type {
+	padding-bottom: 20px;
+
+}
+
+#reg-type button {
+	background-color: #fff;
+	color:black;
+	width:50%;
+}
+
+#settings a{
+	width:250px;
+	height: auto;
+}
+
+.dropdown-toggle{
+    max-width:80px;
+}
+
+.glyphicon-cog, .glyphicon-shopping-cart, .glyphicon-cutlery {
+	font-size: 30px;
+	margin: 0.3em auto 0px;
+}
+
+.navbar-right #settings{
+	padding-right: 10px;
+}
+
+#footerNavBar {
+	background-color: #fff;
+	padding-top: 10px;
+	margin-bottom: 0px;
+	margin-top: 10px;
+}
+
+.jumbotron h3 {
+	text-align: center;
+}
+
+.active {
+	background-color: grey;
+}
+
+#sideNavMenu {
+	padding-left: -20px;
+	width:250px;
+}
+
+#sideNavMenu a {
+	font-weight: bold;
+}
+
+#buttonIcon {
+	font-size: 1.1em;
+    transform: scaleX(-1);
+}
+
+.btn-add-cart {
+	width:100%;
+}
+
+#lessSpace {
+	padding-top: 0px;
+	padding-bottom: 0px;
+	margin-top:0px;
+	margin-bottom:0px;
+}
+
+.thumbnail {
+    border: 0 none;
+    box-shadow: none;
+}
