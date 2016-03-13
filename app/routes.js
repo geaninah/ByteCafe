@@ -1,41 +1,64 @@
-// import librarys
+// import libraries
 var express = require("express");
-var fs      = require("fs");
-var moment  = require("moment");
+var fs = require("fs");
+var moment = require("moment");
+var databaseService = require("../services/databaseService");
 
 // export the routes that the app should follow
 module.exports = function(app) {
+    app.use("/api/hello", function(req, res) {
+        res.write("Hello World!\n");
+        res.write("User: " + process.env.USERNAME + "\n");
+        res.end("ProcID: " + process.pid + "\n");
+    });
 
-// handle the api calls
-  // handy test page test page
-  app.use("/api/hello", function(req, res) {
-    res.write("Hello World!\n");
-    res.write("User: " + process.env.USERNAME + "\n");
-    res.end("ProcID: " + process.pid          + "\n");
-  });
+    // fetch the terms and conditions
+    app.get("/api/terms", function(req, res) {
+        res.sendfile("config/terms.txt");
+    });
 
-  // fetch the terms and conditions
-  app.get("/api/terms", function(req, res) {
-    res.sendfile("config/terms.txt");
-  });
+    // handle the authentication calls
+    app.use("/auth*", function(req, res) {
+        res.end("Not implemented!");
+    });
 
-// handle the authentication calls
-  // not implemented yet
-  app.use("/auth*", function(req, res) {
-    res.end("Not implemented!");
-  });
+    // handle misc calls
+    // log any /robots.txt calls
+    app.get("/robots.txt", function(req, res, next) {
+        var logLine = req.connection.remoteAddress + " - " + moment().format("MM/DD/YY HH:MM:SS")
+            + ": " + req.headers['user-agent'] + "\n";
+        fs.appendFile("logs/robots_requests", logLine);
+        next(); // then use the default handler
+    });
 
+    // serve the static pages
+    app.use("/", express.static("html"));
 
-// handle misc calls
-  // log any /robots.txt calls
-  app.get("/robots.txt", function(req, res, next) {
-    var logLine = req.connection.remoteAddress + " - " + moment().format("MM/DD/YY HH:MM:SS")
-                  + ": " + req.headers['user-agent'] + "\n";
-    fs.appendFile("logs/robots_requests", logLine);
-    next(); // then use the default handler
-  });
+    app.get("/api/status", function(req, res) {
+        res.send(databaseService.getStatusInformation());
+    });
 
+    app.get("/api/cafes", function(req, res) {
+        res.send(databaseService.getCafes());
+    });
 
- // serve the static pages
- app.use("/", express.static("html"));
+    app.get("/api/cafes/:cafeId", function(req, res) {
+        res.send(databaseService.getCafeInfo(req.cafeId));
+    });
+
+    app.get("/api/cafes/:cafeId/products", function(req, res) {
+        res.send(databaseService.getProducts(req.cafeId));
+    });
+
+    app.get("/api/products/:productId", function(req, res) {
+        res.send(databaseService.getProductInfo(req.productId));
+    });
+
+    app.get("/api/cafes/:cafeId/orders", function(req, res) {
+        res.send(databaseService.getOrders(req.cafeId));
+    });
+
+    app.get("/api/orders/:orderId", function(req, res) {
+        res.send(databaseService.getOrderInformation(req.orderId));
+    });
 };

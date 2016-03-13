@@ -1,4 +1,4 @@
-// load librarys and tools
+// load libraries and tools
 var express = require("express");
 var morgan  = require("morgan");
 
