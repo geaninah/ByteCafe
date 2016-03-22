@@ -39,26 +39,50 @@ module.exports = function(app) {
     });
 
     app.get("/api/cafes", function(req, res) {
-        res.send(databaseService.getCafes());
+        databaseService.getCafes(function(err, cafes){
+            if(!err){
+                res.send(cafes);
+            }
+        });
     });
 
     app.get("/api/cafes/:cafeId", function(req, res) {
-        res.send(databaseService.getCafeInfo(req.cafeId));
+        databaseService.getCafeInfo(function(err, cafes){
+            if(!err){
+                res.send(cafes);
+            }
+        }, req.cafeId);
     });
 
     app.get("/api/cafes/:cafeId/products", function(req, res) {
-        res.send(databaseService.getProducts(req.cafeId));
+        databaseService.getProducts(function(err, products){
+            if(!err){
+                res.send(products);
+            }
+        }, req.cafeId);
     });
 
     app.get("/api/products/:productId", function(req, res) {
-        res.send(databaseService.getProductInfo(req.productId));
+        databaseService.getProductInfo(function(err, products){
+            if(!err){
+                res.send(products);
+            }
+        }, req.productId);
     });
 
     app.get("/api/cafes/:cafeId/orders", function(req, res) {
-        res.send(databaseService.getOrders(req.cafeId));
+        databaseService.getOrders(function(err, orders){
+            if(!err){
+                res.send(orders);
+            }
+        }, req.cafeId);
     });
 
     app.get("/api/orders/:orderId", function(req, res) {
-        res.send(databaseService.getOrderInformation(req.orderId));
+        databaseService.getOrderInfo(function(err, orders){
+            if(!err){
+                res.send(orders);
+            }
+        }, req.orderId);
     });
 };
