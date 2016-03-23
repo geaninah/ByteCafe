@@ -12,7 +12,7 @@ var port = process.env.PORT || 8080;
 app.use(morgan("dev"));
 
 // setup routes
-require("./app/routes.js")(app, config);
+require("./app/routes.js")(app);
 
 // start server
 app.listen(port);

@@ -9,7 +9,7 @@ module.exports = {
   // database configuration 
   // https://github.com/felixge/node-mysql#connection-options
   database: {
-    host: "db.example.com", port 3306,
+    host: "db.example.com", port: 3306,
     user: "username", password: "super_secret",
     database: "cafe_db"
   }
