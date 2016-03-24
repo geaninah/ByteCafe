@@ -1,16 +1,14 @@
+// libraires
 var mysql = require('mysql');
 
 // load configuration
 var config = require("../config/config.js")
 
+// create database connection
 var connection = mysql.createConnection(config.database);
 
-var getStatusInformation = function(){
-    return 'getStatusInformation';
-};
-
 var getCafes = function(callback){
-    var query = 'select name, address from cafes';
+    var query = 'select cafe_id, name, image_url from cafes';
 
     connection.query(query, function(err, cafes){
         if(err){
@@ -36,7 +34,7 @@ var getCafeInfo = function(callback, cafeId){
 };
 
 var getProducts = function(callback, cafeId){
-    var query = 'select products.name from products, cafe_products where cafe_products.cafe_id = ?';
+    var query = 'select products.product_id from products, cafe_products where cafe_products.cafe_id = ?';
     var parameters = [cafeId];
 
     connection.query(query, parameters, function(err, products){
@@ -90,7 +88,6 @@ var getOrderInfo = function(callback, orderId){
 };
 
 module.exports = {
-    getStatusInformation: getStatusInformation,
     getCafes: getCafes,
     getCafeInfo: getCafeInfo,
     getProducts: getProducts,
