@@ -42,7 +42,7 @@ module.exports = function(app, passport) {
 
     // serve the main pages
     app.get("/", function(req, res) {
-        res.render("index.ejs", { login: req.flash("loginMessage") });
+        res.render("index.ejs", { login: "test login error message"      });
         console.log(req.flash("loginMessage"))
     });
 
@@ -58,6 +58,7 @@ module.exports = function(app, passport) {
     app.get("/cafe/:cafeId", isLoggedIn, function(req, res) {
         database.getCafeInfo(function(err, infos) {
             database.getProducts(function(err, products) {
+                console.log({cafe: infos, products: products});
                 res.render("cafe.ejs", {cafe: infos, products: products});
             }, req.params.cafeId);
         }, req.params.cafeId);

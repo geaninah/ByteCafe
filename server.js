@@ -24,6 +24,10 @@ GLOBAL.connection.connect(function(err) {
   console.log("Connected as id "+GLOBAL.connection.threadId);
 });
 
+process.on("exit", function() {
+  GLOBAL.connection.end();
+});
+
 // setup passport
 require("./app/passport.js")(passport);
 
