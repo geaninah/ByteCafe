@@ -1,4 +1,6 @@
 // main api logic
+//
+// 
 
 // libraries
 var express         = require("express");
@@ -45,7 +47,7 @@ module.exports = {
     getCafeInfo: function(req, res) {
         databaseService.getCafeInfo(function(err, cafes){
             if(!err){
-                res.end(cafes);
+                res.end(JSON.stringify(cafes));
             }
         }, req.cafeId);
     },
@@ -54,7 +56,7 @@ module.exports = {
     getProducts: function(req, res) {
         databaseService.getProducts(function(err, products){
             if(!err){
-                res.end(products);
+                res.end(JSON.stringify(products));
             }
         }, req.cafeId);
     },
@@ -63,7 +65,7 @@ module.exports = {
     getProductInfo: function(req, res) {
         databaseService.getProductInfo(function(err, products){
             if(!err){
-                res.end(products);
+                res.end(JSON.stringify(products));
             }
         }, req.productId);
     },
@@ -72,7 +74,7 @@ module.exports = {
     getOrders: function(req, res) {
         databaseService.getOrders(function(err, orders){
             if(!err){
-                res.end(orders);
+                res.end(JSON.stringify(orders));
             }
         }, req.cafeId);
     },
@@ -81,7 +83,7 @@ module.exports = {
     getOrderInfo: function(req, res) {
         databaseService.getOrderInfo(function(err, orders){
             if(!err){
-                res.end(orders);
+                res.end(JSON.stringify(orders));
             }
         }, req.orderId);
     } 
