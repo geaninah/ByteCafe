@@ -49,7 +49,7 @@ var getProducts = function(callback, cafeId){
 };
 
 var getProductInfo = function(callback, productId){
-    var query = 'select description from products where product_id = ?';
+    var query = 'select * from products where product_id = ?';
     var parameters = [productId];
 
     connection.query(query, parameters, function(err, products){
@@ -63,7 +63,7 @@ var getProductInfo = function(callback, productId){
 };
 
 var getOrders = function(callback, cafeId){
-    var query = 'select order_id from orders where cafe_id = ?';
+    var query = 'select * from orders where cafe_id = ?';
     var parameters = [cafeId];
 
     connection.query(query, parameters, function(err, orders){
@@ -76,7 +76,7 @@ var getOrders = function(callback, cafeId){
 };
 
 var getOrderInfo = function(callback, orderId){
-    var query = 'select status from orders where order_id = ?';
+    var query = 'select * from orders where order_id = ?';
     var parameters = [orderId];
 
     connection.query(query, parameters, function(err, orders){
