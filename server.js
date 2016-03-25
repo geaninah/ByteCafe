@@ -24,7 +24,9 @@ GLOBAL.connection.connect(function(err) {
   console.log("Connected as id "+GLOBAL.connection.threadId);
 });
 
+// make sure we disconnect cleanly
 process.on("exit", function() {
+  console.log("closing database connection");
   GLOBAL.connection.end();
 });
 

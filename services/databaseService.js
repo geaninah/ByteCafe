@@ -20,7 +20,7 @@ var getCafes = function(callback){
 };
 
 var getCafeInfo = function(callback, cafeId){
-    var query = 'select name, description, map_location, address, image_url opening_times from cafes where cafe_id = ?';
+    var query = 'select * from cafes where cafe_id = ?';
     var parameters = [cafeId];
 
     connection.query(query, parameters, function(err, cafes){

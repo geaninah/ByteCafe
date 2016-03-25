@@ -26,7 +26,7 @@
   <div class="container">
     <div class="row">
         <div class="col-sm-8" id="demonstration">
-          <img src="images/sample.png">
+          <img class="img-rounded" src="images/sample.png">
         </div>
         <div class="col-sm-4">
           
@@ -69,9 +69,8 @@
 
         
         <div class="col-sm-12">
-            
+            <%= login_message %>
             <form role="form" id="loginForm" method="post" action="/auth/login">
-              <%= login %> 
               <div class="form-group has-feedback">
                 <input type="email" class="form-control" id="emailField" name="email" placeholder="Email">
               <span class="glyphicon form-control-feedback glyphicon-envelope"></span>
@@ -139,7 +138,7 @@
           </form>
 
             <form role="form" id="signUpForm" action="/auth/signup" method="post">
-              <%= login %> 
+              <%= signup_message %> 
               <div class="form-group has-feedback" id="email_group1">
                 <input type="email" class="form-control" id="email" name="email" placeholder="Email">
               <span class="glyphicon form-control-feedback glyphicon-envelope " id="email_icon1"></span>

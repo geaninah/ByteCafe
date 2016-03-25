@@ -75,6 +75,8 @@
       <!-- STATIC SIDEBAR WITH DIFFERENT CATEGORIES -->
       <div class="col-sm-3">
         <nav class="bs-docs-sidebar affix" id="sideNavMenu"> 
+        <img src="<%= cafe.image_url %>" class="img-responsive img-rounded" alt="<%= cafe.name %>">
+        <br>
           <div class="list-group">
             <a href="#" class="list-group-item">Sandwiches</a>
             <a href="#" class="list-group-item active">Hot Drinks</a>
@@ -90,20 +92,22 @@
         <!-- CONTENT OF EACH ROW OF THE CONTENT -->
         <div class="row">
 
-        <!-- BOX REFERRING TO A NEW CAFE -->
-        <a href="byte-cafe.html">
+        <% products.forEach(function (product) { %>
+        <!-- BOX REFERRING TO A PRODUCT -->
+        <a href="#">
           <div class="col-sm-6 col-md-4">
             <div class="thumbnail">
               <div class="caption" id="lessSpace">
-                 <h3 align="center">Cappuccino</h3>
-               </div>
-               <img src="/images/cappuccino.png" alt="Cappuccino">
-               <div class="caption">
-                 <a href="#" class="btn btn-default btn-add-cart" role="button">Add to Cart &nbsp;&nbsp;<span class="glyphicon glyphicon-shopping-cart" id="buttonIcon" aria-hidden="true"></span></a>
-               </div>
+              <h3 align="center"><%= product.name%></h3>
+              </div>
+              <img class="img-rounded" src="<%= product.image_url %>" alt="<%= product.name%>">
+              <div class="caption">
+                <a href="#" class="btn btn-default btn-add-cart" role="button">Add to Cart &nbsp;&nbsp;<span class="glyphicon glyphicon-shopping-cart" id="buttonIcon" aria-hidden="true"></span></a>
+              </div>
             </div>
           </div>
         </a>
+        <% }); %>
       </div>
     </div>
   </div>

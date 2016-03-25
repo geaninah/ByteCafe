@@ -37,19 +37,21 @@ module.exports = function(app, passport) {
 
     app.get("/auth/logout", function(req, res) {
       req.logout();
+      req.flash("loginMessage", "successfully logged out");
       res.redirect("/");
     });
 
     // serve the main pages
     app.get("/", function(req, res) {
-        res.render("index.ejs", { login: "test login error message"      });
-        console.log(req.flash("loginMessage"))
+        res.render("index.ejs", {
+            login_message: req.flash("loginMessage"),
+            signup_message: req.flash("signupMessage")
+        });
     });
 
     // serve cafe list
     app.get("/cafes", isLoggedIn, function(req, res) {
         database.getCafes(function(err, cafes) {
-            console.log(req.user.email);
             res.render("menu.ejs", {cafes: cafes, user: req.user});
         });
     });
@@ -68,5 +70,6 @@ module.exports = function(app, passport) {
 function isLoggedIn(req, res, next) {
   if(req.isAuthenticated())
     return next();
+  req.flash("loginMessage", "please log in");
   res.redirect("/");
 }
