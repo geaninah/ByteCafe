@@ -37,7 +37,7 @@ module.exports = function(app, passport) {
 
     app.get("/auth/logout", function(req, res) {
       req.logout();
-      req.flash("loginMessage", "successfully logged out");
+      req.flash("loginMessage", "You've successfully logged out!");
       res.redirect("/");
     });
 
@@ -70,6 +70,6 @@ module.exports = function(app, passport) {
 function isLoggedIn(req, res, next) {
   if(req.isAuthenticated())
     return next();
-  req.flash("loginMessage", "please log in");
+  req.flash("loginMessage", "Please log in!");
   res.redirect("/");
 }

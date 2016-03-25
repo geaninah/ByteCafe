@@ -69,7 +69,13 @@
 
         
         <div class="col-sm-12">
-            <%= login_message %>
+
+
+            <div id="error-message">
+                <%= login_message %>
+                <%= signup_message %>
+            </div>
+            <br>
             <form role="form" id="loginForm" method="post" action="/auth/login">
               <div class="form-group has-feedback">
                 <input type="email" class="form-control" id="emailField" name="email" placeholder="Email">
@@ -80,7 +86,7 @@
                 <span class="glyphicon form-control-feedback glyphicon-lock"></span>
               </div>
               <div class="checkbox" name="request_remember">
-                <label><input type="checkbox"> Remember me</label>
+                <label><input type="checkbox" name="remember_me_box"> Remember me</label>
              </div>
              <div class="col-sm-12" id="FP_link">
                <button type="button" class="btn btn-link" data-toggle="modal" data-target="#ResetPassword">Forgotten password?</button>
@@ -136,9 +142,12 @@
         </div>
 
           </form>
-
+<!--
+            <div id="error-message">
+              <%= signup_message %>
+            </div>
+            <br> -->
             <form role="form" id="signUpForm" action="/auth/signup" method="post">
-              <%= signup_message %> 
               <div class="form-group has-feedback" id="email_group1">
                 <input type="email" class="form-control" id="email" name="email" placeholder="Email">
               <span class="glyphicon form-control-feedback glyphicon-envelope " id="email_icon1"></span>

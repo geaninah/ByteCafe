@@ -29,6 +29,12 @@
 	color: #fff;
 }
 
+#error-message {
+	text-align: center;
+	color: darkred;
+	font-weight: bold;
+}
+
 #submitForgotPass:hover {
 	background-color: #ba7658;
 }
