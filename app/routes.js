@@ -73,7 +73,7 @@ module.exports = function(app, passport) {
             database.getCafes(function(err, cafes) {
                 res.render("basket.ejs", {basket: basket, cafes: cafes, user: req.user});
             });
-        });
+        }, req.user.user_id);
     });
 };
 

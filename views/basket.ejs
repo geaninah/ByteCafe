@@ -1,20 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
-  <!-- Latest compiled and minified CSS -->
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
-
-  <script scr="/js/dropdown.js"></script>
-
-  <!-- Latest compiled and minified JavaScript -->
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
-
-
-  <link rel="stylesheet" href="/css/style.css">
-
+  
+  <% include head_incl.ejs %>
   <title>Basket</title>
 
 </head>
@@ -85,9 +73,6 @@
                 <br>
                 Once you are sure this is your order, please <br> press the 
                 button. You will be redirected to PayPal.</p>
-<!-- TO DO TO DO TO DO TO DO TO DO TO DO TO DO
-      CODE THAT LOADS THE CAFE AND THE ITEMS FROM IT
--->
           </div>
           <div class="col-sm-7">
             <!-- List group -->
@@ -110,22 +95,7 @@
 
   <!-- FOOTER OF PAGE -->
 
-  <footer class="bs-docs-footer" role="contentInfo">
-    <div class="container"></div>
-    <div class="row">
-      <div class="col-sm-12"><hr></div>
-      <div class="col-sm-12">
-        <div class="col-sm-7">
-          <a href="#">Terms of Service</a>    
-          <a href="#">Privacy</a>    
-          <a href="#">Contacts</a>
-        </div>
-        <div class="col-sm-5">
-          <p class="muted pull-right">© 2016 W3 Group @ School of Computer Science @ UoM. All rights reserved</p>
-        </div>
-      </div>
-    </div>
-  </footer>
+  <% include footer.ejs %>
 
   <!-- END OF FOOTER OF PAGE -->
 

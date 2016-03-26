@@ -158,3 +158,9 @@
 	font-size: 1.4em;
 	font-weight: bold;
 }
+
+.dropdown-menu {
+    max-height: 400px;
+    overflow-y: scroll;
+    overflow-x: hidden;
+}
