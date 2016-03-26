@@ -79,27 +79,22 @@
         <div class="panel-heading" id="order-heading">Your order:</div>
         <div class="panel-body">
           <div class="col-sm-5">
-          <% cafes.forEach(function(cafe) { %>
-              <a href="/cafe/<%= cafe.cafe_id %>">
-              <div class="col-sm-6 col-md-4">
-                <div class="thumbnail">
-                  <img src="<%= cafe.image_url %>" alt="<%= cafe.name %>">
-                  <div class="caption">
-                    <h3><%= cafe.name %></h3>
-                  </div>
-                </div>
-              </div>
-            </a>
-            <% }); %>
+            <p> Your current order includes the listed items. <br><br>
+                If you wish to add more items, you can always do so.<br>
+                You can also remove items that you do not want anymore.<br>
+                <br>
+                Once you are sure this is your order, please <br> press the 
+                button. You will be redirected to PayPal.</p>
+<!-- TO DO TO DO TO DO TO DO TO DO TO DO TO DO
+      CODE THAT LOADS THE CAFE AND THE ITEMS FROM IT
+-->
           </div>
           <div class="col-sm-7">
             <!-- List group -->
             <ul class="list-group">
-              <li class="list-group-item">Cras justo odio <a href="" id="remove-button"><span class="glyphicon glyphicon-remove-circle" aria-hidden="true" style="color:#aa764e"></span></a></li>
-              <li class="list-group-item">Dapibus ac facilisis in <a href="" id="remove-button"><span class="glyphicon glyphicon-remove-circle" aria-hidden="true" style="color:#aa764e"></span></a></li>
-              <li class="list-group-item">Morbi leo risus <a href="" id="remove-button"><span class="glyphicon glyphicon-remove-circle" aria-hidden="true" style="color:#aa764e"></span></a></li>
-              <li class="list-group-item">Porta ac consectetur ac <a href="" id="remove-button"><span class="glyphicon glyphicon-remove-circle" aria-hidden="true" style="color:#aa764e"></span></a></li>
-              <li class="list-group-item">Vestibulum at eros <a href="" id="remove-button"><span class="glyphicon glyphicon-remove-circle" aria-hidden="true" style="color:#aa764e"></span></a></li>
+              <% basket.forEach(function(bask_item) { %>
+                <li class="list-group-item"><%= bask_item.product_id %><a href="" id="remove-button"><span class="glyphicon glyphicon-remove-circle" aria-hidden="true" style="color:#aa764e"></span></a></li>
+              <% }); %>
              </ul>
           </div>
         </div>
