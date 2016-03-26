@@ -70,7 +70,9 @@ module.exports = function(app, passport) {
     // serve basket
     app.get("/basket", isLoggedIn, function(req, res) {
         database.getBasket(function(err, basket) {
-            res.render("basket.ejs", {basket: basket, user: req.user});
+            database.getCafes(function(err, cafes) {
+                res.render("basket.ejs", {basket: basket, cafes: cafes, user: req.user});
+            });
         });
     });
 };
