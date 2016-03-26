@@ -134,3 +134,27 @@
     border: 0 none;
     box-shadow: none;
 }
+
+#goToPayment {
+	width: 105%;
+	border-radius: 10px;
+	background-color: #aa764e;
+	color: #fff;
+	font-size: 1.3em;
+}
+
+#goToPayment:hover {
+	background-color: #ba7658;
+}
+
+#remove-button {
+	text-align: right;
+	float: right;
+	margin-left: 20px;
+	margin: right:20px;
+}
+
+#order-heading {
+	font-size: 1.4em;
+	font-weight: bold;
+}

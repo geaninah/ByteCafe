@@ -17,6 +17,7 @@ module.exports = function(app, passport) {
     app.get("/api/cafes/:cafeId/orders",      api.getOrderInfo);
     app.get("/api/products/:productId",       api.getOrders);
     app.get("/api/orders/:orderId",           api.getOrderInfo);
+    app.get("/api/basket",                    api.getBasket);
     
     // serve static content
     app.use("/images",                        express.static("resources/images"));
@@ -56,7 +57,7 @@ module.exports = function(app, passport) {
         });
     });
 
-    // server cafe products
+    // serve cafe products
     app.get("/cafe/:cafeId", isLoggedIn, function(req, res) {
         database.getCafeInfo(function(err, infos) {
             database.getProducts(function(err, products) {
@@ -64,6 +65,13 @@ module.exports = function(app, passport) {
                 res.render("cafe.ejs", {cafe: infos, products: products});
             }, req.params.cafeId);
         }, req.params.cafeId);
+    });
+
+    // serve basket
+    app.get("/basket", isLoggedIn, function(req, res) {
+        database.getBasket(function(err, basket) {
+            res.render("basket.ejs", {basket: basket, user: req.user});
+        });
     });
 };
 

@@ -7,14 +7,15 @@
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
 
+  <script scr="/js/dropdown.js"></script>
 
   <!-- Latest compiled and minified JavaScript -->
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
 
 
-  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="/css/style.css">
 
-  <title>Welcome Page - Café Selector</title>
+  <title>Basket</title>
 
 </head>
 <body>
@@ -23,7 +24,7 @@
 
   <nav class="navbar navbar-default navbar-fixed-top">
       <div class="container-fluid navbar-header" id="header">
-        <img src="images/logo.png">
+          <img src="/images/logo.png">
       </div>
       <div class="collapse navbar-collapse " id="">
 
@@ -34,16 +35,12 @@
           <!-- LIST ITEM --> 
           <li class="dropdown">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="glyphicon glyphicon-cutlery glyphicon-larges" aria-hidden="true" style="color:#aa764e"><span class="caret"></span></span></a>
-            <ul class="dropdown-menu">
-              <% cafes.forEach(function(cafe) { %>
-                <li><a href="byte-cafe.html"><%= cafe.name %></a></li>
-              <% }); %>
-            </ul>
+           
           </li>
 
           <!-- LIST ITEM -->
           <li>
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="glyphicon glyphicon-shopping-cart glyphicon-larges" aria-hidden="true" style="color:#aa764e"></span></a>
+            <a href="#" class="dropdown-toggle active" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="glyphicon glyphicon-shopping-cart glyphicon-larges" aria-hidden="true" style="color:#aa764e"></span></a>
           </li>
 
           <!-- LIST ITEM -->
@@ -52,7 +49,7 @@
             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" ><span class="glyphicon glyphicon-cog glyphicon-large" aria-hidden="true" style="color:#aa764e"><span class="caret"></span></span></a>
             <ul class="dropdown-menu">
               <li><a href="#"><%= user.email %><a></li>
-              <li><a href="#">Account Detail</a></li>
+              <li><a href="account-details.html">Account Detail</a></li>
               <li><a href="#">Order History</a></li>
               <li role="separator" class="divider"></li>
               <li><a href="#">Help</a></li>
@@ -66,40 +63,39 @@
   </nav>
   <!-- END OF NAVIGATION BAR -->
 
+
   <!-- MAIN CONTENT OF THE PAGE -->
 
   <div class="container">
-      <div class="col-sm-12"> 
+    <div class="row">
 
-        <!-- JUMBOTRON - HUGE BOX -->
-
-        <div class="jumbotron">
-          <h1 align="center">Hello!</h1>
-
-          <div class="row">
-
-            <!-- BOX REFERRING TO A NEW CAFE -->
-            <% cafes.forEach(function(cafe) { %>
-              <a href="/cafe/<%= cafe.cafe_id %>">
-              <div class="col-sm-6 col-md-4">
-                <div class="thumbnail">
-                  <img src="<%= cafe.image_url %>" alt="<%= cafe.name %>">
-                  <div class="caption">
-                    <h3><%= cafe.name %></h3>
-                  </div>
-                </div>
-              </div>
-            </a>
-            <% }); %>
+      <div class="panel panel-default">
+      <!-- Default panel contents -->
+        <div class="panel-heading" id="order-heading">Your order:</div>
+        <div class="panel-body">
+          <div class="col-sm-5">
+            Your order is from this cafe.
           </div>
-          <!-- END OF ROW OF JUMBOTRON -->
-
+          <div class="col-sm-7">
+            <!-- List group -->
+            <ul class="list-group">
+              <li class="list-group-item">Cras justo odio <a href="" id="remove-button"><span class="glyphicon glyphicon-remove-circle" aria-hidden="true" style="color:#aa764e"></span></a></li>
+              <li class="list-group-item">Dapibus ac facilisis in <a href="" id="remove-button"><span class="glyphicon glyphicon-remove-circle" aria-hidden="true" style="color:#aa764e"></span></a></li>
+              <li class="list-group-item">Morbi leo risus <a href="" id="remove-button"><span class="glyphicon glyphicon-remove-circle" aria-hidden="true" style="color:#aa764e"></span></a></li>
+              <li class="list-group-item">Porta ac consectetur ac <a href="" id="remove-button"><span class="glyphicon glyphicon-remove-circle" aria-hidden="true" style="color:#aa764e"></span></a></li>
+              <li class="list-group-item">Vestibulum at eros <a href="" id="remove-button"><span class="glyphicon glyphicon-remove-circle" aria-hidden="true" style="color:#aa764e"></span></a></li>
+             </ul>
+          </div>
         </div>
-        <!-- END OF JUMBOTRON -->
-
       </div>
-  </div>
+    </div>
 
+    <div class="row">
+      <div class="col-sm-8">
+      </div>
+      <div class="col-sm-4">
+        <button type="submit" class="btn btn-default btn-block" id="goToPayment" href="">Procede to payment</button>
+      </div>
 
   <!-- FOOTER OF PAGE -->
 

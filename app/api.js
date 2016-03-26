@@ -86,5 +86,14 @@ module.exports = {
                 res.end(JSON.stringify(orders));
             }
         }, req.orderId);
-    } 
+    },
+
+    // returns basket information for a specific user
+    getBasket: function(req, res) {
+        databaseService.getBasket(function(err, basket){
+            if(!err){
+                res.end(JSON.stringify(basket));
+            }
+        }, req.userId);
+    }
 };

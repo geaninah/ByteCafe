@@ -89,11 +89,26 @@ var getOrderInfo = function(callback, orderId){
     });
 };
 
+var getBasket = function (callback, userId){
+    var query = 'select * from basket where user_id = ?';
+    var parameters = [userId];
+
+    connection.query(query, parameters, function(err, basket) {
+        if(err){
+            console.log(err);
+        }else{
+            var basketItems = basket[0];
+            callback(err, basket);
+        }
+    });
+};
+
 module.exports = {
     getCafes: getCafes,
     getCafeInfo: getCafeInfo,
     getProducts: getProducts,
     getProductInfo: getProductInfo,
     getOrders: getOrders,
-    getOrderInfo: getOrderInfo
+    getOrderInfo: getOrderInfo,
+    getBasket: getBasket
 };
