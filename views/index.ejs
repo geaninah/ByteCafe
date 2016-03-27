@@ -49,13 +49,18 @@
 
 
             // populate the terms and conditions modal
-            $.get('/api/terms', function(data) {
-              $('#placeTandC').html(data); 
+            var tncDownloadedAlready = false;
+            $("#TandCModal").on("show.bs.modal", function() {
+              if(!tncDownloadedAlready) {
+                $.get('/api/terms', function(data) {
+                  $('#placeTandC').removeClass("text-center").html(data); 
+                  tncDownloadedAlready = true;
+                });
+              }
             });
 
           });
           </script>
-
         
         <div class="col-sm-12">
 
@@ -175,6 +180,7 @@
                   <h4 class="modal-title">Terms and Conditions: </h4>
                 </div>
                 <div class="modal-body" id="placeTandC">
+                  <i class="fa fa-circle-o-notch fa-spin"></i>
                 </div>
                 <div class="modal-footer">
                   <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>

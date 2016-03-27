@@ -90,13 +90,14 @@ var getOrderInfo = function(callback, orderId){
 };
 
 var getBasket = function (callback, userId){
-    var query = 'select * from basket where user_id = ?';
+  console.log("getting basket for "+userId);
+    var query = 'select basket.cafe_id, basket.product_id, products.name, products.price, products.name, cafes.name, basket.amount from basket, products, cafes where user_id = ? and basket.product_id = products.product_id and basket.cafe_id = cafes.cafe_id';
     var parameters = [userId];
 
     connection.query(query, parameters, function(err, basket) {
-        if(err){
+        if(err) {
             console.log(err);
-        }else{
+        } else {
             var basketItems = basket[0];
             callback(err, basket);
         }
