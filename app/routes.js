@@ -18,6 +18,7 @@ module.exports = function(app, passport) {
     app.get("/api/products/:productId",       api.getOrders);
     app.get("/api/orders/:orderId",           api.getOrderInfo);
     app.get("/api/basket",                    api.getBasket);
+    //app.get("/api/tables",                    api.getTables);
     
     // serve static content
     app.use("/images",                        express.static("resources/images"));
@@ -75,6 +76,12 @@ module.exports = function(app, passport) {
             });
         }, req.user.user_id);
     });
+
+    app.get("/tables", isLoggedIn, function(req, res) {
+        database.getCafes(function(err, cafes) {
+            res.render("table_html.ejs", {cafes: cafes, user: req.user});
+        });
+    })
 };
 
 function isLoggedIn(req, res, next) {

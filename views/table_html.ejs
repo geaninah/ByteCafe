@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html>
+  <head>
+
+    <% include head_incl.ejs %>
+    <title>Tables</title>
+
+  </head>
+  <body>
+
+    <% include nav_bar.ejs %>
+
+    <div class="container">
+      <div class="col-sm-12">
+        <div class="jumbotron"> 
+
+
+          <!-- BUTTON GROUP - JUST ADD ANOTHER BUTTON FOR NEXT TAB WITH A TABLE-->
+          <div class="btn-group" role="group" aria-label="Choose the table">
+            <button type="button" class="btn btn-default" id="tab_1">TAB 1</button>
+            <button type="button" class="btn btn-default" id="tab_2">TAB 2</button>
+            <button type="button" class="btn btn-default" id="tab_3">TAB 3</button>
+          </div>
+
+          <br>
+          <br>
+
+
+          <script>
+          //JAVASCRIPT FOR THE TABS
+          $(document).ready(function() {
+            $('#content_2').hide();
+            $('#content_3').hide();
+            //ADD MORE CONTENTS TO HIDE IF YOU ADD ANY
+            $('#tab_1').addClass('focus');
+
+            // FOR TAB 1 HIDE ALL OTHER CONTENTS AND REMOVE CLASS FOCUS
+            $('#tab_1').click(function () {
+              $('#content_2').hide();
+              $('#content_3').hide();
+              //ADD MORE CONTENTS TO HIDE IF YOU ADD ANY
+              $('#content_1').show();
+              $('#tab_1').addClass('focus');
+              $('#tab_2').removeClass('focus');
+              $('#tab_3').removeClass('focus');
+              //REMOVE FOCUS FROM ANY EXTRA TABS YOU ADD
+            });
+
+            // FOR TAB 2 HIDE ALL OTHER CONTENTS AND REMOVE CLASS FOCUS
+            $('#tab_2').click(function () {
+              $('#content_1').hide();
+              $('#content_3').hide();
+              //ADD MORE CONTENTS TO HIDE IF YOU ADD ANY
+              $('#content_2').show();
+              $('#tab_2').addClass('focus');
+              $('#tab_1').removeClass('focus');
+              $('#tab_3').removeClass('focus');
+            });
+
+            // FOR TAB 3 HIDE ALL OTHER CONTENTS AND REMOVE CLASS FOCUS
+            $('#tab_3').click(function () {
+              $('#content_1').hide();
+              $('#content_2').hide();
+              $('#content_3').show();
+              $('#tab_3').addClass('focus');
+              $('#tab_1').removeClass('focus');
+              $('#tab_2').removeClass('focus');
+              //REMOVE FOCUS FROM ANY EXTRA TABS YOU ADD
+            });
+          });
+
+          </script>
+
+
+          <!-- TABLE FOR TAB 1 - ID IS CONTENT_1 -->
+          <div class="table-responsive" id="content_1">
+            <table class="table table-bordered table-hover">
+              <thead>
+                <tr>
+                  <th>Column 1</th>
+                  <th>Column 2</th>
+                  <th>Column 3</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>1</td>
+                  <td>2</td>
+                  <td>3</td>
+                </tr>
+                <tr>
+                  <td>1</td>
+                  <td>2</td>
+                  <td>3</td>
+                </tr>
+                <tr>
+                  <td>1</td>
+                  <td>2</td>
+                  <td>3</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <!-- END OF TAB 1 -->
+
+          <!-- TABLE FOR TAB 2 - ID IS CONTENT_2 -->
+          <div class="table-responsive" id="content_2">
+            <table class="table table-bordered table-hover">
+              <thead>
+                <tr>
+                  <th>Column 1_2</th>
+                  <th>Column 2_2</th>
+                  <th>Column 3_2</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>4</td>
+                  <td>5</td>
+                  <td>6</td>
+                </tr>
+                <tr>
+                  <td>4</td>
+                  <td>5</td>
+                  <td>6</td>
+                </tr>
+                <tr>
+                  <td>4</td>
+                  <td>5</td>
+                  <td>6</td>
+                </tr>
+                <tr>
+                  <td>4</td>
+                  <td>5</td>
+                  <td>6</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <!-- END OF TAB 2 -->
+
+          <!-- TABLE FOR TAB 3 - ID IS CONTENT_3 -->
+          <div class="table-responsive" id="content_3">
+            <table class="table table-bordered table-hover">
+              <thead>
+                <tr>
+                  <th>Column 1_2_3</th>
+                  <th>Column 2_2_3</th>
+                  <th>Column 3_2_3</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>7</td>
+                  <td>8</td>
+                  <td>9</td>
+                </tr>
+                <tr>
+                  <td>7</td>
+                  <td>8</td>
+                  <td>9</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <!-- END OF TAB 3 -->
+
+        </div>
+      </div>
+    </div>
+
+    <% include footer.ejs %>
+  </body>
+</html>

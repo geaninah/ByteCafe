@@ -164,3 +164,7 @@
     overflow-y: scroll;
     overflow-x: hidden;
 }
+
+.jumbotron .table-responsive .table {
+	background-color: #fff;
+}
