@@ -36,7 +36,7 @@ var getCafeInfo = function(callback, cafeId){
 };
 
 var getProducts = function(callback, cafeId){
-    var query = 'select products.product_id, products.name, products.category_id, products.price, products.image_url from products where products.purchasable and products.product_id in ( select cafe_products.product_id from cafe_products where cafe_products.cafe_id = ? and cafe_products.purchasable and cafe_products.stock > 0 )';
+    var query = 'select products.product_id, products.product_name, products.category_id, products.price, products.image_url from products where products.purchasable and products.product_id in ( select cafe_products.product_id from cafe_products where cafe_products.cafe_id = ? and cafe_products.purchasable and cafe_products.stock > 0 )';
     var parameters = [cafeId];
 
     connection.query(query, parameters, function(err, products){
@@ -91,7 +91,7 @@ var getOrderInfo = function(callback, orderId){
 
 var getBasket = function (callback, userId){
   console.log("getting basket for " + userId);
-    var query = 'select basket.cafe_id, basket.product_id, products.name, products.price, products.name, cafes.name, basket.amount from basket, products, cafes where user_id = ? and basket.product_id = products.product_id and basket.cafe_id = cafes.cafe_id';
+    var query = 'select basket.cafe_id, basket.product_id, products.product_name, products.price, cafes.name, basket.amount from basket, products, cafes where user_id = ? and basket.product_id = products.product_id and basket.cafe_id = cafes.cafe_id';
     var parameters = [userId];
 
     connection.query(query, parameters, function(err, basket) {

@@ -24,6 +24,7 @@
       <!-- Default panel contents -->
         <div class="panel-heading" id="order-heading">Your order:</div>
         <div class="panel-body">
+          <div class="row">
           <div class="col-sm-5">
             <p> Your current order includes the listed items. <br><br>
                 If you wish to add more items, you can always do so.<br>
@@ -35,12 +36,31 @@
           <div class="col-sm-7">
             <!-- List group -->
             <ul class="list-group">
+              <script> var totalPrice = 0; </script>
               <% basket.forEach(function(bask_item) { %>
-                <li class="list-group-item"><%= bask_item.product_id %><a href="" id="remove-button"><span class="glyphicon glyphicon-remove-circle" aria-hidden="true" style="color:#aa764e"></span></a></li>
+                <li class="list-group-item">
+                  <div class="row">
+                    <div class="col-sm-7"><%= bask_item.product_name %></div>
+                    <div class="col-sm-2">$&nbsp;<%= bask_item.price %></div>
+                    <div class="col-sm-1"><%= bask_item.amount %></div>
+                    <script> totalPrice = totalPrice + parseFloat(<%= bask_item.price %>) * parseFloat(<%= bask_item.amount %>);</script>
+                    <div class="col-sm-2"><a href="" id="remove-button"><span class="glyphicon glyphicon-remove-circle" aria-hidden="true" style="color:#aa764e"></span></a></div>
+                  </div>
+                </li>
               <% }); %>
              </ul>
           </div>
         </div>
+        <div class="row">
+          <div class="col-sm-7">
+          </div>
+          <div class="col-sm-2" align="right">
+            <p> Total price: </p>
+          </div>
+          <div class="col-sm-3">
+            <p><strong> $ <script>document.write(totalPrice)</script></strong></p>
+          </div>
+      </div>
       </div>
     </div>
 
