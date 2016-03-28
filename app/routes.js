@@ -104,6 +104,12 @@ module.exports = function(app, passport) {
         database.getCafes(function(err, cafes) {
             res.render("POS_side.ejs", {cafes: cafes, user: req.user});
         });
+    });
+
+    app.get("/account", isLoggedIn, function(req, res) {
+        database.getCafes(function(err, cafes) {
+            res.render("account-details.ejs", {cafes: cafes, user: req.user});
+        });
     })
 };
 
