@@ -43,11 +43,26 @@ module.exports = function(app, passport) {
       res.redirect("/");
     });
 
+    // serves calls for forgotten password
+    app.get("/forgot", function(req, res) {
+        res.render('forgot', {
+            user: req.user,
+            forgot_message: req.flash("forgotMessage")
+        });
+    });
+
+    app.post("/forgot", passport.authenticate("local-forgot",{
+        successRedirect: "/",
+        failureRedirect: "/",
+        failureFlash: true
+    }));
+
     // serve the main pages
     app.get("/", function(req, res) {
         res.render("index.ejs", {
             login_message: req.flash("loginMessage"),
-            signup_message: req.flash("signupMessage")
+            signup_message: req.flash("signupMessage"),
+            forgot_message: req.flash("forgotMessage")
         });
     });
 
@@ -60,12 +75,14 @@ module.exports = function(app, passport) {
 
     // serve cafe products
     app.get("/cafe/:cafeId", isLoggedIn, function(req, res) {
-        database.getCafeInfo(function(err, infos) {
-            database.getProducts(function(err, products) {
-                console.log({cafe: infos, products: products});
-                res.render("cafe.ejs", {cafe: infos, products: products});
+        database.getCafes(function(err, cafes) {
+            database.getCafeInfo(function(err, infos) {
+                database.getProducts(function(err, products) {
+                    console.log({cafe: infos, products: products});
+                    res.render("cafe.ejs", {cafes:cafes, user: req.user, cafe: infos, products: products});
+                }, req.params.cafeId);
             }, req.params.cafeId);
-        }, req.params.cafeId);
+        });
     });
 
     // serve basket
@@ -80,6 +97,12 @@ module.exports = function(app, passport) {
     app.get("/tables", isLoggedIn, function(req, res) {
         database.getCafes(function(err, cafes) {
             res.render("table_html.ejs", {cafes: cafes, user: req.user});
+        });
+    });
+
+    app.get("/pos", isLoggedIn, function(req, res) {
+        database.getCafes(function(err, cafes) {
+            res.render("POS_side.ejs", {cafes: cafes, user: req.user});
         });
     })
 };

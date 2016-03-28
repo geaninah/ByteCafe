@@ -168,3 +168,11 @@
 .jumbotron .table-responsive .table {
 	background-color: #fff;
 }
+
+#userEmail{
+	pointer-events: none;
+}
+
+#cancel-order, #wait-order, #finish-order {
+	width: 100%;
+}

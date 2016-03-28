@@ -2,7 +2,11 @@
 var LocalStrategy  = require("passport-local").Strategy;
 var mysql          = require("mysql");
 var bcrypt         = require("bcrypt-nodejs");
-var express = require('express');
+var express        = require('express');
+var crypto         = require('crypto');
+var async          = require('async');
+var nodemailer     = require('nodemailer');
+
 var RememberMeStrategy = require('passport-remember-me').Strategy;
 
 // load config
@@ -115,6 +119,78 @@ module.exports = function(passport) {
     });
   }
   ));
+
+  // forgotten password strategy
+  passport.use("local-forgot", new LocalStrategy({
+    usernameField: "email",
+    passwordField: "password",
+    passReqToCallback: true
+  },
+  function(req, email) {
+    async.waterfall([
+      function(done) {
+        crypto.randomBytes(20, function(err, buf){
+          var token = buf.toString('hex');
+          done(err, token);
+        });
+      },
+      function(token, done) {
+
+        console.log("checking if user exists for: " + email);
+        connection.query("select * from users where users.email = ?", [email], function(err, rows) {
+          // catch sql error
+          if(err) { console.log(err); return done(null, false, req.flash("forgotMessage", "Sorry, something went wrong. Please try again later!")); } 
+          // if no such user
+          if(!rows.length) return done(null, false, req.flash("forgotMessage", "This email address is not associated with any account!"));
+          console.log("acct exists");
+          var user = rows[0];  
+          // if users account is marked disabled
+          if(user.disabled) return done(null, false, req.flash("forgotMessage", "The account was disabled."));
+          
+          user.resetPasswordToken = token;
+          user.resetPasswordExpires = Date.now() + 3600000; // 1 hour
+
+          user.save(function(err) {
+            done(err, token, user);
+          });
+        }); 
+      },       
+      function(token, user, done) {
+          var transport = nodemailer.createTransport({
+            host: 'smtp.gmail.com',
+            port: 465,
+            secure: true, // use SSL
+            auth: {
+              user: 'user@gmail.com',
+              pass: 'pass'
+            }
+          });
+            var mailOptions = {
+                to: user.email,
+                from: "passwordreset@demo.com",
+                subject: "Password Reset",
+                text: 'You are receiving this because you (or someone else) have requested the reset of the password for your account.\n\n' +
+                'Please click on the following link, or paste this into your browser to complete the process:\n\n' +
+                'http://' + req.headers.host + '/reset/' + token + '\n\n' +
+                'If you did not request this, please ignore this email and your password will remain unchanged.\n'
+            };
+            transporter.sendMail(mailOptions, function(err, info){
+              if(err){
+                return console.log(err);
+              }
+              console.log('Message sent: ' + info.response);
+            });
+
+            smtpTransport.sendMail(mailOptions, function(err) {
+                req.flash('forgotMessage', 'An e-mail has been sent to ' + user.email + ' with further instructions.');
+                done(err, 'done');
+            });
+        }
+    ], function(err) {
+        if (err) return next(err);
+        res.redirect('/');
+    });
+    }));
 
 };
 

@@ -3,7 +3,7 @@
 <head>
   
   <% include head_incl.ejs %>
-  <title>Byte Café</title>
+  <title><%= cafe.name %></title>
 
 </head>
 <body>
@@ -21,9 +21,7 @@
 
       <!-- STATIC SIDEBAR WITH DIFFERENT CATEGORIES -->
       <div class="col-sm-3">
-        <nav class="bs-docs-sidebar affix" id="sideNavMenu"> 
-        <img src="<%= cafe.image_url %>" class="img-responsive img-rounded" alt="<%= cafe.name %>">
-        <br>
+
           <div class="list-group">
             <a href="#" class="list-group-item">Sandwiches</a>
             <a href="#" class="list-group-item active">Hot Drinks</a>
@@ -31,7 +29,19 @@
             <a href="#" class="list-group-item">Cold Drinks</a>
             <a href="#" class="list-group-item">Soups</a>
           </div>
-        </nav>
+
+          <div class="panel panel-default">
+            <div class="panel-heading">
+              <h3 class="panel-title"><%= cafe.name %></h3>
+            </div>
+            <div class="panel-body">
+              <img src="<%= cafe.image_url %>" class="img-responsive img-rounded" alt="<%= cafe.name %>">
+              <br>
+              <p><strong>Working hours:</strong><br><%= cafe.opening_times %></p>
+              <p><strong>Location:</strong><br><%= cafe.address %></p>
+            </div>
+          </div>
+        <!-- </nav> -->
       </div>
 
       <!-- DYNAMIC CONTENT OF THE PAGE - STOCK ITEMS-->
@@ -41,7 +51,7 @@
 
         <% products.forEach(function (product) { %>
         <!-- BOX REFERRING TO A PRODUCT -->
-        <a href="#">
+        <a data-toggle="modal" data-target="#productInfo" data-id="<%= product.name%>">
           <div class="col-sm-6 col-md-4">
             <div class="thumbnail">
               <div class="caption" id="lessSpace">
@@ -55,10 +65,38 @@
           </div>
         </a>
         <% }); %>
+        </div>
       </div>
+
+      <!-- Modal -->
+      <div class="modal fade" id="productInfo" tabindex="-1" role="dialog" aria-labelledby="ProductInformation">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+              <h4 class="modal-title" id="myModalLabel">Product Name</h4>
+            </div>
+            <div class="modal-body">
+              <div class="row">
+                <div class="col-sm-6">
+                  image
+                </div>
+                <div class="col-sm-6">
+                  Product info
+                </div>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+
     </div>
   </div>
-</div>
 
 
   <!-- FOOTER OF PAGE -->

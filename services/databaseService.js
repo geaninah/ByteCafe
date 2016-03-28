@@ -90,7 +90,7 @@ var getOrderInfo = function(callback, orderId){
 };
 
 var getBasket = function (callback, userId){
-  console.log("getting basket for "+userId);
+  console.log("getting basket for " + userId);
     var query = 'select basket.cafe_id, basket.product_id, products.name, products.price, products.name, cafes.name, basket.amount from basket, products, cafes where user_id = ? and basket.product_id = products.product_id and basket.cafe_id = cafes.cafe_id';
     var parameters = [userId];
 

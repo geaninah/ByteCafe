@@ -4,6 +4,7 @@
   "description": "### File-structrure  - app/ - contains the core functionality  - config/ - contains configuration files (don't push contents to git)  - html/ - contains the web content files  - node_modules/ - modules used by node  - server.js - byte cafe main program  - package.json - npm configuration",
   "main": "server.js",
   "dependencies": {
+    "async": "^2.0.0-rc.2",
     "bcrypt-nodejs": "0.0.3",
     "body-parser": "^1.15.0",
     "connect-flash": "^0.1.1",
@@ -14,6 +15,7 @@
     "moment": "^2.12.0",
     "morgan": "^1.7.0",
     "mysql": "^2.10.2",
+    "nodemailer": "^2.3.0",
     "passport": "^0.3.2",
     "passport-local": "^1.0.0",
     "path": "^0.12.7"
