@@ -24,7 +24,7 @@ module.exports = {
         res.sendFile(path.join(__dirname, "../config/terms.txt"));
     },
 
-    // handle the authentication calls
+    // placeholder for not implemented functionality
     notImplemented: function(req, res) {
         res.header("Content-Type", "text/plain; charset=utf-8");
         res.end("Not implemented!\n");
@@ -53,7 +53,7 @@ module.exports = {
                 res.header("Content-Type", "application/json; charset=utf-8");
                 res.end(JSON.stringify(cafes));
             }
-        }, req.cafeId);
+        }, req.params.cafeId);
     },
 
     // returns a list of products at a cafe
@@ -63,7 +63,7 @@ module.exports = {
                 res.header("Content-Type", "application/json; charset=utf-8");
                 res.end(JSON.stringify(products));
             }
-        }, req.cafeId);
+        }, req.params.cafeId);
     },
 
     // returns information about a products
@@ -73,7 +73,7 @@ module.exports = {
                 res.header("Content-Type", "application/json; charset=utf-8");
                 res.end(JSON.stringify(products));
             }
-        }, req.productId);
+        }, req.params.productId);
     },
 
     // returns queued orders at a cafe
@@ -83,7 +83,7 @@ module.exports = {
                 res.header("Content-Type", "application/json; charset=utf-8");
                 res.end(JSON.stringify(orders));
             }
-        }, req.cafeId);
+        }, req.params.cafeId);
     },
 
     // returns information about a specific order
@@ -93,7 +93,7 @@ module.exports = {
                 res.header("Content-Type", "application/json; charset=utf-8");
                 res.end(JSON.stringify(orders));
             }
-        }, req.orderId);
+        }, req.params.orderId);
     },
 
     // returns basket information for a specific user
@@ -103,6 +103,6 @@ module.exports = {
                 res.header("Content-Type", "application/json; charset=utf-8");
                 res.end(JSON.stringify(basket));
             }
-        }, req.userId);
+        }, req.user.user_id);
     }
 };
