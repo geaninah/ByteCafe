@@ -119,7 +119,7 @@ module.exports = function(app, passport) {
 function isLoggedIn(req, res, next) {
   if(req.isAuthenticated())
     return next();
-  req.flash("loginMessage", "Please log in!");
+  req.flash("error", "Please log in!");
   res.redirect("/");
 }
 

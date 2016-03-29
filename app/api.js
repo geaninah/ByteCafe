@@ -1,6 +1,4 @@
 // main api logic
-//
-// 
 
 // libraries
 var express         = require("express");
@@ -9,10 +7,11 @@ var path            = require("path");
 var moment          = require("moment");
 var databaseService = require("../services/databaseService");
 
-// logic
+// main api functionality
 module.exports = {
     // present some debug info 
     hello: function(req, res) {
+        res.header("Content-Type", "text/plain; charset=utf-8");
         res.write("Hello World!\n");
         res.write("User: "    + process.env.USER + "\n");
         res.write("Dirname: " + __dirname        + "\n");
@@ -21,16 +20,19 @@ module.exports = {
 
     // fetch the terms and conditions
     terms: function(req, res) {
+        res.header("Content-Type", "text/html; charset=utf-8");
         res.sendFile(path.join(__dirname, "../config/terms.txt"));
     },
 
     // handle the authentication calls
     notImplemented: function(req, res) {
-        res.end("Not implemented!");
+        res.header("Content-Type", "text/plain; charset=utf-8");
+        res.end("Not implemented!\n");
     },
 
     // return status information
     status: function(req, res) {
+        res.header("Content-Type", "text/plain; charset=utf-8");
         res.end("all good g\n");
     },
 
@@ -38,6 +40,7 @@ module.exports = {
     getCafes: function(req, res) {
         databaseService.getCafes(function(err, cafes){
             if(!err){
+                res.header("Content-Type", "application/json; charset=utf-8");
                 res.end(JSON.stringify(cafes));
             }
         });
@@ -47,6 +50,7 @@ module.exports = {
     getCafeInfo: function(req, res) {
         databaseService.getCafeInfo(function(err, cafes){
             if(!err){
+                res.header("Content-Type", "application/json; charset=utf-8");
                 res.end(JSON.stringify(cafes));
             }
         }, req.cafeId);
@@ -56,6 +60,7 @@ module.exports = {
     getProducts: function(req, res) {
         databaseService.getProducts(function(err, products){
             if(!err){
+                res.header("Content-Type", "application/json; charset=utf-8");
                 res.end(JSON.stringify(products));
             }
         }, req.cafeId);
@@ -65,6 +70,7 @@ module.exports = {
     getProductInfo: function(req, res) {
         databaseService.getProductInfo(function(err, products){
             if(!err){
+                res.header("Content-Type", "application/json; charset=utf-8");
                 res.end(JSON.stringify(products));
             }
         }, req.productId);
@@ -74,6 +80,7 @@ module.exports = {
     getOrders: function(req, res) {
         databaseService.getOrders(function(err, orders){
             if(!err){
+                res.header("Content-Type", "application/json; charset=utf-8");
                 res.end(JSON.stringify(orders));
             }
         }, req.cafeId);
@@ -83,6 +90,7 @@ module.exports = {
     getOrderInfo: function(req, res) {
         databaseService.getOrderInfo(function(err, orders){
             if(!err){
+                res.header("Content-Type", "application/json; charset=utf-8");
                 res.end(JSON.stringify(orders));
             }
         }, req.orderId);
@@ -92,6 +100,7 @@ module.exports = {
     getBasket: function(req, res) {
         databaseService.getBasket(function(err, basket){
             if(!err){
+                res.header("Content-Type", "application/json; charset=utf-8");
                 res.end(JSON.stringify(basket));
             }
         }, req.userId);
