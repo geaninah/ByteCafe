@@ -66,8 +66,7 @@
 
 
             <div id="error-message">
-                <%= login_message %>
-                <%= signup_message %>
+                <%= message %>
             </div>
             <br>
             <form role="form" id="loginForm" method="post" action="/auth/login">
@@ -118,7 +117,7 @@
                    <h5>No worries! Just enter your email address in the field below and we will send you information on how to reset it! (: </h5>
                    <input type="email" class="form-control" id="emailForgotPass" placeholder="Email">
                     <div id="error-message-forgot">
-                     <%= forgot_message %>
+                     <%= message %>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -143,7 +142,6 @@
         </div>
 
           </form>
-
             <form role="form" id="signUpForm" action="/auth/signup" method="post">
               <div class="form-group has-feedback" id="email_group1">
                 <input type="email" class="form-control" id="email" name="email" placeholder="Email">

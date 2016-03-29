@@ -6,8 +6,7 @@ var express        = require('express');
 var crypto         = require('crypto');
 var async          = require('async');
 var nodemailer     = require('nodemailer');
-
-var RememberMeStrategy = require('passport-remember-me').Strategy;
+var secure         = require("secure-random");
 
 // load config
 var config         = require("../config/config.js");
@@ -42,9 +41,9 @@ module.exports = function(passport) {
     console.log("request to enrol "+email);
     connection.query("select * from users where users.email = ?", [email], function(err, rows) {
       // fail on catch sql error
-      if (err)  return done(null, false, req.flash("signupMessage", "Sorry, something went wrong. Please try again later!"));
+      if (err)  return done(null, false, {message: "Sorry, something went wrong. Please try again later!"});
       // fail if user already exists
-      if (rows.length) done(null, false, req.flash("signupMessage", "This email is already in use!"));
+      if (rows.length) done(null, false, {message: "This email is already in use!"});
       else {
         // create our new user object
         var newUser = {
@@ -63,12 +62,12 @@ module.exports = function(passport) {
           // fail on sql error
           if(err) {
             console.log(err);
-            return done(null, false, req.flash("signupMessage", "Sorry, something went wrong. Please try again later!"));
+            return done(null, false, {message: "Sorry, something went wrong. Please try again later!"});
           }
 
           // add our user id
           newUser.user_id = rows.insertId;
-          return(done, newUser);
+          return done(null, user);
         });
       }
     });
@@ -85,42 +84,31 @@ module.exports = function(passport) {
     console.log("checking login for: "+email);
     connection.query("select * from users where users.email = ?", [email], function(err, rows) {
       // catch sql error
-      if(err) { console.log(err); return done(null, false, req.flash("loginMessage", "Sorry, something went wrong. Please try again later!")); } 
+      if(err) {
+        console.log(err);
+        return done(null, false, {message: "Sorry, something went wrong. Please try again later!"}); } 
       // if no such user
-      if(!rows.length) return done(null, false, req.flash("loginMessage", "Incorrect email or password!"));
+      if(!rows.length)
+        return done(null, false, {message: "Incorrect email or password!"});
       console.log(" acct exists");
       // This line gives errors - TO DO!!!
       var user = rows[0];
       // if users password is incorrect
-      if(!bcrypt.compareSync(password, user.password)) return done(null, false, req.flash("loginMessage", "Incorrect email or password!"));
+      if(!bcrypt.compareSync(password, user.password))
+        return done(null, false, {message: "Incorrect email or password!"});
       console.log(" pw accepted");
       // if users account is marked disabled
-      if(user.disabled) return done(null, false, req.flash("loginMessage", "The account was disabled."));
+      if(user.disabled) return done(null, false, {message: "This account has been disabled."});
+          console.log(req.body);
+      
+      // if user requested to remember them, save them a cookie!
+      if (req.body.remember_me_box) return createAndSaveRememberCookie(done, req, user);
+      // else just validate auth
       return done(null, user);
     }); 
   }));
 
-  // rememberme strategy
-
-  passport.use(new RememberMeStrategy(
-  function(token, done) {
-    Token.consume(token, function (err, user) {
-      if (err) { return done(err); }
-      if (!user) { return done(null, false); }
-      return done(null, user);
-    });
-  },
-
-  function(user, done) {
-    var token = utils.generateToken(64);
-    Token.save(token, { userId: user.id }, function(err) {
-      if (err) { return done(err); }
-      return done(null, token);
-    });
-  }
-  ));
-
-  // forgotten password strategy
+  // forgotten password logic
   passport.use("local-forgot", new LocalStrategy({
     usernameField: "email",
     passwordField: "password",
@@ -129,26 +117,25 @@ module.exports = function(passport) {
   function(req, email) {
     async.waterfall([
       function(done) {
-        crypto.randomBytes(20, function(err, buf){
-          var token = buf.toString('hex');
-          done(err, token);
-        });
+        // generate a 64 char unique string
+        var token = secure(48,{type: "Buffer"}).toString("base64");
+        done(null, token);
       },
       function(token, done) {
-
-        console.log("checking if user exists for: " + email);
+        // ensure that the user is valid
+        console.log("Password reset requested for " + email);
         connection.query("select * from users where users.email = ?", [email], function(err, rows) {
           // catch sql error
-          if(err) { console.log(err); return done(null, false, req.flash("forgotMessage", "Sorry, something went wrong. Please try again later!")); } 
+          if(err) { console.log(err); return done(null, false, {message: "Sorry, something went wrong. Please try again later!"}); } 
           // if no such user
-          if(!rows.length) return done(null, false, req.flash("forgotMessage", "This email address is not associated with any account!"));
+          if(!rows.length) return done(null, false, {message: "This email address is not associated with any account!"});
           console.log("acct exists");
           var user = rows[0];  
           // if users account is marked disabled
-          if(user.disabled) return done(null, false, req.flash("forgotMessage", "The account was disabled."));
+          if(user.disabled) return done(null, false, {message: "This account has been disabled."});
           
           user.resetPasswordToken = token;
-          user.resetPasswordExpires = Date.now() + 3600000; // 1 hour
+          user.resetPasswordExpires = Date.now() + 1 * 60 * 60 * 1000; // 1 hour
 
           user.save(function(err) {
             done(err, token, user);
@@ -167,7 +154,7 @@ module.exports = function(passport) {
           });
             var mailOptions = {
                 to: user.email,
-                from: "passwordreset@demo.com",
+                from: "password_reset_no_reply@demo.com",
                 subject: "Password Reset",
                 text: 'You are receiving this because you (or someone else) have requested the reset of the password for your account.\n\n' +
                 'Please click on the following link, or paste this into your browser to complete the process:\n\n' +
@@ -182,7 +169,7 @@ module.exports = function(passport) {
             });
 
             smtpTransport.sendMail(mailOptions, function(err) {
-                req.flash('forgotMessage', 'An e-mail has been sent to ' + user.email + ' with further instructions.');
+                req.flash('error', 'An e-mail has been sent to ' + user.email + ' with further instructions.');
                 done(err, 'done');
             });
         }
@@ -190,53 +177,20 @@ module.exports = function(passport) {
         if (err) return next(err);
         res.redirect('/');
     });
-    }));
+    })); 
 
-};
+}
 
-// The following code generates the initial token:
-
-/*
-
-app.post('/auth/login', 
-  passport.authenticate('local-login', { failureRedirect: '/auth/login', failureFlash: true }),
-  function(req, res, next) {
-    // issue a remember me cookie if the option was checked
-    if (!req.body.remember_me_box) { return next(); }
-
-    var token = utils.generateToken(64);
-    Token.save(token, { userId: req.user.id }, function(err) {
-      if (err) { return done(err); }
-      res.cookie('remember_me', token, { path: '/', httpOnly: true, maxAge: 604800000 }); // 7 days
-      return next();
-    });
-  },
-  function(req, res) {
-    res.redirect('/');
+// create our remember me cookie and insert the tokens into the database
+var createAndSaveRememberCookie = function(done, req, user) {
+  var res = req.res;
+  var selector  = secure(48, {type: "Buffer"}).toString("base64");
+  var validator = secure(48, {type: "Buffer"}).toString("base64");
+  var query = "insert into remember_me_tokens (token_user_id, token_selector, token_validator, token_expires) "
+            + "values (?, ?, ?, NOW() + INTERVAL 2 WEEK)";
+  var params = [user.user_id, selector, validator];
+  connection.query(query, params, function(err, rows) {
+    res.cookie("rememberme", selector + "$" + validator, {httpOnly:true, maxAge:2 * 7 * 24 * 60 * 60 * 1000});
+    return done(null, user);
   });
-
-*/ 
-
-// BUT I cannot get it running because I do not have the app.configure thing I showed you
-// Hence, it gives errors.
-
-// I think that the remember me strategy above should work once we get the app.post running.
-// At least, it does not break anything, which is always a good sign. 
-
-// This is the code that configures the app (according to the documentation):
-
-/*
-
-var app = express();
-app.configure(function() {
-  app.use(express.cookieParser());
-  app.use(express.bodyParser());
-  app.use(express.session({ secret: 'keyboard cat' }));
-  app.use(passport.initialize());
-  app.use(passport.session());
-  app.use(passport.authenticate('remember-me'));
-  app.use(app.router);
-});
-
-*/
-
+}

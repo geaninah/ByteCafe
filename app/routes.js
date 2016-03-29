@@ -11,13 +11,13 @@ module.exports = function(app, passport) {
     app.get("/api/terms",                     api.terms);
     app.get("/api/status",                    api.status);
 
-    app.get("/api/cafes",                     api.getCafes);
-    app.get("/api/cafes/:cafeId",             api.getCafeInfo);
-    app.get("/api/cafes/:cafeId/products",    api.getProducts);
-    app.get("/api/cafes/:cafeId/orders",      api.getOrderInfo);
-    app.get("/api/products/:productId",       api.getOrders);
-    app.get("/api/orders/:orderId",           api.getOrderInfo);
-    app.get("/api/basket",                    api.getBasket);
+    app.get("/api/cafes",                     isLoggedInAPI, api.getCafes);
+    app.get("/api/cafes/:cafeId",             isLoggedInAPI, api.getCafeInfo);
+    app.get("/api/cafes/:cafeId/products",    isLoggedInAPI, api.getProducts);
+    app.get("/api/cafes/:cafeId/orders",      isLoggedInAPI, api.getOrderInfo);
+    app.get("/api/products/:productId",       isLoggedInAPI, api.getOrders);
+    app.get("/api/orders/:orderId",           isLoggedInAPI, api.getOrderInfo);
+    app.get("/api/basket",                    isLoggedInAPI, api.getBasket);
     //app.get("/api/tables",                    api.getTables);
     
     // serve static content
@@ -38,6 +38,12 @@ module.exports = function(app, passport) {
     }));
 
     app.get("/auth/logout", function(req, res) {
+      GLOBAL.connection.query("delete from remember_me_tokens where token_selector = ?", 
+                              [req.cookies.rememberme.split("$")[0]],
+                              function(err, rows){
+                                console.log(err);
+      });
+      res.clearCookie("rememberme");
       req.logout();
       req.flash("loginMessage", "You've successfully logged out!");
       res.redirect("/");
@@ -59,11 +65,8 @@ module.exports = function(app, passport) {
 
     // serve the main pages
     app.get("/", function(req, res) {
-        res.render("index.ejs", {
-            login_message: req.flash("loginMessage"),
-            signup_message: req.flash("signupMessage"),
-            forgot_message: req.flash("forgotMessage")
-        });
+        if(req.isAuthenticated()) { res.redirect("/cafes"); return }
+        res.render("index.ejs", {message: req.flash("error")});
     });
 
     // serve cafe list
@@ -110,7 +113,7 @@ module.exports = function(app, passport) {
         database.getCafes(function(err, cafes) {
             res.render("account-details.ejs", {cafes: cafes, user: req.user});
         });
-    })
+    });
 };
 
 function isLoggedIn(req, res, next) {
@@ -118,4 +121,11 @@ function isLoggedIn(req, res, next) {
     return next();
   req.flash("loginMessage", "Please log in!");
   res.redirect("/");
+}
+
+function isLoggedInAPI (req, res, next) {
+  if(req.isAuthenticated())
+    return next();
+  res.status(401);
+  res.end(JSON.stringify({error: true, message: "Unauthorized: please POST email=<your-email>&password=<your-password> to /auth/login"}));
 }

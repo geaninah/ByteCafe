@@ -7,6 +7,9 @@ var passport     = require("passport");
 var flash        = require("connect-flash");
 var morgan       = require("morgan");
 var mysql        = require("mysql");
+var death        = require("death");
+
+var rememberme   = require("./app/remember-me.js");
 
 
 // load our configuration
@@ -24,10 +27,14 @@ GLOBAL.connection.connect(function(err) {
   console.log("Connected as id "+GLOBAL.connection.threadId);
 });
 
-// make sure we disconnect cleanly
-process.on("exit", function() {
+// make sure we disconnect cleanly on any kind of quit
+death(function(signal, err) {
+  // additional graves...
   console.log("closing database connection");
   GLOBAL.connection.end();
+  console.log("closed");
+  console.log("Quitting, goodbye");
+  process.exit();
 });
 
 // setup passport
@@ -49,6 +56,7 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(flash());
+app.use(rememberme);
 
 // setup routes
 require("./app/routes.js")(app, passport);
