@@ -3,7 +3,7 @@
 <head>
   
   <% include head_incl.ejs %>
-  <title><%= cafe.name %></title>
+  <title><%= cafe.cafe_name %></title>
 
 </head>
 <body>
@@ -35,7 +35,7 @@
               <h3 class="panel-title"><%= cafe.name %></h3>
             </div>
             <div class="panel-body">
-              <img src="<%= cafe.image_url %>" class="img-responsive img-rounded" alt="<%= cafe.name %>">
+              <img src="<%= cafe.cafe_image_url %>" class="img-responsive img-rounded" alt="<%= cafe.cafe_name %>">
               <br>
               <p><strong>Working hours:</strong><br><%= cafe.opening_times %></p>
               <p><strong>Location:</strong><br><%= cafe.address %></p>
@@ -51,13 +51,13 @@
 
         <% products.forEach(function (product) { %>
         <!-- BOX REFERRING TO A PRODUCT -->
-        <a data-toggle="modal" data-target="#productInfo" data-id="<%= product.name%>">
+        <a data-toggle="modal" data-target="#productInfo" data-id="<%= product.product_name%>">
           <div class="col-sm-6 col-md-4">
             <div class="thumbnail">
               <div class="caption" id="lessSpace">
               <h3 align="center"><%= product.product_name%></h3>
               </div>
-              <img class="img-rounded" src="<%= product.image_url %>" alt="<%= product.name%>">
+              <img class="img-rounded" src="<%= product.product_image_url %>" alt="<%= product.product_name%>">
               <div class="caption">
                 <a href="#" class="btn btn-default btn-add-cart" role="button">Add to Cart &nbsp;&nbsp;<span class="glyphicon glyphicon-shopping-cart" id="buttonIcon" aria-hidden="true"></span></a>
               </div>

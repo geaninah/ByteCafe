@@ -8,7 +8,7 @@ var config = require("../config/config.js")
 var connection = GLOBAL.connection;
 
 var getCafes = function(callback){
-    var query = 'select cafe_id, name, image_url from cafes';
+    var query = 'select cafe_id, cafe_name, cafe_image_url from cafes';
 
     connection.query(query, function(err, cafes){
         if(err){
@@ -36,7 +36,7 @@ var getCafeInfo = function(callback, cafeId){
 };
 
 var getProducts = function(callback, cafeId){
-    var query = 'select products.product_id, products.product_name, products.category_id, products.price, products.image_url from products where products.purchasable and products.product_id in ( select cafe_products.product_id from cafe_products where cafe_products.cafe_id = ? and cafe_products.purchasable and cafe_products.stock > 0 )';
+    var query = 'select products.product_id, products.product_name, products.category_id, products.product_price, products.product_image_url from products where products.product_purchasable and products.product_id in ( select cafe_products.product_id from cafe_products where cafe_products.cafe_id = ? and cafe_products.purchasable and cafe_products.stock > 0 )';
     var parameters = [cafeId];
 
     connection.query(query, parameters, function(err, products){
@@ -91,7 +91,7 @@ var getOrderInfo = function(callback, orderId){
 
 var getBasket = function (callback, userId){
   console.log("getting basket for " + userId);
-    var query = 'select basket.cafe_id, basket.product_id, products.product_name, products.price, cafes.name, basket.amount from basket, products, cafes where user_id = ? and basket.product_id = products.product_id and basket.cafe_id = cafes.cafe_id';
+    var query = 'select basket.cafe_id, basket.product_id, products.product_name, products.product_price, cafes.cafe_name, basket.basket_amount from basket, products, cafes where user_id = ? and basket.product_id = products.product_id and basket.cafe_id = cafes.cafe_id';
     var parameters = [userId];
 
     connection.query(query, parameters, function(err, basket) {

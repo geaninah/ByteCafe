@@ -41,9 +41,9 @@
                 <li class="list-group-item">
                   <div class="row">
                     <div class="col-sm-7"><%= bask_item.product_name %></div>
-                    <div class="col-sm-2">$&nbsp;<%= bask_item.price %></div>
-                    <div class="col-sm-1"><%= bask_item.amount %></div>
-                    <script> totalPrice = totalPrice + parseFloat(<%= bask_item.price %>) * parseFloat(<%= bask_item.amount %>);</script>
+                    <div class="col-sm-2">$&nbsp;<%= bask_item.product_price %></div>
+                    <div class="col-sm-1"><%= bask_item.basket_amount %></div>
+                    <script> totalPrice = totalPrice + parseFloat(<%= bask_item.product_price %>) * parseFloat(<%= bask_item.basket_amount %>);</script>
                     <div class="col-sm-2"><a href="" id="remove-button"><span class="glyphicon glyphicon-remove-circle" aria-hidden="true" style="color:#aa764e"></span></a></div>
                   </div>
                 </li>
