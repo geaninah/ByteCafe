@@ -16,7 +16,7 @@ module.exports = function(req, res, next) {
         connection.query("select user_id, user_name, user_email, user_disabled, "
                         +"user_permission_store, user_permission_pos, user_permission_stock, "
                         +"user_permission_admin from users where users.user_id = ?",
-                        [rows[0].token_user_id], function(err, users) {
+                        [rows[0].remember_me_token_user_id], function(err, users) {
           var user = users[0];
           // log the user in
           req.login(user, function(err) {
