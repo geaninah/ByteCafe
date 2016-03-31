@@ -9,14 +9,14 @@ var morgan       = require("morgan");
 var mysql        = require("mysql");
 var death        = require("death");
 
+// load our remember me middleware
 var rememberme   = require("./app/remember-me.js");
-
 
 // load our configuration
 var config = require("./config/config.js")
 var port = config.http_port;
 
-// setup our db connection
+// setup our database connection
 GLOBAL.connection = mysql.createConnection(config.database);
 GLOBAL.connection.connect(function(err) {
   if (err) {
@@ -24,15 +24,16 @@ GLOBAL.connection.connect(function(err) {
     process.exit(1);
     return
   }
-  console.log("Connected as id "+GLOBAL.connection.threadId);
+  console.log("Connected to database with id "
+              + GLOBAL.connection.threadId);
 });
 
 // make sure we disconnect cleanly on any kind of quit
 death(function(signal, err) {
   // additional graves...
-  console.log("closing database connection");
+  console.log("Cleaning up:")
+  console.log("Closing database connection");
   GLOBAL.connection.end();
-  console.log("closed");
   console.log("Quitting, goodbye");
   process.exit();
 });
