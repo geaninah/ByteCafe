@@ -2,7 +2,7 @@
 var mysql = require('mysql');
 
 // load configuration
-var config = require("../config/config.js")
+var config = require("../config/config")
 
 // create database connection
 var connection = GLOBAL.connection;

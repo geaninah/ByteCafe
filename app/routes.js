@@ -1,7 +1,7 @@
 // import libraries
-var api      = require("./api.js");
+var api      = require("./api");
 var express  = require("express");
-var database = require("../services/databaseService.js");
+var database = require("../services/database-service");
 
 // export the routes that the app should follow
 module.exports = function(app, passport) {

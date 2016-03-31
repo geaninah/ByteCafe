@@ -5,7 +5,7 @@ var express         = require("express");
 var fs              = require("fs");
 var path            = require("path");
 var moment          = require("moment");
-var databaseService = require("../services/databaseService");
+var databaseService = require("../services/database-service");
 
 // main api functionality
 module.exports = {

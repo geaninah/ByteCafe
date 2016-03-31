@@ -9,11 +9,11 @@ var morgan       = require("morgan");
 var mysql        = require("mysql");
 var death        = require("death");
 
-var rememberme   = require("./app/remember-me.js");
+var rememberme   = require("./app/remember-me");
 
 
 // load our configuration
-var config = require("./config/config.js")
+var config = require("./config/config")
 var port = config.http_port;
 
 // setup our db connection
@@ -38,7 +38,7 @@ death(function(signal, err) {
 });
 
 // setup passport
-require("./app/passport.js")(passport);
+require("./app/passport")(passport);
 
 // setup express app
 var app = express();
@@ -59,7 +59,7 @@ app.use(flash());
 app.use(rememberme);
 
 // setup routes
-require("./app/routes.js")(app, passport);
+require("./app/routes")(app, passport);
 
 // start server
 console.log("Listening on port " + port);

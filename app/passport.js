@@ -9,7 +9,7 @@ var nodemailer     = require('nodemailer');
 var secure         = require("secure-random");
 
 // load config
-var config         = require("../config/config.js");
+var config         = require("../config/config");
 
 // get our mysql connection
 var connection = GLOBAL.connection;
