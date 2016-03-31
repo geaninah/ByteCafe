@@ -1,4 +1,3 @@
-config/config.js
 config/terms.txt
 logs/**
 node_modules/**
