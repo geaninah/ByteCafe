@@ -6,6 +6,8 @@ var fs              = require("fs");
 var path            = require("path");
 var moment          = require("moment");
 var databaseService = require("../services/database-service");
+var emailService    = require("../services/email-service");
+var databaseService = require("../services/databaseService");
 
 // main api functionality
 module.exports = {
