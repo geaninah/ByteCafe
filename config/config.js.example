@@ -12,5 +12,9 @@ module.exports = {
     host: "db.example.com", port: 3306,
     user: "username", password: "super_secret",
     database: "cafe_db"
+  },
+  sendGrid: {
+        username: process.env.SENDGRID_USERNAME,
+        password: process.env.SENDGRID_PASSWORD
   }
 };
