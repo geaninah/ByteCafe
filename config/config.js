@@ -1,7 +1,7 @@
 // example configuration file
 module.exports = {
   // http website port
-  http_port: 80,
+  http_port: process.env.PORT || 80,
 
   // https website port
   tls_port: 443,
