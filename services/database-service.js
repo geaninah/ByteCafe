@@ -181,6 +181,44 @@ var deleteRememberMeToken = function(selector, callback) {
   });
 }
 
+var addUser = function(username, email, password, userDisabled, userStore, userPos, userStock, userAdmin, callback){
+    var query = 'insert into users (user_name, user_email, user_password, user_disabled, user_permission_store, user_permission_pos, user_permission_stock, user_permission_admin) values (?, ?, ?, ?, ?, ?, ?, ?)';
+    var parameters = [username, email, password, userDisabled, userStore, userPos, userStock, userAdmin];
+    connection.query(query, parameters, function(result, err){
+        if(err){
+            console.log(err);
+        }
+        else{
+            callback(result, err);
+        }
+    });
+};
+
+var deleteUser = function(user_id, callback){
+    var query = 'delete from users where user_id = ?';
+    var parameters = [user_id];
+    connection.query(query, parameters, function(result, err){
+        if(err){
+            console.log(err);
+        }
+        else{
+            callback(result, err);
+        }
+    });
+};
+
+var editUser = function(username, email, password, userDisabled, userStore, userPos, userStock, userAdmin, userId, callback){
+    var query = 'update users set user_name = ?, user_email = ?, user_password = ?, user_disabled = ?, user_permission_store = ?, user_permission_pos = ?, user_permission_stock = ?, user_permission_admin = ? where user_id = ?';
+    var parameters = [username, email, password, userDisabled, userStore, userPos, userStock, userAdmin, userId];
+    connection.query(query, parameters, function(result, err){
+        if(err){
+            console.log(err);
+        }
+        else{
+            callback(result, err);
+        }
+    });
+};
 
 module.exports = {
     end: end,
@@ -196,5 +234,14 @@ module.exports = {
     enrolNewUser: enrolNewUser,
     addRememberMeToken: addRememberMeToken,
     getRememberMeToken: getRememberMeToken,
-    deleteRememberMeToken: deleteRememberMeToken
+    deleteRememberMeToken: deleteRememberMeToken,
+    addUser: addUser,
+    deleteUser: deleteUser,
+    editUser: editUser
 };
+
+
+
+
+
+
