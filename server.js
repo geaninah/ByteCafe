@@ -18,7 +18,7 @@ var port = config.http_port;
 
 // load our database and email providers
 var database = require("./services/database-service.js");
-var database = require("./services/email-service.js");
+var email    = require("./services/email-service.js");
 
 // make sure we disconnect cleanly on any kind of quit
 death(function(signal, err) {
