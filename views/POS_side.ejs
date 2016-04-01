@@ -8,32 +8,7 @@
   </head>
   <body>
 
-    <nav class="navbar navbar-default navbar-fixed-top">
-      <div class="container-fluid navbar-header" id="header">
-          <img src="/images/logo.png">
-      </div>
-      <div class="collapse navbar-collapse " id="">
-
-      <!-- CONTENT ON THE RIGHT (FROM LEFT TO RIGHT) -->
-
-        <ul class="nav navbar-nav navbar-right">
-
-          <!-- LIST ITEM -->
-          <li class="dropdown" id="settings">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" ><span class="glyphicon glyphicon-cog glyphicon-large" aria-hidden="true" style="color:#aa764e"><span class="caret"></span></span></a>
-            <ul class="dropdown-menu">
-              
-              <li><a href="#">Order History</a></li>
-              <li role="separator" class="divider"></li>
-              <li><a href="#">Help</a></li>
-              <li role="separator" class="divider"></li>
-              <li><a href="/auth/logout">Log out</a></li>
-            </ul>
-          </li>
-            
-        </ul>
-      </div>
-    </nav>
+  <% include nav_bar.ejs %>
 
     <div class="container">
     <div class="row">
@@ -79,7 +54,7 @@
               </div>
             </div>
           </div>
-        
+
         </div>
       </div>
 

@@ -10,36 +10,28 @@ var mysql        = require("mysql");
 var death        = require("death");
 
 // load our remember me middleware
-var rememberme   = require("./app/remember-me");
+var rememberme   = require("./app/remember-me.js");
 
 // load our configuration
-var config = require("./config/config")
+var config = require("./config/config.js")
 var port = config.http_port;
 
-// setup our database connection
-GLOBAL.connection = mysql.createConnection(config.database);
-GLOBAL.connection.connect(function(err) {
-  if (err) {
-    console.error("Error connecting to database" + err);
-    process.exit(1);
-    return
-  }
-  console.log("Connected to database with id "
-              + GLOBAL.connection.threadId);
-});
+// load our database and email providers
+var database = require("./services/database-service.js");
+var database = require("./services/email-service.js");
 
 // make sure we disconnect cleanly on any kind of quit
 death(function(signal, err) {
   // additional graves...
   console.log("Cleaning up:")
   console.log("Closing database connection");
-  GLOBAL.connection.end();
+  database.end();
   console.log("Quitting, goodbye");
   process.exit();
 });
 
 // setup passport
-require("./app/passport")(passport);
+require("./app/passport.js")(passport, database);
 
 // setup express app
 var app = express();
@@ -57,11 +49,12 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(flash());
-app.use(rememberme);
+app.use(rememberme(database));
 
 // setup routes
-require("./app/routes")(app, passport);
+require("./app/routes.js")(app, passport, database, email);
 
 // start server
+// TODO: setup and enforce https
 console.log("Listening on port " + port);
 app.listen(port);

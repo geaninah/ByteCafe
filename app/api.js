@@ -5,12 +5,11 @@ var express         = require("express");
 var fs              = require("fs");
 var path            = require("path");
 var moment          = require("moment");
-var databaseService = require("../services/database-service");
-var emailService    = require("../services/email-service");
 
 // main api functionality
-module.exports = {
-    // present some debug info 
+module.exports = function (database, email) {
+  return {
+    // present some debug info
     hello: function(req, res) {
         res.header("Content-Type", "text/plain; charset=utf-8");
         res.write("Hello World!\n");
@@ -39,7 +38,7 @@ module.exports = {
 
     // returns a list of cafes
     getCafes: function(req, res) {
-        databaseService.getCafes(function(err, cafes){
+        database.getCafes(function(err, cafes){
             if(!err){
                 res.header("Content-Type", "application/json; charset=utf-8");
                 res.end(JSON.stringify(cafes));
@@ -49,7 +48,7 @@ module.exports = {
 
     // returns information about a cafe
     getCafeInfo: function(req, res) {
-        databaseService.getCafeInfo(function(err, cafes){
+        database.getCafeInfo(function(err, cafes){
             if(!err){
                 res.header("Content-Type", "application/json; charset=utf-8");
                 res.end(JSON.stringify(cafes));
@@ -59,7 +58,7 @@ module.exports = {
 
     // returns a list of products at a cafe
     getProducts: function(req, res) {
-        databaseService.getProducts(function(err, products){
+        database.getProducts(function(err, products){
             if(!err){
                 res.header("Content-Type", "application/json; charset=utf-8");
                 res.end(JSON.stringify(products));
@@ -69,7 +68,7 @@ module.exports = {
 
     // returns information about a products
     getProductInfo: function(req, res) {
-        databaseService.getProductInfo(function(err, products){
+        database.getProductInfo(function(err, products){
             if(!err){
                 res.header("Content-Type", "application/json; charset=utf-8");
                 res.end(JSON.stringify(products));
@@ -79,7 +78,7 @@ module.exports = {
 
     // returns queued orders at a cafe
     getOrders: function(req, res) {
-        databaseService.getOrders(function(err, orders){
+        database.getOrders(function(err, orders){
             if(!err){
                 res.header("Content-Type", "application/json; charset=utf-8");
                 res.end(JSON.stringify(orders));
@@ -89,7 +88,7 @@ module.exports = {
 
     // returns information about a specific order
     getOrderInfo: function(req, res) {
-        databaseService.getOrderInfo(function(err, orders){
+        database.getOrderInfo(function(err, orders){
             if(!err){
                 res.header("Content-Type", "application/json; charset=utf-8");
                 res.end(JSON.stringify(orders));
@@ -99,11 +98,12 @@ module.exports = {
 
     // returns basket information for a specific user
     getBasket: function(req, res) {
-        databaseService.getBasket(function(err, basket){
+        database.getBasket(function(err, basket){
             if(!err){
                 res.header("Content-Type", "application/json; charset=utf-8");
                 res.end(JSON.stringify(basket));
             }
         }, req.user.user_id);
     }
+  }
 };

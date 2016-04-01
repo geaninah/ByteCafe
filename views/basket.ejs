@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  
+
   <% include head_incl.ejs %>
   <title>Basket</title>
 
@@ -11,7 +11,7 @@
   <!-- NAVIGATION BAR -->
 
   <% include nav_bar.ejs %>
-  
+
   <!-- END OF NAVIGATION BAR -->
 
 
@@ -30,7 +30,7 @@
                 If you wish to add more items, you can always do so.<br>
                 You can also remove items that you do not want anymore.<br>
                 <br>
-                Once you are sure this is your order, please <br> press the 
+                Once you are sure this is your order, please <br> press the
                 button. You will be redirected to PayPal.</p>
           </div>
           <div class="col-sm-7">
@@ -58,7 +58,7 @@
             <p> Total price: </p>
           </div>
           <div class="col-sm-3">
-            <p><strong> $ <script>document.write(totalPrice)</script></strong></p>
+            <p><strong> £<script>document.write(totalPrice)</script></strong></p>
           </div>
       </div>
       </div>
@@ -79,11 +79,11 @@
             <!-- Modal content-->
             <div class="modal-content">
                 <div class="modal-body">
-                  <p>Are you sure you want to complete this order and pay <strong> $ <script>document.write(totalPrice)</script></strong></p>
+                  <p>Are you sure you want to complete this order and pay <strong> £<script>document.write(totalPrice)</script></strong></p>
                 </div>
                 <div class="modal-footer">
                   <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                  <button type="button" class="btn btn-primary" data-dismiss="modal">Procede to PayPal</button>
+                  <button type="button" class="btn btn-primary" data-dismiss="modal">Procede to Paypal</button>
                 </div>
             </div>
             </div>

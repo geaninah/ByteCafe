@@ -20,14 +20,24 @@ function sendMessage(email, subject, message) {
     });
 }
 
-module.exports = {
-    sendMessage: function(email, subject, message) {
-        if (!emailIsValid(email)) {
-            return 'Email address "' + email + '" is not valid.';
-        }
-
-        sendMessage(email, subject, message);
-
-        return 'Your message has been received.';
+var real_sendmessage_function = function(email, subject, message) {
+    if (!emailIsValid(email)) {
+        return 'Email address "' + email + '" is not valid.';
     }
-};
+
+    sendMessage(email, subject, message);
+
+    return 'Your message has been received.';
+}
+
+var debug_sendmessage_function = function(email, subject, message) {
+  console.log("");
+  console.log("To:  " + email);
+  console.log("Sub: " + message);
+  if(!emailIsValid(email)) console.log("== ADDRESS NOT VALID ==");
+  console.log(message);
+  console.log("");
+}
+
+if (config.debug_email) module.exports = { sendMessage: debug_sendmessage_function };
+else                    module.exports = { sendMessage: real_sendmessage_function };
