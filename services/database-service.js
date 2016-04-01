@@ -2,7 +2,7 @@
 var mysql = require('mysql');
 
 // load configuration
-var config = require("../config/config.js");
+var config = require("../config/config");
 
 // setup our database connection
 var connection = mysql.createConnection(config.database);
