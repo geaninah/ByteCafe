@@ -311,16 +311,42 @@ var addNutritionalFlag = function(productId, type, value, callback){
     });
 };
 
-// ??
-var addOrderItems = function(orderId, productId, cafeId, itemAmount, callback){
-    var query = 'insert into order_items (order_item_order_id, order_item_product_id, order_item_cafe_id, order_item_amount) values(?, ?, ?, ?)';
-    parameters = [orderId, productId, cafeId, itemAmount];
+var deleteNutritionalFlag = function(productId, type, callback){
+    var query = 'delete from nutritional_flags where nutritional_flag_product_id = ? and nutritional_flag_type = ?';
+    var parameters = [productId, type];
     connection.query(query, parameters, function(result, err){
         if(err){
             console.log(err);
         }
         else{
             callback(result, err);
+        }
+    });
+};
+
+var editNutritionalFlag = function(value, productId, type, callback){
+    var query = 'update nutritional_flags set nutritional_flag_value = ? where nutritional_flag_product_id = ? and nutritional_flag_type = ?';
+    var parameters = [value, productId, type];
+    connection.query(query, parameters, function(result, err){
+        if(err){
+            console.log(err);
+        }
+        else{
+            callback(result, err);
+        }
+    });
+};
+
+var getNutritionalFlag = function(productId, type, callback){
+    var query = 'select * from nutritional_flags where nutritional_flag_product_id = ? and nutritional_flag_type = ?';
+    var parameters = [productId, type];
+    connection.query(query, parameters, function(result, err){
+        if(err){
+            console.log(err);
+        }
+        else{
+            var res = result[0];
+            callback(res, err);
         }
     });
 };
@@ -350,6 +376,9 @@ module.exports = {
     deleteCafe: deleteCafe,
     editCafe: editCafe,
     addNutritionalFlag: addNutritionalFlag,
+    deleteNutritionalFlag: deleteNutritionalFlag,
+    editNutritionalFlag: editNutritionalFlag,
+    getNutritionalFlag: getNutritionalFlag,
     addOrderItems: addOrderItems
 };
 
