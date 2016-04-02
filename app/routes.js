@@ -4,7 +4,7 @@ var express  = require("express");
 // export the routes that the app should follow
 module.exports = function(app, passport, database, email) {
     // initialize our api
-    var api = require("./api.js")(database, email);
+    var api = require("./api")(database, email);
 
     // api calls
     app.get("/api/hello",                     api.hello);

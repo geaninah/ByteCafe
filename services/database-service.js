@@ -220,6 +220,111 @@ var editUser = function(username, email, password, userDisabled, userStore, user
     });
 };
 
+var addProduct = function(name, categoryId, price, description, image_url, purchasable, callback){
+    var query = 'insert into products (product_name, product_category_id, product_price, product_description, product_image_url, product_purchasable) values (?, ?, ?, ?, ?, ?)';
+    var parameters = [name, categoryId, price, description, image_url, purchasable];
+    connection.query(query, parameters, function(result, err){
+        if(err){
+            console.log(err);
+        }
+        else{
+            callback(result, err);
+        }
+    });
+};
+
+var deleteProduct = function(product_id, callback){
+    var query = 'delete from products where product_id = ?';
+    var parameters = [product_id];
+    connection.query(query, parameters, function(result, err){
+        if(err){
+            console.log(err);
+        }
+        else{
+            callback(result, err);
+        }
+    });
+};
+
+var editProduct = function(name, categoryId, price, description, image_url, purchasable, productId, callback){
+    var query = 'update products set product_name = ?, product_category_id = ?, product_price = ?, product_description = ?, product_image_url = ?, product_purchasable = ? where product_id = ?';
+    var parameters = [name, categoryId, price, description, image_url, purchasable, productId];
+    connection.query(query, parameters, function(result, err){
+        if(err){
+            console.log(err);
+        }
+        else{
+            callback(result, err);
+        }
+    });
+};
+
+var addCafe = function(name, description, mapLocation, address, openingTimes, imageUrl, available, callback){
+    var query = 'insert into cafes (cafe_name, cafe_description, cafe_map_location, cafe_address, cafe_opening_times, cafe_image_url, cafe_avaliable) values (?, ?, ?, ?, ?, ?, ?)';
+    var parameters = [name, description, mapLocation, address, openingTimes, imageUrl, available];
+    connection.query(query, parameters, function(result, err){
+        if(err){
+            console.log(err);
+        }
+        else{
+            callback(result, err);
+        }
+    });
+};
+
+var deleteCafe = function(cafe_id, callback){
+    var query = 'delete from cafes where cafe_id = ?';
+    var parameters = [cafe_id];
+    connection.query(query, parameters, function(result, err){
+        if(err){
+            console.log(err);
+        }
+        else{
+            callback(result, err);
+        }
+    });
+};
+
+var editCafe = function(name, description, mapLocation, address, openingTimes, imageUrl, available, cafeId, callback){
+    var query = 'update cafes set cafe_name = ?, cafe_description = ?, cafe_map_location = ?, cafe_address = ?, cafe_opening_times = ?, cafe_image_url = ?, cafe_avaliable = ? where cafe_id = ?';
+    var parameters = [name, description, mapLocation, address, openingTimes, imageUrl, available, cafeId];
+    connection.query(query, parameters, function(result, err){
+        if(err){
+            console.log(err);
+        }
+        else{
+            callback(result, err);
+        }
+    });
+};
+
+var addNutritionalFlag = function(productId, type, value, callback){
+    var query = 'insert into nutritional_flags (nutritional_flag_product_id, nutritional_flag_type, nutritional_flag_value) values (?, ?, ?)';
+    var parameters = [productId, type, value];
+    connection.query(query, parameters, function(result, err){
+        if(err){
+            console.log(err);
+        }
+        else{
+            callback(result, err);
+        }
+    });
+};
+
+// ??
+var addOrderItems = function(orderId, productId, cafeId, itemAmount, callback){
+    var query = 'insert into order_items (order_item_order_id, order_item_product_id, order_item_cafe_id, order_item_amount) values(?, ?, ?, ?)';
+    parameters = [orderId, productId, cafeId, itemAmount];
+    connection.query(query, parameters, function(result, err){
+        if(err){
+            console.log(err);
+        }
+        else{
+            callback(result, err);
+        }
+    });
+};
+
 module.exports = {
     end: end,
     getCafes: getCafes,
@@ -237,7 +342,15 @@ module.exports = {
     deleteRememberMeToken: deleteRememberMeToken,
     addUser: addUser,
     deleteUser: deleteUser,
-    editUser: editUser
+    editUser: editUser,
+    addProduct: addProduct,
+    deleteProduct: deleteProduct,
+    editProduct: editProduct,
+    addCafe: addCafe,
+    deleteCafe: deleteCafe,
+    editCafe: editCafe,
+    addNutritionalFlag: addNutritionalFlag,
+    addOrderItems: addOrderItems
 };
 
 
