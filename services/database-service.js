@@ -351,6 +351,163 @@ var getNutritionalFlag = function(productId, type, callback){
     });
 };
 
+var addOrder = function(cafeId, userId, orderStatus, paypal, cost, callback){
+    var query = 'insert into orders (order_cafe_id, order_user_id, order_date , order_status, order_paypal_transaction, order_cost) values (?, ?, now(), ?, ?, ?)';
+    var parameters = [cafeId, userId, orderStatus, paypal, cost];
+    connection.query(query, parameters, function(result, err){
+        if(err){
+            console.log(err);
+        }
+        else{
+            callback(result, err);
+        }
+    });
+};
+
+var deleteOrder = function(orderId, callback){
+    var query = 'delete from orders where  order_id = ?';
+    var parameters = [orderId];
+    connection.query(query, parameters, function(result, err){
+        if(err){
+            console.log(err);
+        }
+        else{
+            callback(result, err);
+        }
+    });
+};
+
+var editOrder = function(cafeId, userId, orderStatus, paypal, cost, orderId, callback){
+    var query = 'update orders set order_cafe_id = ?, order_user_id = ?, order_status = ?, order_paypal_transaction = ?, order_cost = ? where order_id = ?';
+    var parameters = [cafeId, userId, orderStatus, paypal, cost, orderId];
+    connection.query(query, parameters, function(result, err){
+        if(err){
+            console.log(err);
+        }
+        else{
+            callback(result, err);
+        }
+    });
+};
+
+var getOrder = function(orderId, callback){
+    var query = 'select * from orders where order_id = ?';
+    var parameters = [orderId];
+    connection.query(query, parameters, function(result, err){
+        if(err){
+            console.log(err);
+        }
+        else{
+            var res = result[0];
+            callback(res, err);
+        }
+    });
+};
+
+var addCategory = function(name, parentId, callback){
+    var query = 'insert into categories(category_name, category_parent_id) values (?, ?)';
+    var parameters = [name, parentId];
+    connection.query(query, parameters, function(result, err){
+        if(err){
+            console.log(err);
+        }
+        else{
+            callback(result, err);
+        }
+    });
+};
+
+var deleteCategory = function(categoryId, callback){
+    var query = 'delete from categories where category_id = ?';
+    var parameters = [categoryId];
+    connection.query(query, parameters, function(result, err){
+        if(err){
+            console.log(err);
+        }
+        else{
+            callback(result, err);
+        }
+    });
+};
+
+var editCategory = function(categoryId, name, parentId, callback){
+    var query = 'update categories set category_name = ?, category_parent_id = ? where category_id = ?';
+    var parameters = [name, parentId, categoryId];
+    connection.query(query, parameters, function(result, err){
+        if(err){
+            console.log(err);
+        }
+        else{
+            callback(result, err);
+        }
+    });
+};
+
+var getCategory = function(categoryId, callback){
+    var query = 'select * from categories where category_id = ?';
+    var parameters = [categoryId];
+    connection.query(query, parameters, function(result, err){
+        if(err){
+            console.log(err);
+        }
+        else{
+            callback(result, err);
+        }
+    });
+};
+
+var addCafeProduct = function(cafeId, productId, stock, purchasable, callback){
+    var query = 'insert into cafe_products(cafe_product_cafe_id, cafe_product_product_id, cafe_product_stock, cafe_product_purchasable) values (?, ?, ?, ?)';
+    var parameters = [cafeId, productId, stock, purchasable];
+    connection.query(query, parameters, function(result, err){
+        if(err){
+            console.log(err);
+        }
+        else{
+            callback(result, err);
+        }
+    });
+};
+
+var deleteCafeProduct = function(cafeId, productId, callback){
+    var query = 'delete from cafe_products where cafe_product_cafe_id = ? and cafe_product_product_id = ?';
+    var parameters = [cafeId, productId];
+    connection.query(query, parameters, function(result, err){
+        if(err){
+            console.log(err);
+        }
+        else{
+            callback(result, err);
+        }
+    });
+};
+
+var editCafeProduct = function(stock, purchasable, cafeId, productId, callback){
+    var query = 'update cafe_products set cafe_product_stock = ?, cafe_product_purchasable = ? where cafe_product_cafe_id = ? and cafe_product_product_id = ?';
+    var parameters = [stock, purchasable, cafeId, productId];
+    connection.query(query, parameters, function(result, err){
+        if(err){
+            console.log(err);
+        }
+        else{
+            callback(result, err);
+        }
+    });
+};
+
+var getCafeProduct = function(cafeId, productId){
+    var query = 'select * from cafe_products where cafe_product_cafe_id = ? and cafe_product_product_id = ?';
+    var parameters = [cafeId, productId];
+    connection.query(query, parameters, function(result, err){
+        if(err){
+            console.log(err);
+        }
+        else{
+            callback(result, err);
+        }
+    });
+};
+
 module.exports = {
     end: end,
     getCafes: getCafes,
@@ -379,7 +536,18 @@ module.exports = {
     deleteNutritionalFlag: deleteNutritionalFlag,
     editNutritionalFlag: editNutritionalFlag,
     getNutritionalFlag: getNutritionalFlag,
-    addOrderItems: addOrderItems
+    addOrder: addOrder,
+    deleteOrder: deleteOrder,
+    editOrder: editOrder,
+    getOrder: getOrder,
+    addCategory: addCategory,
+    deleteCategory: deleteCategory,
+    editCategory: editCategory,
+    getCategory: getCategory,
+    addCafeProduct: addCafeProduct,
+    deleteCafeProduct: deleteCafeProduct,
+    editCafeProduct: editCafeProduct,
+    getCafeProduct: getCafeProduct
 };
 
 
