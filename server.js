@@ -33,6 +33,9 @@ death(function(signal, err) {
 // setup passport
 require("./app/passport.js")(passport, database);
 
+// setup rememberme
+rememberme.init(database);
+
 // setup express app
 var app = express();
 app.use(morgan("dev"));
@@ -49,10 +52,10 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(flash());
-app.use(rememberme(database));
+app.use(rememberme.login);
 
 // setup routes
-require("./app/routes.js")(app, passport, database, email);
+require("./app/routes.js")(app, passport, rememberme, database, email);
 
 // start server
 // TODO: setup and enforce https
