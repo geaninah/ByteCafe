@@ -398,8 +398,7 @@ var getOrder = function(orderId, callback){
             console.log(err);
         }
         else{
-            var res = result[0];
-            callback(res, err);
+            callback(result, err);
         }
     });
 };
@@ -508,6 +507,124 @@ var getCafeProduct = function(cafeId, productId){
     });
 };
 
+var addBasketItems = function(userId, productId, cafeId, amount, callback){
+    var query = 'insert into basket_items(basket_item_user_id, basket_item_product_id, basket_item_cafe_id, basket_item_amount) values (?, ?, ?, ?)';
+    var parameters = [userId, productId, cafeId, amount];
+    connection.query(query, parameters, function(result, err){
+        if(err){
+            console.log(err);
+        }
+        else{
+            callback(result, err);
+        }
+    });
+};
+
+var deleteBasketItems = function(userId, productId, callback){
+    var query = 'delete from basket_items where basket_item_user_id = ? and basket_item_product_id = ?';
+    var parameters = [userId, productId];
+    connection.query(query, parameters, function(result, err){
+        if(err){
+            console.log(err);
+        }
+        else{
+            callback(result, err);
+        }
+    });
+};
+
+var editBasketItems = function(cafeId, amount, userId, productId, callback){
+    var query = 'update basket_items set basket_item_cafe_id = ?, basket_item_amount = ? where basket_item_user_id = ? and basket_item_product_id = ?';
+    var parameters = [cafeId, amount, userId, productId];
+    connection.query(query, parameters, function(result, err){
+        if(err){
+            console.log(err);
+        }
+        else{
+            callback(result, err);
+        }
+    });
+};
+
+var getBasketItems = function(userId, callback){
+    var query = 'select * from basket_items where basket_item_user_id = ?';
+    var parameters = [userId];
+    connection.query(query, parameters, function(result, err){
+        if(err){
+            console.log(err);
+        }
+        else{
+            callback(result, err);
+        }
+    });
+};
+
+var addOrderItems = function(orderId, productId, cafeId, amount, callback){
+    var query = 'insert into order_items(order_item_order_id, order_item_product_id, order_item_cafe_id, order_item_amount) values (?, ?, ?, ?)';
+    var parameters = [orderId, productId, cafeId, amount];
+    connection.query(query, parameters, function(result, err){
+        if(err){
+            console.log(err);
+        }
+        else{
+            callback(result, err);
+        }
+    });
+};
+
+
+var deleteOrderItems = function(orderId, productId, callback){
+    var query = 'delete from order_items where order_item_order_id = ? and order_item_product_id = ?';
+    var parameters = [orderId, productId];
+    connection.query(query, parameters, function(result, err){
+        if(err){
+            console.log(err);
+        }
+        else{
+            callback(result, err);
+        }
+    });
+};
+
+var editOrderItems = function(cafeId, amount, productId, orderId, callback){
+    var query = 'update order_items set order_item_cafe_id = ?, order_item_amount = ?, order_item_product_id = ? where order_item_order_id = ?';
+    var parameters = [cafeId, amount, productId, orderId];
+    connection.query(query, parameters, function(result, err){
+        if(err){
+            console.log(err);
+        }
+        else{
+            callback(result, err);
+        }
+    });
+};
+
+var getOrderItems = function(orderId, callback){
+    var query = 'select * from order_items where order_item_order_id = ?';
+    var parameters = [orderId];
+    connection.query(query, parameters, function(result, err){
+        if(err){
+            console.log(err);
+        }
+        else{
+            callback(result, err);
+        }
+    });
+};
+
+var getOrdersByUserId = function(userId, callback){
+    var query = 'select * from orders where order_user_id = ?';
+    var parameters = [userId];
+    connection.query(query, parameters, function(result, err){
+        if(err){
+            console.log(err);
+        }
+        else{
+            callback(result, err);
+        }
+    });
+}
+
 module.exports = {
     end: end,
     getCafes: getCafes,
@@ -547,7 +664,16 @@ module.exports = {
     addCafeProduct: addCafeProduct,
     deleteCafeProduct: deleteCafeProduct,
     editCafeProduct: editCafeProduct,
-    getCafeProduct: getCafeProduct
+    getCafeProduct: getCafeProduct,
+    addBasketItems: addBasketItems,
+    deleteBasketItems: deleteBasketItems,
+    editBasketItems: editBasketItems,
+    getBasketItems: getBasketItems, 
+    addOrderItems: addOrderItems,
+    deleteOrderItems: deleteOrderItems, 
+    editOrderItems: editOrderItems,
+    getOrderItems: getOrderItems,
+    getOrdersByUserId: getOrdersByUserId
 };
 
 
