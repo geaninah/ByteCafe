@@ -76,6 +76,26 @@ module.exports = function (database, email) {
       }, req.params.productId);
     },
 
+    // returns nutritional information about a product
+    getNutrition: function (req, res) {
+      database.getNutritionalFlags(req.params.productId, function(err, rows) {
+        if(!err) {
+          res.header("Content-Type", "application/json; charset=utf-8");
+          var response = {};
+          var allergens = [];
+          rows.forEach(function(row){
+            if(row.nutritional_flag_type.startsWith("gda")) {
+              response[row.nutritional_flag_type] = row.nutritional_flag_value;
+            } else if (row.nutritional_flag_type === "allergen") {
+              allergens.push(row.nutritional_flag_value);
+            }
+          });
+          response.allergens = allergens;
+          res.end(JSON.stringify(response));
+        }
+      });
+    },
+
     // returns queued orders at a cafe
     getOrders: function(req, res) {
       database.getOrders(function(err, orders){
@@ -104,6 +124,12 @@ module.exports = function (database, email) {
           res.end(JSON.stringify(basket));
         }
       }, req.user.user_id);
+    },
+
+    // modifies the contents of a users basket
+    editBasket: function(req, res) {
+      res.header("Content-Type", "text/plain; charset=utf-8");
+      res.end("Not done yet :c");
     }
   }
 };

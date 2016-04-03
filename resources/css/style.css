@@ -176,3 +176,68 @@
 #cancel-order, #wait-order, #finish-order {
 	width: 100%;
 }
+
+#productInfoDescription {
+	padding-bottom: 5px;
+}
+
+.icon_gda {
+  float: left;
+  margin-right: 1px;
+
+  text-align: center;
+  color: white;
+  font-weight: bold;
+  font-size: 0.65em;
+  font-family: sans-serif;
+}
+
+/* applies to the 3 sub elements of a gda */
+.icon_gda_elem {
+  vertical-align: middle;
+  width: 50px;
+  border: 1px solid black;
+  padding: 2px;
+}
+
+/* gda sections */
+.icon_gda_top {
+  height: 15px;
+  margin-bottom: 1px;
+  border-top-left-radius: 6px;
+  border-top-right-radius: 6px;
+}
+.icon_gda_mid {
+  height: 30px;
+  margin-bottom: 1px;
+}
+.icon_gda_bot {
+  height: 15px;
+  border-bottom-left-radius: 6px;
+  border-bottom-right-radius: 6px;
+  position: relative;
+  bottom: 0;
+}
+.icon_gda_text {
+  display: inline-block;
+  vertical-align: middle;
+}
+
+/* gda colouring */
+.icon_gda_green {
+  background-color: green;
+}
+.icon_gda_yellow {
+  background-color: orange;
+}
+.icon_gda_red {
+  background-color: red;
+}
+.icon_gda_no_color {
+  background-color: grey;
+}
+
+.allergen {
+	padding-left: 5px;
+	margin-bottom: 2px;
+}

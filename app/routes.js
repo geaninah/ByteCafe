@@ -14,10 +14,12 @@ module.exports = function(app, passport, rememberme, database, email) {
   app.get("/api/cafes",                     isLoggedInAPI, api.getCafes);
   app.get("/api/cafes/:cafeId",             isLoggedInAPI, api.getCafeInfo);
   app.get("/api/cafes/:cafeId/products",    isLoggedInAPI, api.getProducts);
-  app.get("/api/cafes/:cafeId/orders",      isLoggedInAPI, api.getOrderInfo);
-  app.get("/api/products/:productId",       isLoggedInAPI, api.getOrders);
+  app.get("/api/cafes/:cafeId/orders",      isLoggedInAPI, api.getOrders);
+  app.get("/api/products/:productId",       isLoggedInAPI, api.getProductInfo);
+  app.get("/api/products/:productId/nutrition", isLoggedInAPI, api.getNutrition);
   app.get("/api/orders/:orderId",           isLoggedInAPI, api.getOrderInfo);
   app.get("/api/basket",                    isLoggedInAPI, api.getBasket);
+  app.get("/api/basket/edit",               isLoggedInAPI, api.editBasket);
   //app.get("/api/tables",                    api.getTables);
 
   // serve static content

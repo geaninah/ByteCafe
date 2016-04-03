@@ -51,7 +51,7 @@
 
         <% products.forEach(function (product) { %>
         <!-- BOX REFERRING TO A PRODUCT -->
-        <a data-toggle="modal" data-target="#productInfo" data-id="<%= product.product_name%>">
+        <a data-toggle="modal" data-target="#productInfo" data-product-description="<%= product.product_description %>" data-product-image-url="<%= product.product_image_url %>" data-product-name="<%= product.product_name %>" data-product-id="<%= product.product_id%>">
           <div class="col-sm-6 col-md-4">
             <div class="thumbnail">
               <div class="caption" id="lessSpace">
@@ -59,7 +59,7 @@
               </div>
               <img class="img-rounded" src="<%= product.product_image_url %>" alt="<%= product.product_name %>">
               <div class="caption">
-                <a href="#" class="btn btn-default btn-add-cart" role="button">Add to Cart &nbsp;&nbsp;<span class="glyphicon glyphicon-shopping-cart" id="buttonIcon" aria-hidden="true"></span></a>
+                <a href="#" class="btn btn-default btn-add-cart" role="button">£<%= product.product_price.toFixed(2) %> - Add to Cart &nbsp;&nbsp;<span class="glyphicon glyphicon-shopping-cart" id="buttonIcon" aria-hidden="true"></span></a>
               </div>
             </div>
           </div>
@@ -74,15 +74,20 @@
           <div class="modal-content">
             <div class="modal-header">
               <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-              <h4 class="modal-title" id="myModalLabel">Product Name</h4>
+              <h4 class="modal-title" id="productInfoName">Product Name</h4>
             </div>
             <div class="modal-body">
               <div class="row">
                 <div class="col-sm-6">
-                  image
+                  <img class="img-responsive img-rounded" id="productInfoImage">
+
                 </div>
-                <div class="col-sm-6">
-                  Product info
+                <div class="col-sm-6" style="overflow-y: scroll">
+                  <div id="productInfoDescription">
+                    Product info
+                  </div>
+                  <div id="productInfoNutritional">
+                  </div>
                 </div>
               </div>
             </div>
@@ -92,9 +97,70 @@
           </div>
         </div>
       </div>
+      <script>
+        // holds our gda data
+        var gda = $("<div>", {"class":"icon_gda_bar"});
+        // adds a gda icon to our data
+        var add_gda = function(data, type) {
+          if (typeof data === "undefined") return;
+          var flag_parts = data.split(":");
+          console.log(flag_parts);
+          var gda_icon = $("<div>", {"class":"icon_gda"});
+          if(type === "Energy") {
+            gda_icon.append($("<div>", {
+              "class":"icon_gda_elem icon_gda_top icon_gda_"+flag_parts[3],
+              "html":"<span class=\"icon_gda_text\">Energy</span>"
+            }));
+            gda_icon.append($("<div>", {
+              "class":"icon_gda_elem icon_gda_mid icon_gda_"+flag_parts[3],
+              "html":"<span class=\"icon_gda_text\">"+flag_parts[0]+"kJ</span><span class=\"icon_gda_text\">"+flag_parts[1]+"kcal</span>"
+            }));
+            gda_icon.append($("<div>", {
+              "class":"icon_gda_elem icon_gda_bot icon_gda_"+flag_parts[3],
+              "html":"<span class=\"icon_gda_text\">"+flag_parts[2]+"</span>"
+            }));
+          } else {
+            gda_icon.append($("<div>", {
+              "class":"icon_gda_elem icon_gda_top icon_gda_"+flag_parts[2],
+              "html":"<span class=\"icon_gda_text\">"+type+"</span>"
+            }));
+            gda_icon.append($("<div>", {
+              "class":"icon_gda_elem icon_gda_mid icon_gda_"+flag_parts[2],
+              "html":"<span class=\"icon_gda_text\">"+flag_parts[0]+"g</span>"
+            }));
+            gda_icon.append($("<div>", {
+              "class":"icon_gda_elem icon_gda_bot icon_gda_"+flag_parts[2],
+              "html":"<span class=\"icon_gda_text\">"+flag_parts[1]+"%</span>"
+            }));
+          }
+          gda.append(gda_icon);
+        }
 
-
-
+        $("#productInfo").on("show.bs.modal", function(e) {
+          gda.empty();
+          var product_id = $(e.relatedTarget).data("product-id");
+          var product_name = $(e.relatedTarget).data("product-name");
+          var product_image = $(e.relatedTarget).data("product-image-url");
+          var product_description = $(e.relatedTarget).data("product-description");
+          $("#productInfoImage").attr("src", product_image);
+          $("#productInfoName").html(product_name);
+          $("#productInfoDescription").html(product_description);
+          $.getJSON("/api/products/"+product_id+"/nutrition").done(function(data){
+            $("#productInfoNutritional").empty();
+            if (typeof data.gda_text_per !== "undefined") {
+              add_gda(data.gda_icon_energy, "Energy");
+              add_gda(data.gda_icon_fat, "Fat");
+              add_gda(data.gda_icon_saturates, "Saturates");
+              add_gda(data.gda_icon_sugars, "Sugars");
+              add_gda(data.gda_icon_salt, "Salt");
+              gda.appendTo("#productInfoNutritional");
+            }
+            data.allergens.forEach(function(allergen) {
+              $("<div class=\"allergen\"><i class=\"fa fa-exclamation-circle\"></i>Contains "+allergen+"</div>").appendTo("#productInfoNutritional");
+            });
+          });
+        });
+      </script>
     </div>
   </div>
 

@@ -46,7 +46,7 @@ var getCafeInfo = function(callback, cafeId){
 
 // returns the products at a cafe
 var getProducts = function(callback, cafeId){
-    var query = 'select products.product_id, products.product_name, products.product_category_id, products.product_price, products.product_image_url from products where products.product_purchasable and products.product_id in ( select cafe_products.cafe_product_product_id from cafe_products where cafe_products.cafe_product_cafe_id = ? and cafe_products.cafe_product_purchasable and cafe_products.cafe_product_stock > 0 )';
+    var query = 'select products.product_id, products.product_name, products.product_category_id, products.product_price, products.product_image_url, products.product_description from products where products.product_purchasable and products.product_id in ( select cafe_products.cafe_product_product_id from cafe_products where cafe_products.cafe_product_cafe_id = ? and cafe_products.cafe_product_purchasable and cafe_products.cafe_product_stock > 0 )';
     var parameters = [cafeId];
 
     connection.query(query, parameters, function(err, products){
@@ -77,7 +77,7 @@ var getProductInfo = function(callback, productId){
 // gets the queued orders at a cafe
 // TODO: refine query getOrders
 var getOrders = function(callback, cafeId){
-    var query = 'select * from orders where cafe_id = ?';
+    var query = 'select * from orders where order_cafe_id = ?';
     var parameters = [cafeId];
 
     connection.query(query, parameters, function(err, orders){
@@ -347,6 +347,19 @@ var getNutritionalFlag = function(productId, type, callback){
         else{
             var res = result[0];
             callback(res, err);
+        }
+    });
+};
+
+var getNutritionalFlags = function(productId, callback){
+    var query = 'select * from nutritional_flags where nutritional_flag_product_id = ?';
+    var parameters = [productId];
+    connection.query(query, parameters, function(err, rows){
+        if(err){
+            console.log(err);
+        }
+        else{
+            callback(err, rows);
         }
     });
 };
@@ -653,6 +666,7 @@ module.exports = {
     deleteNutritionalFlag: deleteNutritionalFlag,
     editNutritionalFlag: editNutritionalFlag,
     getNutritionalFlag: getNutritionalFlag,
+    getNutritionalFlags: getNutritionalFlags,
     addOrder: addOrder,
     deleteOrder: deleteOrder,
     editOrder: editOrder,
@@ -668,16 +682,10 @@ module.exports = {
     addBasketItems: addBasketItems,
     deleteBasketItems: deleteBasketItems,
     editBasketItems: editBasketItems,
-    getBasketItems: getBasketItems, 
+    getBasketItems: getBasketItems,
     addOrderItems: addOrderItems,
-    deleteOrderItems: deleteOrderItems, 
+    deleteOrderItems: deleteOrderItems,
     editOrderItems: editOrderItems,
     getOrderItems: getOrderItems,
     getOrdersByUserId: getOrdersByUserId
 };
-
-
-
-
-
-
