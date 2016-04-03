@@ -1,6 +1,7 @@
-// middleware to log the user in if they have a valid rememberme cookie
-module.exports = function(database) {
-  return function(req, res, next) {
+// middleware to log the user in transparently if they have a valid rememberme cookie
+module.exports.init = function(database) {
+  // transparent login general middlewear
+  module.exports.login = function(req, res, next) {
     // if the user isn't logged in but /does/ have a rememberme cookie
     if(!req.isAuthenticated() && typeof req.cookies.rememberme != "undefined") {
       var selector  = req.cookies.rememberme.split("$")[0];
@@ -30,5 +31,18 @@ module.exports = function(database) {
     } else { // if alreadly logged in or no cookie
       return next();
     }
-  }
-}
+  } // transparent_login
+
+  // export our logout function
+  module.exports.logout = function(req, res, next) {
+    // if client is maintaining a remember me cookie
+    if(req.cookies.rememberme) {
+      var selector = req.cookies.rememberme.split("$")[0];
+      database.deleteRememberMeToken(selector, function(err, rows) {
+        if(err) console.log(err); // doesn't particularly matter if this fails
+      });
+      res.clearCookie("rememberme");
+    }
+    return next();
+  };
+};
