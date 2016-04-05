@@ -26,12 +26,14 @@
         <div class="panel-body">
           <div class="row">
           <div class="col-sm-5">
-            <p> Your current order includes the listed items. <br><br>
-                If you wish to add more items, you can always do so.<br>
-                You can also remove items that you do not want anymore.<br>
-                <br>
-                Once you are sure this is your order, please <br> press the
-                button. You will be redirected to PayPal.</p>
+            <p>
+              Your current order includes the listed items.
+              If you wish to add more items, you can always do so.
+              You can also remove items that you do not want anymore.
+              <br><br>
+              Once you are sure this is your order, please press the
+              button. You will be redirected to PayPal.
+            </p>
           </div>
           <div class="col-sm-7">
             <!-- List group -->
@@ -41,11 +43,11 @@
                 <li class="list-group-item">
                   <div class="row">
                     <div class="col-sm-7"><%= bask_item.product_name %></div>
-                    <div class="col-sm-2">$&nbsp;<%= bask_item.product_price %></div>
-                    <div class="col-sm-1"><%= bask_item.basket_amount %></div>
-                    <script> totalPrice = totalPrice + parseFloat(<%= bask_item.product_price %>) * parseFloat(<%= bask_item.basket_amount %>);</script>
-                    <div class="col-sm-2"><a href="" id="remove-button"><span class="glyphicon glyphicon-remove-circle" aria-hidden="true" style="color:#aa764e"></span></a></div>
-                  </div>
+                    <div class="col-sm-2">£&nbsp;<%= bask_item.product_price.toFixed(2); %></div>
+                    <script> totalPrice = totalPrice + parseFloat(<%= bask_item.product_price %>) * parseFloat(<%= bask_item.basket_item_amount %>);</script>
+                    <div class="col-sm-1"><%= bask_item.basket_item_amount %></div>
+                    <div class="col-sm-1"><a href="" id="remove-button"><span class="glyphicon glyphicon-plus-sign" aria-hidden="true" style="color:#aa764e"></span></a></div>
+                    <div class="col-sm-1"><a href="" id="remove-button"><span class="glyphicon glyphicon-minus-sign" aria-hidden="true" style="color:#aa764e"></span></a></div>
                 </li>
               <% }); %>
              </ul>
@@ -58,7 +60,7 @@
             <p> Total price: </p>
           </div>
           <div class="col-sm-3">
-            <p><strong> £<script>document.write(totalPrice)</script></strong></p>
+            <p><strong> £<script>document.write(totalPrice.toFixed(2))</script></strong></p>
           </div>
       </div>
       </div>

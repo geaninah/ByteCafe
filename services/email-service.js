@@ -33,7 +33,7 @@ var real_sendmessage_function = function(email, subject, message) {
 var debug_sendmessage_function = function(email, subject, message) {
   console.log("");
   console.log("To:  " + email);
-  console.log("Sub: " + message);
+  console.log("Sub: " + subject);
   if(!emailIsValid(email)) console.log("== ADDRESS NOT VALID ==");
   console.log(message);
   console.log("");

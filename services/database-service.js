@@ -181,6 +181,19 @@ var deleteRememberMeToken = function(selector, callback) {
   });
 }
 
+var updatePassword = function(user_id, password, callback){
+    var query = 'update users set user_password = ? where user_id = ?';
+    var parameters = [password, user_id];
+    connection.query(query, parameters, function(err, rows){
+        if(err){
+            console.log(err);
+        }
+        else{
+            callback(err, rows);
+        }
+    });
+};
+
 var addUser = function(username, email, password, userDisabled, userStore, userPos, userStock, userAdmin, callback){
     var query = 'insert into users (user_name, user_email, user_password, user_disabled, user_permission_store, user_permission_pos, user_permission_stock, user_permission_admin) values (?, ?, ?, ?, ?, ?, ?, ?)';
     var parameters = [username, email, password, userDisabled, userStore, userPos, userStock, userAdmin];
@@ -638,6 +651,49 @@ var getOrdersByUserId = function(userId, callback){
     });
 }
 
+var addPasswordResetToken = function(user_email, token, callback) {
+    getUserByEmail(user_email, function(err, rows) {
+        if(rows.length) { // FIXME TypeError: Cannot read property 'length' of null
+            var user = rows[0];
+            var query = "insert into password_reset_tokens "
+                      + "(password_reset_token_user_id, password_reset_token_validator, password_reset_token_expires)"
+                      + "values (?, ?, NOW() + INTERVAL 30 MINUTE)";
+            var params = [user.user_id, token];
+            connection.query(query, params, function(err, rows) {
+                if (err) { console.log(err); return callback(err); }
+                else     { return callback(err, rows); }
+            });
+        } else {
+          return callback("no-user");
+        }
+    });
+}
+
+var getPasswordResetToken = function(token, callback) {
+  var query = 'select * from password_reset_tokens where password_reset_token_validator = ? and password_reset_token_expires > NOW()';
+  var parameters = [token];
+  connection.query(query, parameters, function(err, rows){
+    if(err){
+      return console.log(err);
+    } else {
+      return callback(err, rows);
+    }
+  });
+}
+
+var consumePasswordResetToken = function(user_id, callback) {
+  var query = 'delete from password_reset_tokens where password_reset_token_user_id = ?';
+  var parameters = [user_id];
+  connection.query(query, parameters, function(err, rows) {
+    if(err) {
+      console.log(err);
+      return
+    } else {
+      return callback(err, rows);
+    }
+  });
+}
+
 module.exports = {
     end: end,
     getCafes: getCafes,
@@ -653,6 +709,7 @@ module.exports = {
     addRememberMeToken: addRememberMeToken,
     getRememberMeToken: getRememberMeToken,
     deleteRememberMeToken: deleteRememberMeToken,
+    updatePassword: updatePassword,
     addUser: addUser,
     deleteUser: deleteUser,
     editUser: editUser,
@@ -687,5 +744,8 @@ module.exports = {
     deleteOrderItems: deleteOrderItems,
     editOrderItems: editOrderItems,
     getOrderItems: getOrderItems,
-    getOrdersByUserId: getOrdersByUserId
+    getOrdersByUserId: getOrdersByUserId,
+    addPasswordResetToken: addPasswordResetToken,
+    getPasswordResetToken: getPasswordResetToken,
+    consumePasswordResetToken: consumePasswordResetToken
 };

@@ -4,12 +4,18 @@
 }
 
 .container {
-	padding-top:100px;
+	padding-top: 100px;
+  padding-bottom: 140px;
+}
+
+.navbar-fixed-bottom {
+  background-color: #f8f8f8;
 }
 
 #demonstration img {
 	width:100%;
 	height: auto;
+  padding-bottom: 20px
 }
 
 #login {

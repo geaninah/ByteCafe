@@ -43,7 +43,7 @@ module.exports = function(passport, database) {
       if (rows.length) return done(null, false, {message: "This email is already in use!"});
       else {
         // generate our bcrypt hash
-        var hashed_password = bcrypt.hashSync(password, null, null)
+        var hashed_password = bcrypt.hashSync(password, null, null);
         // add them to the user database (the defaults are set in the mysql database)
         database.enrolNewUser(email, hashed_password, function(err, rows) {
           // fail on sql error

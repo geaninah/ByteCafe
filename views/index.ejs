@@ -1,220 +1,155 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  
+
   <% include head_incl.ejs %>
   <title>INDEX</title>
 
 </head>
 <body>
+  <!-- blank navigation bar -->
   <nav class="navbar navbar-default navbar-fixed-top">
-      <div class="container-fluid" id="header">
-        <img src="images/logo.png">
-      </div> 
+    <div class="container-fluid" id="header">
+      <img src="images/logo.png">
+    </div>
   </nav>
+
+  <!-- main content -->
   <div class="container">
     <div class="row">
-        <div class="col-sm-8" id="demonstration">
-          <img class="img-rounded" src="images/sample.png">
-        </div>
-        <div class="col-sm-4">
-          
-          <div class="col-sm-12 btn-group" id="reg-type">
-            <button type="button" class="btn btn-primary" id="loginTab">Log In</button>
-            <button type="button" class="btn btn-primary" id="signupTab">Sign Up</button>
+
+      <!-- left hand image -->
+      <div class="col-sm-8" id="demonstration">
+        <img class="img-rounded" src="images/sample.png">
+      </div>
+
+
+      <!-- right hand login forms -->
+      <div class="col-sm-4">
+        <!-- login / signup form switch buttons -->
+        <div class="col-sm-12 btn-group" id="reg-type">
+          <button type="button" class="btn btn-primary" id="loginTab">Log In</button>
+          <button type="button" class="btn btn-primary" id="signupTab">Sign Up</button>
         </div>
 
+        <!-- script to handle switching between login and signup forms -->
         <script>
-          $(document).ready(function() {
+        $(document).ready(function() {
+
+          $('#signUpForm').hide();
+          $('#loginTab').addClass('focus');
+
+          // setup signup/login buttons
+          $('#loginTab').click(function () {
             $('#signUpForm').hide();
+            $('#loginForm').show();
             $('#loginTab').addClass('focus');
+            $('#signupTab').removeClass('focus');
+          });
 
-            // setup signup/login buttons
-            $('#loginTab').click(function () {
-              $('#signUpForm').hide();
-              $('#loginForm').show();
-              $('#loginTab').addClass('focus');
-              $('#signupTab').removeClass('focus');
-            });
+          // setup signup/login buttons
+          $('#signupTab').click(function () {
+            $('#loginForm').hide();
+            $('#signUpForm').show();
+            $('#signupTab').addClass('focus');
+            $('#loginTab').removeClass('focus');
+          });
 
-            // setup signup/login buttons
-            $('#signupTab').click(function () {
-              $('#loginForm').hide();
-              $('#signUpForm').show();
-              $('#signupTab').addClass('focus');
-              $('#loginTab').removeClass('focus');
-            });
+          // populate the terms and conditions modal
+          var tncDownloadedAlready = false;
+          $("#TandCModal").on("show.bs.modal", function() {
+            if(!tncDownloadedAlready) {
+              $.get('/api/terms', function(data) {
+                $('#placeTandC').removeClass("text-center").html(data);
+                tncDownloadedAlready = true;
+              });
+            }
+          });
 
-            
+        }); // on document ready
+        </script>
 
+        <!-- forms container -->
+        <div class="col-sm-12">
+          <!-- error message box -->
+          <div id="error-message"><%= message %></div><br>
 
-            // populate the terms and conditions modal
-            var tncDownloadedAlready = false;
-            $("#TandCModal").on("show.bs.modal", function() {
-              if(!tncDownloadedAlready) {
-                $.get('/api/terms', function(data) {
-                  $('#placeTandC').removeClass("text-center").html(data); 
-                  tncDownloadedAlready = true;
-                });
+          <!-- login form -->
+          <form role="form" id="loginForm" method="post" action="/auth/login">
+            <div class="form-group has-feedback">
+              <input type="email" class="form-control" id="emailField" name="email" placeholder="Email">
+              <span class="glyphicon form-control-feedback glyphicon-envelope"></span>
+            </div>
+            <div class="form-group has-feedback">
+              <input type="password" class="form-control" id="passwordField" name="password" placeholder="Password">
+              <span class="glyphicon form-control-feedback glyphicon-lock"></span>
+            </div>
+            <div>
+              <label><input type="checkbox" name="remember_me_box"> Remember me</label>
+            </div>
+            <div class="col-sm-12" id="FP_link">
+              <button type="button" class="btn btn-link" data-toggle="modal" data-target="#ResetPassword">Forgotten password?</button>
+            </div>
+            <div class="col-sm-12">
+              <button type="submit" class="btn btn-default" disabled="disabled" id="login">Submit</button>
+            </div>
+            <script>
+            // checks fields are populated
+            $('#passwordField').on("input", function() {
+              if($('#emailField').val() == "" || $('#passwordField').val() == "") {
+                $('#login').attr('disabled', 'disabled');
+              }
+              else {
+                $('#login').removeAttr('disabled', 'disabled');
               }
             });
-
-          });
-          </script>
-        
-        <div class="col-sm-12">
-
-
-            <div id="error-message">
-                <%= message %>
-            </div>
-            <br>
-            <form role="form" id="loginForm" method="post" action="/auth/login">
-              <div class="form-group has-feedback">
-                <input type="email" class="form-control" id="emailField" name="email" placeholder="Email">
-              <span class="glyphicon form-control-feedback glyphicon-envelope"></span>
-              </div>
-             <div class="form-group has-feedback">
-                <input type="password" class="form-control" id="passwordField" name="password" placeholder="Password">
-                <span class="glyphicon form-control-feedback glyphicon-lock"></span>
-              </div>
-              <div class="checkbox" name="request_remember">
-                <label><input type="checkbox" name="remember_me_box"> Remember me</label>
-             </div>
-             <div class="col-sm-12" id="FP_link">
-               <button type="button" class="btn btn-link" data-toggle="modal" data-target="#ResetPassword">Forgotten password?</button>
-             </div>
-             <div class="col-sm-12">
-                <button type="submit" class="btn btn-default" disabled="disabled" id="login">Submit</button>
-              </div>
-
-              <script>
-
-                $('#passwordField').change(function() {
-                if($('#emailField').val() == "" || $('#passwordField').val() == "") {
-                  $('#login').attr('disabled', 'disabled');
-                }
-                else {
-                  $('#login').removeAttr('disabled', 'disabled');
-                }
-              });
-
-              </script>
-
-              <!-- Modal -->
-        <div class="modal fade" id="ResetPassword" role="dialog">
-            <div class="modal-dialog" role="document">
-
-            <!-- Modal content-->
-            <div class="modal-content">
-                <div class="modal-header">
-                  <button type="button" class="close" data-dismiss="modal">&times;</button>
-                  <h4 class="modal-title">Forgot your password?</h4>
-                </div>
-                <form role="form" id="forgotPassForm" method="post" action="/forgot">
-                <div class="form-group has-feedback">
-                <div class="modal-body">
-                   <h5>No worries! Just enter your email address in the field below and we will send you information on how to reset it! (: </h5>
-                   <input type="email" class="form-control" id="emailForgotPass" placeholder="Email">
-                    <div id="error-message-forgot">
-                     <%= message %>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                  <button type="submit" class="btn btn-default" disabled="disabled" id="submitForgotPass">Submit</button>
-                  <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                </div>
-              </div>
-            </form>
-            </div>
-
-            <script>
-              $('#emailForgotPass').change(function() {
-                if($('#emailForgotPass').val() != "") {
-                  $('#submitForgotPass').removeAttr('disabled', 'disabled');
-                }
-                else {
-                  $('#submitForgotPass').attr('disabled', 'disabled');
-                }
-              });
             </script>
-            </div>
-        </div>
-
           </form>
-            <form role="form" id="signUpForm" action="/auth/signup" method="post">
-              <div class="form-group has-feedback" id="email_group1">
-                <input type="email" class="form-control" id="email" name="email" placeholder="Email">
+
+          <!-- Signup Form -->
+          <form role="form" id="signUpForm" action="/auth/signup" method="post">
+            <div class="form-group has-feedback" id="email_group1">
+              <input type="email" class="form-control" id="email" name="email" placeholder="Email">
               <span class="glyphicon form-control-feedback glyphicon-envelope " id="email_icon1"></span>
-              </div>
-              <div class="form-group has-feedback" id="email_group2">
-                <input type="email" class="form-control" id="Conf_email" placeholder="Confirm Email">
+            </div>
+            <div class="form-group has-feedback" id="email_group2">
+              <input type="email" class="form-control" id="Conf_email" placeholder="Confirm Email">
               <span class="glyphicon form-control-feedback glyphicon-envelope" id="email_icon2"></span>
-              </div>
-             <div class="form-group has-feedback" id="password_group1">
-                <input type="password" class="form-control" id="passwordPass" name="password" placeholder="Password">
-                <span class="glyphicon form-control-feedback glyphicon-lock" id="password_icon1"></span>
-              </div>
-              <div class="form-group has-feedback" id="password_group2">
-                <input type="password" class="form-control" id="Conf_password" value="" placeholder="Confirm Password">
+            </div>
+            <div class="form-group has-feedback" id="password_group1">
+              <input type="password" class="form-control" id="passwordPass" name="password" placeholder="Password">
+              <span class="glyphicon form-control-feedback glyphicon-lock" id="password_icon1"></span>
+            </div>
+            <div class="form-group has-feedback" id="password_group2">
+              <input type="password" class="form-control" id="Conf_password" value="" placeholder="Confirm Password">
               <span class="glyphicon form-control-feedback glyphicon-lock" id="password_icon2"></span>
-              </div>
-              <div class="checkbox">
-                <label><input type="checkbox" id="validPP"> I understand that to purchase something from the website, I need to have a <b>valid PayPal account</b>.</label>
-             </div>
-              <div class="checkbox">
-                <label><input type="checkbox" id="TandC"> I confirm that I have read and agree with the <a data-toggle='modal' data-target='#TandCModal' id="openTandC">Terms and Conditions</a>.</label>
-             </div>
-             <div class="col-sm-12">
-                <button type="submit" class="btn btn-default" disabled="disabled" id="login1">Submit</button>
-              </div>
-
-
-              <!-- Modal -->
-        <div class="modal fade" id="TandCModal" role="dialog">
-            <div class="modal-dialog" role="document">
-
-            <!-- Modal content-->
-            <div class="modal-content">
-                <div class="modal-header">
-                  <button type="button" class="close" data-dismiss="modal">&times;</button>
-                  <h4 class="modal-title">Terms and Conditions: </h4>
-                </div>
-                <div class="modal-body" id="placeTandC">
-                  <i class="fa fa-circle-o-notch fa-spin"></i>
-                </div>
-                <div class="modal-footer">
-                  <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                </div>
             </div>
+            <div class="checkbox">
+              <label><input type="checkbox" id="validPP"> I understand that to purchase something from the website, I need to have a <b>valid PayPal account</b>.</label>
             </div>
-        </div>
-
-              <script>
-
-                $('#TandC').change(function() {
-                if($('#email_group1').hasClass("has-success") && $('#password_group1').hasClass("has-success") 
-                  && $('#TandC').is(':checked') && $('#validPP').is(':checked')) {
-                  $('#login1').removeAttr('disabled', 'disabled');
-                }
-                else {
-                  $('#login1').attr('disabled', 'disabled');
-                  $('#TandC').prop('checked', false);
-                }
-              });
-
-              </script>
-
-          </form>
-
-          <script>
-            $('#Conf_email').change(function() {
+            <div class="checkbox">
+              <label><input type="checkbox" id="TandC"> I confirm that I have read and agree with the <a data-toggle='modal' data-target='#TandCModal' id="openTandC">Terms and Conditions</a>.</label>
+            </div>
+            <div class="col-sm-12">
+              <button type="submit" class="btn btn-default" disabled="disabled" id="login1">Submit</button>
+            </div>
+            <script>
+            $('#TandC').change(function() {
+              if($('#email_group1').hasClass("has-success") && $('#password_group1').hasClass("has-success")
+              && $('#TandC').is(':checked') && $('#validPP').is(':checked')) {
+                $('#login1').removeAttr('disabled', 'disabled');
+              }
+              else {
+                $('#login1').attr('disabled', 'disabled');
+                $('#TandC').prop('checked', false);
+              }
+            });
+            var validate_email = function() {
 
               $('#email_icon1').removeClass('glyphicon-envelope');
               $('#email_icon2').removeClass('glyphicon-envelope');
 
-              if ($('#email').val() == $('#Conf_email').val())
-              { 
+              if ($('#email').val() == $('#Conf_email').val() && /[a-zA-Z0-9._%+-]+\@[a-zA-Z0-9.-]+?\..+/.test($("#email").val())) {
                 if($('#email_group1').hasClass("has-error")) {
                   $('#email_group1').removeClass('has-error');
                   $('#email_group2').removeClass('has-error');
@@ -225,8 +160,7 @@
                 $('#email_group2').addClass('has-success');
                 $('#email_icon1').addClass('glyphicon-ok');
                 $('#email_icon2').addClass('glyphicon-ok');
-              }
-              else {
+              } else {
                 if($('#email_group1').hasClass("has-success")) {
                   $('#email_group1').removeClass('has-error');
                   $('#email_group2').removeClass('has-error');
@@ -238,14 +172,13 @@
                 $('#email_icon1').addClass('glyphicon-remove');
                 $('#email_icon2').addClass('glyphicon-remove');
               }
-            });
+            };
+            var validate_password = function() {
 
-            $('#Conf_password').change(function() {
-            
               $('#password_icon1').removeClass('glyphicon-lock');
               $('#password_icon2').removeClass('glyphicon-lock');
               if ($('#passwordPass').val() == $('#Conf_password').val())
-              { 
+              {
                 if($('#password_group1').hasClass("has-error")) {
                   $('#password_group1').removeClass('has-error');
                   $('#password_group2').removeClass('has-error');
@@ -256,8 +189,7 @@
                 $('#password_group2').addClass('has-success');
                 $('#password_icon1').addClass('glyphicon-ok');
                 $('#password_icon2').addClass('glyphicon-ok');
-              }
-              else {
+              } else {
                 if($('#password_group1').hasClass("has-success")) {
                   $('#password_group1').removeClass('has-error');
                   $('#password_group2').removeClass('has-error');
@@ -269,20 +201,27 @@
                 $('#password_icon1').addClass('glyphicon-remove');
                 $('#password_icon2').addClass('glyphicon-remove');
               }
-            });
-
-          </script>
+            };
+            $('#email').on("input", validate_email);
+            $('#Conf_email').on("input", validate_email);
+            $('#passwordPass').on("input", validate_password);
+            $('#Conf_password').on("input", validate_password);
+            </script>
+          </form>
         </div>
-        </div>
+      </div>
+    </div>
+  </div>
 
+  <!-- Bottom navbar -->
   <div class="row-fluid navbar-fixed-bottom">
     <div class="col-sm-12">
       <hr>
     </div>
     <div class="col-sm-12">
       <div class="col-sm-7">
-        <a href="#">Terms of Service</a>    
-        <a href="#">Privacy</a>    
+        <a href="#">Terms of Service</a>
+        <a href="#">Privacy</a>
         <a href="#">Contacts</a>
       </div>
       <div class="col-sm-5">
@@ -291,6 +230,75 @@
     </div>
   </div>
 
+  <!-- Modals from here on down  -->
+  <!-- Terms and conditions modal -->
+  <div class="modal fade" id="TandCModal" role="dialog">
+    <div class="modal-dialog" role="document">
+      <!-- content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title">Terms and Conditions</h4>
+        </div>
+        <div class="modal-body" id="placeTandC">
+          <i class="fa fa-circle-o-notch fa-spin"></i>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Forgot password Modal -->
+  <div class="modal fade" id="ResetPassword" role="dialog">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <!-- modal header -->
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title">Forgot your password?</h4>
+        </div>
+        <!-- modal content -->
+        <div class="modal-body">
+          <h5>No worries! Just enter your email address in the field below and we will send you information on how to reset it! (: </h5>
+          <h6 id="messageForgotPass"></h6>
+          <div class="form-group has-feedback">
+            <input type="email" class="form-control" id="emailForgotPass" placeholder="Email">
+            <i class="form-control-feedback glyphicon glyphicon-envelope"></i>
+          </div>
+          <div class="modal-footer">
+            <button class="btn btn-default" disabled="disabled" id="submitForgotPass">Submit</button>
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+      <script>
+      // disable submit button till email populated
+      $('#emailForgotPass').on("input", function() {
+        if($('#emailForgotPass').val() != "") {
+          $('#submitForgotPass').removeAttr('disabled', 'disabled');
+        } else {
+          $('#submitForgotPass').attr('disabled', 'disabled');
+        }
+      });
+
+      $("#submitForgotPass").click(function(){
+        var button_submit = $("#submitForgotPass");
+        var text_email = $("#emailForgotPass");
+        var email = $("#emailForgotPass").val();
+        button_submit.attr("disabled", "disabled");
+        button_submit.html("<i class=\"fa fa-circle-o-notch fa-spin\"></i>");
+        $.getJSON("/auth/forgot", {email: email}).done(function(data){
+          if(data.status == 1) {
+            button_submit.addClass("btn-success");
+          } else {
+            button_submit.addClass("btn-danger");
+          }
+          button_submit.html(data.message);
+        });
+      });
+      </script>
     </div>
   </div>
 </body>

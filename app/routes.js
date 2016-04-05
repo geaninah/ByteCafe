@@ -46,12 +46,11 @@ module.exports = function(app, passport, rememberme, database, email) {
   });
 
   // serves calls for forgotten password
-  app.get("/forgot", function(req, res) {
-    res.render('forgot', {
-      user: req.user,
-      forgot_message: req.flash("forgotMessage")
-    });
+  app.get("/auth/forgot", api.resetPassword);
+  app.get("/auth/reset", api.verifyResetToken, function(req, res) {
+    res.render("reset_pass.ejs", {token: req.query.token});
   });
+  app.post("/auth/reset", api.verifyResetTokenPost, api.updatePassword);
 
   app.post("/forgot", passport.authenticate("local-forgot",{
     successRedirect: "/",
