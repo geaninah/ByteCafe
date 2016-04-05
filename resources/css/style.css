@@ -188,7 +188,7 @@
 }
 
 .icon_gda {
-  float: left;
+  display: inline-block;
   margin-right: 1px;
 
   text-align: center;
@@ -198,10 +198,15 @@
   font-family: sans-serif;
 }
 
+.icon_gda_bar {
+	height: 65px;
+	text-align: center;
+}
+
 /* applies to the 3 sub elements of a gda */
 .icon_gda_elem {
   vertical-align: middle;
-  width: 50px;
+  width: 43px;
   border: 1px solid black;
   padding: 2px;
 }
@@ -246,4 +251,12 @@
 .allergen {
 	padding-left: 5px;
 	margin-bottom: 2px;
+	background-color: orange;
+	border-radius: 10px;
+	width: 100%;
+	text-align: left;
+}
+
+#productInforNutritional {
+	text-align: center;
 }
