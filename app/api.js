@@ -6,7 +6,7 @@ var fs              = require("fs");
 var path            = require("path");
 var moment          = require("moment");
 var secure          = require("secure-random");
-var bcrypt         = require("bcrypt-nodejs");
+var bcrypt          = require("bcrypt-nodejs");
 
 // main api functionality
 module.exports = function (database, email) {
@@ -101,26 +101,25 @@ module.exports = function (database, email) {
       var password = req.body.password;
       if(password == "") {
         res.header("Content-Type", "application/json; charset=utf-8");
-        res.end(JSON.stringify({status:0, message:"Password cannot be blank"}));
+        res.end(JSON.stringify({status:0, message: "Password cannot be blank"}));
         return
       }
       database.getPasswordResetToken(actual_token, function(err, rows) {
         var hashed_password = bcrypt.hashSync(password, null, null);
         database.consumePasswordResetToken(rows[0].password_reset_token_user_id, function(err){
           if(err) {
-            res.end(JSON.stringify({status:0, message:"Failed to change password"}));
+            res.end(JSON.stringify({status:0, message: "Failed to change password"}));
             console.log(err);
             return;
           }
           database.updatePassword(rows[0].password_reset_token_user_id, hashed_password, function(err, rows) {
             res.header("Content-Type", "application/json; charset=utf-8");
             if(err) {
-              res.end(JSON.stringify({status:0, message:"Failed to change password"}));
+              res.end(JSON.stringify({status: 0, message: "Failed to change password"}));
               console.log(err);
               return;
             }
-            res.end(JSON.stringify({status:1, message:"Password successfully reset"}));
-
+            res.end(JSON.stringify({status: 1, message: "Password successfully reset"}));
           });
         });
       });
@@ -216,10 +215,52 @@ module.exports = function (database, email) {
       }, req.user.user_id);
     },
 
-    // modifies the contents of a users basket
+    // modifies the contents of a users basket TODO
     editBasket: function(req, res) {
-      res.header("Content-Type", "text/plain; charset=utf-8");
-      res.end("Not done yet :c");
+      var amount = req.query.amount;
+      var product_id = req.query.product_id;
+      var cafe_id = req.query.cafe_id;
+      // ensure input is valid
+      // HACK change the a(nubmer) regex and code to something more sensible
+      if(!/^(\-|a)?\d+$/.test(amount) || isNaN(product_id) || isNaN(cafe_id)) {
+        res.header("Content-Type", "application/json; charset=utf-8");
+        res.end(JSON.stringify({status: 0, message: "Invalid input" }));
+      } else {
+        product_id = Number(product_id);
+        cafe_id = Number(cafe_id);
+        database.getBasketItems(req.user.user_id, function(err, rows) {
+          var basket_item = null;
+          var new_amount = null;
+          var old_amount = null;
+          rows.forEach(function(row) {
+            if(row.basket_item_product_id == product_id && row.basket_item_cafe_id == cafe_id) {
+              old_amount = row.basket_item_amount;
+              basket_item = row;
+            }
+          });
+          console.log(basket_item);
+          if(!basket_item) {
+            old_amount = 0;
+          }
+          if(amount.startsWith("a"))
+            new_amount = Number(old_amount) + Number(amount.slice(1));
+          else if(amount.startsWith("-"))
+            new_amount = Number(old_amount) - amount.slice(1);
+          else
+            new_amount = Number(amount);
+          if (new_amount < 0) new_amount = 0;
+          res.header("Content-Type", "application/json; charset=utf-8");
+          console.log({new_amount: new_amount, cafe_id, cafe_id, user_id: req.user.user_id, product_id: product_id});
+          database.editBasketItems(new_amount, cafe_id, req.user.user_id, product_id, function(err, rows) {
+            if (err) {
+              console.log(err);
+              res.end(JSON.stringify({status: 0, old_amount: old_amount, new_amount: old_amount, message: "Failed, please try again later" }));
+            }
+            console.log(rows);
+            res.end(JSON.stringify({status: 1, old_amount: old_amount, new_amount: new_amount, message: "Added" }));
+          });
+        });
+      }
     }
   }
 };

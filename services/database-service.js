@@ -5,16 +5,19 @@ var mysql = require('mysql');
 var config = require("../config/config");
 
 // setup our database connection
-var connection = mysql.createConnection(config.database);
-connection.connect(function(err) {
+var connection = mysql.createPool(config.database);
+
+// do a test connection
+connection.getConnection(function(err, con) {
   if (err) {
-    console.error("Error connecting to database" + err);
+    console.log("FATAL: Error connecting to database");
+    console.log(err);
+    connection.end();
     process.exit(1);
-    return
   }
-  console.log("Connected to database with id " + connection.threadId);
 });
 
+// close all connections
 var end = function() {
   connection.end();
 }
@@ -559,28 +562,24 @@ var deleteBasketItems = function(userId, productId, callback){
     });
 };
 
-var editBasketItems = function(cafeId, amount, userId, productId, callback){
-    var query = 'update basket_items set basket_item_cafe_id = ?, basket_item_amount = ? where basket_item_user_id = ? and basket_item_product_id = ?';
-    var parameters = [cafeId, amount, userId, productId];
-    connection.query(query, parameters, function(result, err){
-        if(err){
-            console.log(err);
-        }
-        else{
-            callback(result, err);
-        }
+var editBasketItems = function(amount, cafeId, userId, productId, callback){
+    var query = 'update basket_items set basket_item_amount = ? where basket_item_cafe_id = ? and basket_item_user_id = ? and basket_item_product_id = ?';
+    var parameters = [amount, cafeId, userId, productId];
+    connection.query(query, parameters, function(err, result){
+        if(err) console.log(err);
+        return callback(err, result);
     });
 };
 
 var getBasketItems = function(userId, callback){
     var query = 'select * from basket_items where basket_item_user_id = ?';
     var parameters = [userId];
-    connection.query(query, parameters, function(result, err){
+    connection.query(query, parameters, function(err, result){
         if(err){
             console.log(err);
         }
         else{
-            callback(result, err);
+            callback(err, result);
         }
     });
 };
@@ -588,13 +587,9 @@ var getBasketItems = function(userId, callback){
 var addOrderItems = function(orderId, productId, cafeId, amount, callback){
     var query = 'insert into order_items(order_item_order_id, order_item_product_id, order_item_cafe_id, order_item_amount) values (?, ?, ?, ?)';
     var parameters = [orderId, productId, cafeId, amount];
-    connection.query(query, parameters, function(result, err){
-        if(err){
-            console.log(err);
-        }
-        else{
-            callback(result, err);
-        }
+    connection.query(query, parameters, function(err, result) {
+        if(err) console.log(err);
+        return callback(err, result);
     });
 };
 

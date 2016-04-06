@@ -43,27 +43,28 @@ module.exports = function(passport, database) {
       if (rows.length) return done(null, false, {message: "This email is already in use!"});
       else {
         // generate our bcrypt hash
-        var hashed_password = bcrypt.hashSync(password, null, null);
-        // add them to the user database (the defaults are set in the mysql database)
-        database.enrolNewUser(email, hashed_password, function(err, rows) {
-          // fail on sql error
-          if(err) {
-            console.log(err);
-            return done(null, false, {message: "Sorry, something went wrong. Please try again later!"});
-          }
-          // create our new user object
-          var new_user = {
-            user_id: rows.insertId,
-            user_email: email,
-            user_name: null,
-            user_disabled: 0,
-            user_permission_store: 1,
-            user_permission_pos:   0,
-            user_permission_stock: 0,
-            user_permission_admin: 0
-          };
-          // complete user registration & log in
-          return done(null, new_user);
+        bcrypt.hash(password, null, null, function(err, hashed_password) {
+          // add them to the user database (the defaults are set in the mysql database)
+          database.enrolNewUser(email, hashed_password, function(err, rows) {
+            // fail on sql error
+            if(err) {
+              console.log(err);
+              return done(null, false, {message: "Sorry, something went wrong. Please try again later!"});
+            }
+            // create our new user object
+            var new_user = {
+              user_id: rows.insertId,
+              user_email: email,
+              user_name: null,
+              user_disabled: 0,
+              user_permission_store: 1,
+              user_permission_pos:   0,
+              user_permission_stock: 0,
+              user_permission_admin: 0
+            };
+            // complete user registration & log in
+            return done(null, new_user);
+          });
         });
       }
     });
@@ -80,24 +81,32 @@ module.exports = function(passport, database) {
       // catch sql error
       if(err) {
         console.log(err);
-        return done(null, false, {message: "Sorry, something went wrong. Please try again later!"}); }
+        return done(null, false, {message: "Sorry, something went wrong. Please try again later!"});
+      }
       // if no such user
       if(!rows.length)
         return done(null, false, {message: "Incorrect email or password!"});
       // FIXME: This line gives errors
       var user = rows[0];
       // if users password is incorrect
-      if(!bcrypt.compareSync(password, user.user_password))
-        return done(null, false, {message: "Incorrect email or password!"});
-      // no point keeping the users password in memory past this point
-      delete user.user_password;
-      // if users account is marked disabled
-      if(user.disabled) return done(null, false, {message: "This account has been disabled."});
+      bcrypt.compareSync(password, user.user_password, function(err, valid_password) {
+        // catch bcrypt error
+        if(err) {
+          console.log(err);
+          return done(null, false, {message: "Sorry, something went wrong. Please try again later!"});
+        }
+        if(!valid_password)
+          return done(null, false, {message: "Incorrect email or password!"});
+        // no point keeping the users password in memory past this point
+        delete user.user_password;
+        // if users account is marked disabled
+        if(user.disabled) return done(null, false, {message: "This account has been disabled."});
 
-      // if user requested to remember them, save them a cookie!
-      if (req.body.remember_me_box) return createAndSaveRememberCookie(done, req, user);
-      // else just validate auth
-      else return done(null, user);
+        // if user requested to remember them, save them a cookie!
+        if (req.body.remember_me_box) return createAndSaveRememberCookie(done, req, user);
+        // else just validate auth
+        else return done(null, user);
+      });
     });
   }));
 

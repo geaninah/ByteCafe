@@ -8,21 +8,30 @@ var flash        = require("connect-flash");
 var morgan       = require("morgan");
 var mysql        = require("mysql");
 var death        = require("death");
-
-// load our remember me middleware
-var rememberme   = require("./app/remember-me.js");
+var path         = require("path");
 
 // load our configuration
 var config = require("./config/config.js")
 var port = config.http_port;
 
-// load our database and email providers
+// setup our logger
+var logger = require("./services/logger-service.js");
+var log    = logger.init(path.join(__dirname, "logs"), email);
+log(3, "Server", "Starting server");
+
+// load our database, email and log providers
 var database = require("./services/database-service.js");
 var email    = require("./services/email-service.js");
 
-// make sure we disconnect cleanly on any kind of quit
+
+// load our remember me middleware
+var rememberme   = require("./app/remember-me.js");
+rememberme.init(database);
+
+// make sure we disconnect the database cleanly on any kind of quit
 death(function(signal, err) {
   // additional graves...
+  log(3, "Server", "Stopping server");
   console.log("Cleaning up:")
   console.log("Closing database connection");
   database.end();
@@ -33,8 +42,7 @@ death(function(signal, err) {
 // setup passport
 require("./app/passport.js")(passport, database);
 
-// setup rememberme
-rememberme.init(database);
+
 
 // setup express app
 var app = express();
@@ -55,9 +63,11 @@ app.use(flash());
 app.use(rememberme.login);
 
 // setup routes
-require("./app/routes.js")(app, passport, rememberme, database, email);
+log(3, "Server", "Initializing routes");
+require("./app/routes.js")(app, passport, rememberme, database, email, log);
 
 // start server
 // TODO: setup and enforce https
+log(3, "Server", "Startup complete, waiting for connections on port " + port);
 console.log("Listening on port " + port);
 app.listen(port);
