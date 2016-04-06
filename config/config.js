@@ -8,6 +8,7 @@ module.exports = {
 
   // database configuration
   database: {
+    connectionLimit: 1,
     host: process.env.DATABASE_HOSTNAME,
     port: process.env.DATABASE_PORT,
     user: process.env.DATABASE_USERNAME,
