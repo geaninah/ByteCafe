@@ -1,21 +1,19 @@
 // example configuration file
 module.exports = {
   // http website port
-  http_port: 8080,
+  http_port: 80,
 
   // https website port
-  tls_port: 8443,
+  tls_port: 443,
 
-  // database configuration 
+  // database configuration
   database: {
-    host: "eu-cdbr-azure-west-d.cloudapp.net",
-    port: 3306,
-    user: "bc4a04064f12a2",
-    password: "5da0c7c9",
-    database: "bytecafedb"
+    host: process.env.DATABASE_HOSTNAME,
+    port: process.env.DATABASE_PORT,
+    user: process.env.DATABASE_USERNAME,
+    password: process.env.DATABASE_PASSWORD,
+    database: process.env.DATABASE_NAME
   },
-
-  debug_email: true,
 
   sendGrid: {
     username: process.env.SENDGRID_USERNAME,
