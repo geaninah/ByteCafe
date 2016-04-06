@@ -14,6 +14,8 @@ connection.getConnection(function(err, con) {
     console.log(err);
     connection.end();
     process.exit(1);
+  } else {
+    con.release();
   }
 });
 
