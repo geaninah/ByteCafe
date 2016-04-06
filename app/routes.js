@@ -108,6 +108,12 @@ module.exports = function(app, passport, rememberme, database, email) {
       res.render("account-details.ejs", {cafes: cafes, user: req.user});
     });
   });
+
+  app.get("/usr_mng", isLoggedIn, function(req, res) {
+    database.getCafes(function(err, cafes) {
+      res.render("user_mng.ejs", {cafes: cafes, user: req.user});
+    });
+  });
 };
 
 // perform valid user check for serving browsers

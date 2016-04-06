@@ -171,6 +171,19 @@
     overflow-x: hidden;
 }
 
+#submitChangePermission {
+  text-align: center;
+  float: center;
+  background-color: #aa764e;
+  color: #fff;
+  width:100%;
+}
+
+#submitChangePermission:hover {
+  background-color: #ba7658;
+}
+
+
 .jumbotron .table-responsive .table {
 	background-color: #fff;
 }
@@ -251,6 +264,7 @@
 .allergen {
 	padding-left: 5px;
 	margin-bottom: 2px;
+<<<<<<< Updated upstream
 	background-color: orange;
 	border-radius: 10px;
 	width: 100%;
@@ -260,3 +274,6 @@
 #productInforNutritional {
 	text-align: center;
 }
+=======
+}
+>>>>>>> Stashed changes

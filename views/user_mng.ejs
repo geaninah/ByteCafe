@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <% include head_incl.ejs %>
+  <title> User Manager </title>
+</head>
+<body>
+  <% include nav_bar.ejs %>
+
+  <div class="container">
+    <div class="row">
+
+      <div class="jumbotron">
+        <div class="row">
+        <div class="col-sm-6">
+          To change the permission of a certain user, you have to
+          fill in and submit the following form. <br>
+          All changes can be easily reversed, but please pay attention to
+          the people to whom you give permission, as they might make
+          unwanted changes that may <br>be permanent. <br><br>
+          Here's a list with permissions:<br><br>
+          <strong> Admin </strong>: does .... <br>
+          <strong> Stock Manager </strong>: does .... <br>
+          <strong> User </strong>: does ... <br>
+          <strong> POS User </strong>: does ... <br>
+        </div>
+        <div class="col-sm-6">
+          <form role="form">
+            <div class="form-group">
+              <label for="usr_email"> Email address: </label>
+              <input type="email" class="form-control" id="usr_email">
+            </div>
+              <div class="form-group">
+              <label for="usr_email_conf"> Confirm email address: </label>
+              <input type="email" class="form-control" id="usr_email_conf">
+            </div>
+            <div class="row">
+              <div class="col-sm-3">
+              </div>
+              <div class="col-sm-6">
+            <button type="submit" class="btn btn-default" id="submitChangePermission"> Change Permission </button></div></div>
+            <div class="col-sm-3">
+              </div>
+          </form>
+
+          <br><br>
+          <div class="col-sm-8"><h4>To change specific user information </h4></div>
+          <div class="col-sm-4"><button type="submit" class="btn btn-default"> click here</button></div>
+
+        </div>
+
+       </div>
+      </div>
+
+    </div>
+  </div>
+  
+  <% include footer.ejs %>
+</body>
+</html>
