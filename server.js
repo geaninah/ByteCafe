@@ -11,21 +11,21 @@ var death        = require("death");
 var path         = require("path");
 
 // load our configuration
-var config = require("./config/config.js")
+var config = require("./config/config")
 var port = config.http_port;
 
 // setup our logger
-var logger = require("./services/logger-service.js");
+var logger = require("./services/logger-service");
 var log    = logger.init(path.join(__dirname, "logs"), email);
 log(3, "Server", "Starting server");
 
 // load our database, email and log providers
-var database = require("./services/database-service.js");
-var email    = require("./services/email-service.js");
+var database = require("./services/database-service");
+var email    = require("./services/email-service");
 
 
 // load our remember me middleware
-var rememberme   = require("./app/remember-me.js");
+var rememberme   = require("./app/remember-me");
 rememberme.init(database);
 
 // make sure we disconnect the database cleanly on any kind of quit
@@ -40,7 +40,7 @@ death(function(signal, err) {
 });
 
 // setup passport
-require("./app/passport.js")(passport, database);
+require("./app/passport")(passport, database);
 
 
 
@@ -64,7 +64,7 @@ app.use(rememberme.login);
 
 // setup routes
 log(3, "Server", "Initializing routes");
-require("./app/routes.js")(app, passport, rememberme, database, email, log);
+require("./app/routes")(app, passport, rememberme, database, email, log);
 
 // start server
 // TODO: setup and enforce https
