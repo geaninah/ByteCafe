@@ -72,7 +72,9 @@
         <!-- forms container -->
         <div class="col-sm-12">
           <!-- error message box -->
-          <div id="error-message"><%= message %></div><br>
+          <% if (message != "") { %>
+          <div id="error-message" class="alert alert-danger"><%= message %></div>
+          <% } %>
 
           <!-- login form -->
           <form role="form" id="loginForm" method="post" action="/auth/login">
