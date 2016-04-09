@@ -23,7 +23,7 @@ module.exports = function(app, passport, rememberme, database, email) {
   app.get("/api/basket/edit",                   isLoggedInAPI, api.editBasket);
 
   // admin panel calls
-  app.get("/api/admin/user/:userID/update",     isLoggedInAPI, api.admin.assert, api.admin.updateUser);
+  app.get("/api/admin/user/update",             isLoggedInAPI, api.admin.assert, api.admin.updateUser);
 
   // serve static content
   app.use("/images",                            express.static("resources/images"));

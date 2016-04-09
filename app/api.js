@@ -279,7 +279,7 @@ module.exports = function (database, email) {
       updateUser: function(req, res) {
         res.header("Content-Type", "application/json; charset=utf-8");
         var params = req.query;
-        if (!params.id || !params.name || !params.email || !params.disabled || !params.permission_pos|| !params.permission_store || !params.permission_stock || !params.permission_admin  || !params.verified_email)
+        if (!params.id || !params.name || !params.email || !params.disabled || !params.permission_pos || !params.permission_store || !params.permission_stock || !params.permission_admin  || !params.verified_email)
           return res.end(JSON.stringify({status: 0, message: "Invalid input, all fields must be specified" }));
         if (isNaN(params.id) || isNaN(params.disabled) || isNaN(params.permission_pos) || isNaN(params.permission_store) || isNaN(params.permission_stock) || isNaN(params.permission_admin) || isNaN(params.verified_email))
           return res.end(JSON.stringify({status: 0, message: "Invalid input, id, user_disabled, user_verified_email and user_permission_* must be numbers" }));
