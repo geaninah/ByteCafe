@@ -39,7 +39,7 @@ module.exports = function (database, email) {
     },
 
     // generate a password reset token, add it to the database and email it
-    resetPassword(req, res) {
+    resetPassword: function(req, res) {
       // deliberately fail
       if (req.query.email === "force-fail") {
         res.header("Content-Type", "application/json; charset=utf-8");
@@ -68,7 +68,7 @@ module.exports = function (database, email) {
       });
     },
 
-    verifyResetToken(req, res, next) {
+    verifyResetToken: function(req, res, next) {
       var actual_token = req.query.token.replace(/\./g,"+").replace(/_/g, "/").replace(/-/g, "="); // HACK
       database.getPasswordResetToken(actual_token, function(err, rows){
         if(!rows.length) {
@@ -82,7 +82,7 @@ module.exports = function (database, email) {
     },
 
     // same as above but with post requests
-    verifyResetTokenPost(req, res, next) {
+    verifyResetTokenPost: function(req, res, next) {
       var actual_token = req.body.token.replace(/\./g,"+").replace(/_/g, "/").replace(/-/g, "="); // HACK
       database.getPasswordResetToken(actual_token, function(err, rows){
         if(!rows.length) {
@@ -96,7 +96,7 @@ module.exports = function (database, email) {
     },
 
     // resets a password from a reset token and a password
-    updatePassword(req, res) {
+    updatePassword: function(req, res) {
       var actual_token = req.body.token.replace(/\./g,"+").replace(/_/g, "/").replace(/-/g, "="); // HACK
       var password = req.body.password;
       if(password == "") {
@@ -250,7 +250,7 @@ module.exports = function (database, email) {
             new_amount = Number(amount);
           if (new_amount < 0) new_amount = 0;
           res.header("Content-Type", "application/json; charset=utf-8");
-          console.log({new_amount: new_amount, cafe_id, cafe_id, user_id: req.user.user_id, product_id: product_id});
+          console.log({new_amount: new_amount, cafe_id: cafe_id, user_id: req.user.user_id, product_id: product_id});
           database.editBasketItems(new_amount, cafe_id, req.user.user_id, product_id, function(err, rows) {
             if (err) {
               console.log(err);

@@ -89,7 +89,7 @@ module.exports = function(passport, database) {
       // FIXME: This line gives errors
       var user = rows[0];
       // if users password is incorrect
-      bcrypt.compareSync(password, user.user_password, function(err, valid_password) {
+      bcrypt.compare(password, user.user_password, function(err, valid_password) {
         // catch bcrypt error
         if(err) {
           console.log(err);
