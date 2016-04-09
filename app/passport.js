@@ -101,6 +101,7 @@ module.exports = function(passport, database) {
         delete user.user_password;
         // if users account is marked disabled
         if(user.disabled) return done(null, false, {message: "This account has been disabled."});
+        if(!user.user_verified_email) return done(null, false, {message: "Your must verify your email address."});
 
         // if user requested to remember them, save them a cookie!
         if (req.body.remember_me_box) return createAndSaveRememberCookie(done, req, user);
