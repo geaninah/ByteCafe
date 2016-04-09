@@ -7,24 +7,27 @@ module.exports = function(app, passport, rememberme, database, email) {
   var api = require("./api.js")(database, email);
 
   // api calls
-  app.get("/api/hello",                     api.hello);
-  app.get("/api/terms",                     api.terms);
-  app.get("/api/status",                    api.status);
+  app.get("/api/hello",                         api.hello);
+  app.get("/api/terms",                         api.terms);
+  app.get("/api/status",                        api.status);
 
-  app.get("/api/cafes",                     isLoggedInAPI, api.getCafes);
-  app.get("/api/cafes/:cafeId",             isLoggedInAPI, api.getCafeInfo);
-  app.get("/api/cafes/:cafeId/products",    isLoggedInAPI, api.getProducts);
-  app.get("/api/cafes/:cafeId/orders",      isLoggedInAPI, api.getOrders);
-  app.get("/api/products/:productId",       isLoggedInAPI, api.getProductInfo);
+  // cafe calls
+  app.get("/api/cafes",                         isLoggedInAPI, api.getCafes);
+  app.get("/api/cafes/:cafeId",                 isLoggedInAPI, api.getCafeInfo);
+  app.get("/api/cafes/:cafeId/products",        isLoggedInAPI, api.getProducts);
+  app.get("/api/cafes/:cafeId/orders",          isLoggedInAPI, api.getOrders);
+  app.get("/api/products/:productId",           isLoggedInAPI, api.getProductInfo);
   app.get("/api/products/:productId/nutrition", isLoggedInAPI, api.getNutrition);
-  app.get("/api/orders/:orderId",           isLoggedInAPI, api.getOrderInfo);
-  app.get("/api/basket",                    isLoggedInAPI, api.getBasket);
-  app.get("/api/basket/edit",               isLoggedInAPI, api.editBasket);
-  //app.get("/api/tables",                    api.getTables);
+  app.get("/api/orders/:orderId",               isLoggedInAPI, api.getOrderInfo);
+  app.get("/api/basket",                        isLoggedInAPI, api.getBasket);
+  app.get("/api/basket/edit",                   isLoggedInAPI, api.editBasket);
+
+  // admin panel calls
+  app.get("/api/admin/user/:userID/update",     isLoggedInAPI, api.admin.assert, api.admin.updateUser);
 
   // serve static content
-  app.use("/images",                        express.static("resources/images"));
-  app.use("/css",                           express.static("resources/css"));
+  app.use("/images",                            express.static("resources/images"));
+  app.use("/css",                               express.static("resources/css"));
 
   // authentication calls
   app.post("/auth/login", passport.authenticate("local-login", {

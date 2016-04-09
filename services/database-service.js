@@ -225,9 +225,9 @@ var deleteUser = function(user_id, callback){
     });
 };
 
-var editUser = function(username, email, password, userDisabled, userStore, userPos, userStock, userAdmin, userId, callback){
-    var query = 'update users set user_name = ?, user_email = ?, user_password = ?, user_disabled = ?, user_permission_store = ?, user_permission_pos = ?, user_permission_stock = ?, user_permission_admin = ? where user_id = ?';
-    var parameters = [username, email, password, userDisabled, userStore, userPos, userStock, userAdmin, userId];
+var editUser = function(username, email, password, userDisabled, userStore, userPos, userStock, userAdmin, userVerified, userId, callback){
+    var query = 'update users set user_name = ?, user_email = ?, user_password = ?, user_disabled = ?, user_permission_store = ?, user_permission_pos = ?, user_permission_stock = ?, user_permission_admin = ?, user_verified_email = ? where user_id = ?';
+    var parameters = [username, email, password, userDisabled, userStore, userPos, userStock, userAdmin, userVerified, userId];
     connection.query(query, parameters, function(err, result){
         if(err){
             console.log(err);
