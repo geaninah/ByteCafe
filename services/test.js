@@ -8,4 +8,4 @@ var callback = function (err, result){
     } 
 };
 
-database.getOrdersByUserId(2, callback);
+database.getNutritionalFlag(1, "gda_icon_fat", callback);
