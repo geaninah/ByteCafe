@@ -5,6 +5,7 @@
   <title> User Manager </title>
 </head>
 <body>
+
   <% include nav_bar.ejs %>
 
   <div class="container">
@@ -12,46 +13,227 @@
 
       <div class="jumbotron">
         <div class="row">
-        <div class="col-sm-6">
-          To change the permission of a certain user, you have to
-          fill in and submit the following form. <br>
-          All changes can be easily reversed, but please pay attention to
-          the people to whom you give permission, as they might make
-          unwanted changes that may <br>be permanent. <br><br>
-          Here's a list with permissions:<br><br>
-          <strong> Admin </strong>: does .... <br>
-          <strong> Stock Manager </strong>: does .... <br>
-          <strong> User </strong>: does ... <br>
-          <strong> POS User </strong>: does ... <br>
-        </div>
-        <div class="col-sm-6">
-          <form role="form">
-            <div class="form-group">
-              <label for="usr_email"> Email address: </label>
-              <input type="email" class="form-control" id="usr_email">
-            </div>
-              <div class="form-group">
-              <label for="usr_email_conf"> Confirm email address: </label>
-              <input type="email" class="form-control" id="usr_email_conf">
-            </div>
-            <div class="row">
-              <div class="col-sm-3">
+        
+           <!-- TABLE FOR TAB 1 - ID IS CONTENT_1 -->
+          <div class="table-responsive" id="content_1">
+            <table id="user-table" class="table table-bordered table-hover">
+              <thead>
+                <tr>
+                  <th>User ID</th>
+                  <th>Name</th>
+                  <th>Email</th>
+                  <th>Password</th>
+                  <th>Disabled</th>
+                  <th>Verified Email</th>
+                  <th>Use store</th>
+                  <th>POS User</th>
+                  <th>Stock Manager</th>
+                  <th>Admin</th>
+                </tr>
+              </thead>
+              <tbody>
+
+              <% users.forEach(function (user) { %>
+              
+                
+                <tr data-user-id="<%= user.user_id %>" data-user-name="<%= user.user_name %>" data-user-email="<%= user.user_email %>" data-user-disabled="<%= user.user_disabled %>" data-user-verified="<%= user.user_verified_email %>" data-user-store="<%= user.user_permission_store %>" data-user-pos="<%= user.user_permission_pos %>" data-user-stock="<%= user.user_permission_stock %>" data-user-admin="<%= user.user_permission_admin %>">
+
+                  <td><%= user.user_id %></td>
+                  <td><%= user.user_name %></td>
+                  <td><%= user.user_email %></td>
+                  <td>&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;</td>
+                  <td><%= user.user_disabled %></td>
+                  <td><%= user.user_verified_email %></td>
+                  <td><%= user.user_permission_store %></td>
+                  <td><%= user.user_permission_pos %></td>
+                  <td><%= user.user_permission_stock %></td>
+                  <td><%= user.user_permission_admin %></td>
+
+                </tr>
+
+              <% }); %>
+
+              </tbody>
+            </table>
+          </div>
+          <!-- END OF TABLE -->
+
+          <!-- Modal -->
+          <div class="modal fade" id="updateInfo" tabindex="-1" role="dialog" aria-labelledby="UpdateUserInformation">
+            <div class="modal-dialog" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <button type="button" class="close" id="closeModal" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                  <h4 class="modal-title">Update Account Details</h4>
+                </div>
+                <div class="modal-body">
+                  <div class="row">
+                    <div class="col-sm-12">
+                      <form role="form" class="form" id="updateInfoForm" method="post" action="/updateInformation">
+                        <div class="form-group has-feedback">
+                          <div class="row">
+                            <div class="col-sm-2 formrow"><label for="usrIDField">User ID</label></div>
+                            <div class="col-sm-10"><textarea readonly class="form-control" id="usrIDField" rows="1" placeholder="ID"></textarea></div>
+                          </div>
+                        </div>
+                        <div class="form-group has-feedback">
+                          <div class="row">
+                            <div class="col-sm-2 formrow"><label for="usrEmailField">Email</label></div>
+                            <div class="col-sm-10"><textarea type="email" class="form-control" id="usrEmailField" rows="1" placeholder="Email"></textarea></div>
+                          </div>
+                        </div>
+                        <div class="form-group has-feedback">
+                          <div class="row">
+                            <div class="col-sm-2 formrow"><label for="userName">Name</label></div>
+                            <div class="col-sm-10"><textarea class="form-control" id="userName" rows="1" placeholder="Name"></textarea></div>
+                          </div>
+                        </div>
+                        <div class="form-group has-feedback">
+                         <div class="row">
+                            <div class="col-sm-2 formrow"><label for="userPass">Password</label></div>
+                            <div class="col-sm-10"><textarea class="form-control" id="userPass" rows="1" placeholder="(unchanged)"></textarea></div>
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="col-sm-6">
+                            <div class="col-sm-6 formrow"><label for="disabledToggle"> Disabled </label></div>
+                            <div class="col-sm-6"><input type="checkbox" checked id="disabledToggle" cheched data-toggle="toggle"></div>
+                          </div>
+                          <div class="col-sm-6">
+                            <div class="col-sm-6 formrow"><label for="verifiedToggle"> Verified Email </label></div>
+                            <div class="col-sm-6"><input type="checkbox" id="verifiedToggle" cheched data-toggle="toggle"></div>
+                          </div>
+                          <br><br> <br>
+                          <div class="col-sm-6">
+                            <div class="col-sm-6 formrow"><label for="userToggle"> Store </label></div>
+                            <div class="col-sm-6"><input type="checkbox" id="userToggle" cheched data-toggle="toggle"></div>
+                          </div>
+                          <div class="col-sm-6">
+                            <div class="col-sm-6 formrow"><label for="posToggle"> POS </label></div>
+                            <div class="col-sm-6"><input type="checkbox" id="posToggle" cheched data-toggle="toggle"></div>
+                          </div>
+                          <br><br>
+                          <div class="col-sm-6">
+                            <div class="col-sm-6 formrow"><label for="stockToggle"> Stock </label></div>
+                            <div class="col-sm-6"><input type="checkbox" id="stockToggle" cheched data-toggle="toggle"></div>
+                          </div>
+                          <div class="col-sm-6">
+                            <div class="col-sm-6 formrow"><label for="adminToggle"> Admin </label></div>
+                            <div class="col-sm-6"><input type="checkbox" id="adminToggle" cheched data-toggle="toggle"></div>
+                          </div>
+                        </div>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-default" data-dismiss="modal" id="submitChanges">Submit changes</button>
+                </div>
               </div>
-              <div class="col-sm-6">
-            <button type="submit" class="btn btn-default" id="submitChangePermission"> Change Permission </button></div></div>
-            <div class="col-sm-3">
-              </div>
-          </form>
+            </div>
+          </div>
 
-          <br><br>
-          <div class="col-sm-8"><h4>To change specific user information </h4></div>
-          <div class="col-sm-4"><button type="submit" class="btn btn-default"> click here</button></div>
+          <script>
+                $('#user-table > tbody > tr').click(function(a) {
+                  // clear the modal handlers
+                  $("#updateInfo").off();
+
+                  $("#updateInfo").on("show.bs.modal", function() {
+                    // get user data from dom
+                    var idOfUser = $(a.currentTarget).data("user-id");
+                    var nameOfUser = $(a.currentTarget).data("user-name"); 
+                    var emailOfUser = $(a.currentTarget).data("user-email");
+                    var disabledUser = $(a.currentTarget).data("user-disabled");
+                    var verifiedUser = $(a.currentTarget).data("user-verified");
+                    var storeUser = $(a.currentTarget).data("user-store");
+                    var posUser = $(a.currentTarget).data("user-pos");
+                    var stockUser = $(a.currentTarget).data("user-stock");
+                    var adminUser = $(a.currentTarget).data("user-admin");
+
+                    // fill text boxes
+                    $("#usrIDField").val(idOfUser);
+                    $("#userName").val(nameOfUser);   
+                    $("#usrEmailField").val(emailOfUser);
+
+                    // set toggles
+                    if (disabledUser ==  1) { $('#disabledToggle').bootstrapToggle("on"); }
+                    else { $('#disabledToggle').bootstrapToggle("off"); }
+
+                    if (verifiedUser ==  1) { $('#verifiedToggle').bootstrapToggle("on"); }
+                    else { $('#verifiedToggle').bootstrapToggle("off"); }
+
+                    if (storeUser ==  1) { $('#userToggle').bootstrapToggle("on"); }
+                    else {  $('#userToggle').bootstrapToggle("off"); }
+
+                    if (posUser ==  1) { $('#posToggle').bootstrapToggle("on"); }
+                    else { $('#posToggle').bootstrapToggle("off");  }
+
+                    if (stockUser ==  1) { $('#stockToggle').bootstrapToggle("on"); }
+                    else { $('#stockToggle').bootstrapToggle("off"); }
+
+                    if (adminUser ==  1) { $('#adminToggle').bootstrapToggle("on"); }
+                    else { $('#adminToggle').bootstrapToggle("off"); }
+                  });
+
+                  $("#updateInfo").modal("show");
+
+                  $('#userName').on("input", function () {
+                    $('#userName').addClass('updatedField');
+                  });
+
+                  $('#disabledToggle').change(function()
+                  {
+                    console.log("eyyy");
+                    $('#disabledToggle').bootstrapToggle({
+                      onstyle: "success",
+                      offstyle: "success"
+                    });
+                  });
+
+                  $("#updateInfo").on("hidden.bs.modal", function() {
+                    if($('#userName').hasClass('updatedField')) { 
+                      $('#userName').removeClass('updatedField');
+                    }
+                    if($('#usrEmailField').hasClass('updatedField')) { 
+                      $('#usrEmailField').removeClass('updatedField');
+                    }
+                    if($('#userPass').hasClass('updatedField')) { 
+                      $('#userPass').removeClass('updatedField');
+                    }
+                  });
+                });
+
+
+                $('#submitChanges').click(function () {
+                  var data = {
+                    id: $('#usrIDField').val(),
+                    name: $('#usrIDField').val(),
+                    email: $('#usrIDField').val(),
+                    password: $('#usrIDField').val(),
+                    disabled: $('#usrIDField').val(),
+                    permission_store: $('#usrIDField').val(),
+                    permission_pos: $('#usrIDField').val(),
+                    permission_stock: $('#usrIDField').val(),
+                    permission_admin: $('#usrIDField').val(),
+                    verified_email: $('#usrIDField').val(),
+                  };
+
+                  $.getJSON("/api/admin/user/update", data, function(response) {
+                    if(response.status == 1) {
+                      //success
+                      console.log(response.message);
+                    } else {
+                      // fail
+                      console.log(response.message);
+                    }
+                  });
+                });
+                
+
+              </script>
 
         </div>
-
-       </div>
       </div>
-
     </div>
   </div>
   

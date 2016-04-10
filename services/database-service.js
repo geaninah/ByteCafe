@@ -37,6 +37,19 @@ var getCafes = function(callback){
     });
 };
 
+// returns all the users and all their information
+var getAllUsers = function(callback){
+    var query = 'select * from users';
+
+    connection.query(query, function(err, users){
+        if(err){
+            console.log(err);
+        } else {
+            callback(err, users);
+        }
+    });
+};
+
 // returns information about a cafe
 // TODO: refine query getCafeInfo
 var getCafeInfo = function(callback, cafeId){
@@ -697,6 +710,7 @@ var consumePasswordResetToken = function(user_id, callback) {
 module.exports = {
     end: end,
     getCafes: getCafes,
+    getAllUsers: getAllUsers,
     getCafeInfo: getCafeInfo,
     getProducts: getProducts,
     getProductInfo: getProductInfo,

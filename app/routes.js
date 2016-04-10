@@ -114,7 +114,9 @@ module.exports = function(app, passport, rememberme, database, email) {
 
   app.get("/usr_mng", isLoggedIn, function(req, res) {
     database.getCafes(function(err, cafes) {
-      res.render("user_mng.ejs", {cafes: cafes, user: req.user});
+      database.getAllUsers(function(err, users){
+        res.render("user_mng.ejs", {users: users, cafes: cafes, user: req.user});
+      });
     });
   });
 };

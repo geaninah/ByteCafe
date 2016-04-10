@@ -273,3 +273,12 @@
 #productInforNutritional {
 	text-align: center;
 }
+
+.formrow {
+  text-align: right;
+  margin-top: 7px;
+}
+
+.updatedField {
+  background-color: #75C731;
+}
