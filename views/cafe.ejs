@@ -75,12 +75,38 @@
               </div>
               <img class="img-rounded" src="<%= product.product_image_url %>" alt="<%= product.product_name %>">
               <div class="caption">
-                <a href="#" class="btn btn-default btn-add-cart" role="button">£<%= product.product_price.toFixed(2) %> - Add to Cart &nbsp;&nbsp;<span class="glyphicon glyphicon-shopping-cart" id="buttonIcon" aria-hidden="true"></span></a>
+                <a class="btn btn-default btn-add-cart" data-product-id="<%= product.product_id%>" role="button">£<%= product.product_price.toFixed(2) %> - Add to Cart &nbsp;&nbsp;<span class="glyphicon glyphicon-shopping-cart" id="buttonIcon" aria-hidden="true"></span></a>
               </div>
             </div>
           </a>
         </div>
         <% }); %>
+        <script>
+        // set timeout to something reasonable
+        $.ajaxSetup({timeout: 10000});
+        $(".btn-add-cart").click(function(e) {
+          var button = $(e.target);
+          var item = button.data("product-id");
+          var oldtext = button.html();
+          button.html("<i class=\"fa fa-circle-o-notch fa-spin\"></i>").attr("disabled", "disabled");
+          var data = {
+            amount: "a1",
+            product_id: item,
+            cafe_id:  <%= cafe.cafe_id %>
+          };
+          $.getJSON("/api/basket/edit", data, function(response) {
+            if (response.status == 1) {
+            } else {
+              button.css("background-color", "lightred");
+              alert(response.message);
+            }
+            button.html(oldtext).removeAttr("disabled");
+          }).error(function(jqXHR, textStatus, errorThrown){
+            alert(textStatus);
+            button.html(oldtext).removeAttr("disabled").css("background-color", "lightred");
+          });
+        });
+        </script>
         </div>
       </div>
 

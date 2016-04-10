@@ -96,8 +96,20 @@ module.exports = function(app, passport, rememberme, database, email) {
   // serve basket
   app.get("/basket", isLoggedIn, function(req, res) {
     database.getBasket(function(err, basket) {
+      var basket_contents = {};
+      basket.forEach(function(item) {
+        basket_contents[item.basket_item_cafe_id] = basket_contents[item.basket_item_cafe_id] || [];
+        basket_contents[item.basket_item_cafe_id].push({
+          product_id: item.basket_item_product_id,
+          name: item.product_name,
+          price: item.product_price,
+          cafe_id: item.basket_item_cafe_id,
+          cafe_name: item.cafe_name,
+          amount: item.basket_item_amount
+        });
+      });
       database.getCafes(function(err, cafes) {
-        res.render("basket.ejs", {basket: basket, cafes: cafes, user: req.user});
+        res.render("basket.ejs", {basket: basket_contents, cafes: cafes, user: req.user});
       });
     }, req.user.user_id);
   });
