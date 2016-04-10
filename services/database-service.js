@@ -498,6 +498,14 @@ var getCategory = function(categoryId, callback){
     });
 };
 
+var getAllCategories = function(callback){
+    var query = 'select * from categories';
+    connection.query(query, function(err, result) {
+        if(err) { console.log(err); callback(err, result); }
+        else { callback(err, result); }
+    });
+};
+
 var addCafeProduct = function(cafeId, productId, stock, purchasable, callback){
     var query = 'insert into cafe_products(cafe_product_cafe_id, cafe_product_product_id, cafe_product_stock, cafe_product_purchasable) values (?, ?, ?, ?)';
     var parameters = [cafeId, productId, stock, purchasable];
@@ -746,6 +754,7 @@ module.exports = {
     deleteCategory: deleteCategory,
     editCategory: editCategory,
     getCategory: getCategory,
+    getAllCategories: getAllCategories,
     addCafeProduct: addCafeProduct,
     deleteCafeProduct: deleteCafeProduct,
     editCafeProduct: editCafeProduct,

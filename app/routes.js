@@ -79,7 +79,15 @@ module.exports = function(app, passport, rememberme, database, email) {
     database.getCafes(function(err, cafes) {
       database.getCafeInfo(function(err, infos) {
         database.getProducts(function(err, products) {
-          res.render("cafe.ejs", {cafes:cafes, user: req.user, cafe: infos, products: products});
+          database.getAllCategories(function(err, categories) {
+            res.render("cafe.ejs", {
+              cafe: infos,
+              cafes: cafes,
+              user: req.user,
+              categories: categories,
+              products: products
+            });
+          });
         }, req.params.cafeId);
       }, req.params.cafeId);
     });
