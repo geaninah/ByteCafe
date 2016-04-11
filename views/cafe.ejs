@@ -22,49 +22,91 @@
       <!-- STATIC SIDEBAR WITH DIFFERENT CATEGORIES -->
       <div class="col-sm-3">
 
-          <div class="list-group">
-            <a href="#" class="list-group-item">Sandwiches</a>
-            <a href="#" class="list-group-item active">Hot Drinks</a>
-            <a href="#" class="list-group-item">Sweets</a>
-            <a href="#" class="list-group-item">Cold Drinks</a>
-            <a href="#" class="list-group-item">Soups</a>
+        <!-- cafe information panel -->
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h3 class="panel-title"><%= cafe.cafe_name %></h3>
           </div>
+          <div class="panel-body">
+            <img src="<%= cafe.cafe_image_url %>" class="img-responsive img-rounded" alt="<%= cafe.cafe_name %>">
+            <br>
+            <p><strong>Working hours:</strong><br><%= cafe.cafe_opening_times %></p>
+            <p><strong>Location:</strong><br><%= cafe.cafe_address %></p>
+          </div>
+        </div>
 
-          <div class="panel panel-default">
-            <div class="panel-heading">
-              <h3 class="panel-title"><%= cafe.cafe_name %></h3>
-            </div>
-            <div class="panel-body">
-              <img src="<%= cafe.cafe_image_url %>" class="img-responsive img-rounded" alt="<%= cafe.cafe_name %>">
-              <br>
-              <p><strong>Working hours:</strong><br><%= cafe.cafe_opening_times %></p>
-              <p><strong>Location:</strong><br><%= cafe.cafe_address %></p>
-            </div>
-          </div>
+        <!-- categories -->
+        <div class="list-group">
+        <button data-category-id="all" class="category-item list-group-item active">All</button>
+        <% categories.forEach(function (category) { %>
+          <button data-category-id="<%= category.category_id %>" class="category-item list-group-item"><%= category.category_name %></button>
+        <% }); %>
+        <script>
+          $(".category-item").click(function(e) {
+            var category = $(e.target).data("category-id");
+            console.log(category);
+            $(e.target).addClass("active");
+            $(e.target).siblings().removeClass("active");
+            if(category == "all") {
+              $("#product-container").children().css("display", ""); // show all products
+            } else {
+              $("#product-container").children().css("display", "none"); // hide all products
+              $("#product-container").children("*[data-category-id='"+category+"']").css("display", ""); // show selected categories products
+            }
+          });
+        </script>
+        </div>
+
         <!-- </nav> -->
       </div>
 
       <!-- DYNAMIC CONTENT OF THE PAGE - STOCK ITEMS-->
       <div class="col-sm-9">
         <!-- CONTENT OF EACH ROW OF THE CONTENT -->
-        <div class="row">
+        <div id="product-container" class="row">
 
         <% products.forEach(function (product) { %>
         <!-- BOX REFERRING TO A PRODUCT -->
-        <a data-toggle="modal" data-target="#productInfo" data-product-description="<%= product.product_description %>" data-product-image-url="<%= product.product_image_url %>" data-product-name="<%= product.product_name %>" data-product-id="<%= product.product_id%>">
-          <div class="col-sm-6 col-md-4">
+        <div data-product-id="<%= product.product_id %>" data-category-id="<%= product.product_category_id %>" class="col-sm-6 col-md-4">
+          <a style="display:block" data-toggle="modal" data-target="#productInfo" data-product-description="<%= product.product_description %>" data-product-image-url="<%= product.product_image_url %>" data-product-name="<%= product.product_name %>" data-product-id="<%= product.product_id%>" data-category-id="<%= product.product_category_id%>">
             <div class="thumbnail">
               <div class="caption" id="lessSpace">
               <h3 align="center"><%= product.product_name%></h3>
               </div>
               <img class="img-rounded" src="<%= product.product_image_url %>" alt="<%= product.product_name %>">
               <div class="caption">
-                <a href="#" class="btn btn-default btn-add-cart" role="button">£<%= product.product_price.toFixed(2) %> - Add to Cart &nbsp;&nbsp;<span class="glyphicon glyphicon-shopping-cart" id="buttonIcon" aria-hidden="true"></span></a>
+                <a class="btn btn-default btn-add-cart" data-product-id="<%= product.product_id%>" role="button">£<%= product.product_price.toFixed(2) %> - Add to Cart &nbsp;&nbsp;<span class="glyphicon glyphicon-shopping-cart" id="buttonIcon" aria-hidden="true"></span></a>
               </div>
             </div>
-          </div>
-        </a>
+          </a>
+        </div>
         <% }); %>
+        <script>
+        // set timeout to something reasonable
+        $.ajaxSetup({timeout: 10000});
+        $(".btn-add-cart").click(function(e) {
+          var button = $(e.target);
+          var item = button.data("product-id");
+          var oldtext = button.html();
+          button.html("<i class=\"fa fa-circle-o-notch fa-spin\"></i>").attr("disabled", "disabled");
+          var data = {
+            amount: "a1",
+            product_id: item,
+            cafe_id:  <%= cafe.cafe_id %>
+          };
+          $.getJSON("/api/basket/edit", data, function(response) {
+            if (response.status == 1) {
+            } else {
+              button.css("background-color", "lightred");
+              alert(response.message);
+            }
+            button.html(oldtext).removeAttr("disabled");
+          }).error(function(jqXHR, textStatus, errorThrown){
+            alert(textStatus);
+            button.html(oldtext).removeAttr("disabled").css("background-color", "lightred");
+          });
+        });
+        </script>
         </div>
       </div>
 
@@ -82,7 +124,7 @@
                   <img class="img-responsive img-rounded" id="productInfoImage">
 
                 </div>
-                <div class="col-sm-6" style="overflow-y: scroll">
+                <div class="col-sm-6" style="overflow-y: auto">
                   <div id="productInfoDescription">
                     Product info
                   </div>

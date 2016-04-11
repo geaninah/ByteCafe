@@ -37,21 +37,51 @@
           </div>
           <div class="col-sm-7">
             <!-- List group -->
+            <% Object.keys(basket).forEach(function(cafe_id) { %>
             <ul class="list-group">
-              <script> var totalPrice = 0; </script>
-              <% basket.forEach(function(bask_item) { %>
-                <li class="list-group-item">
-                  <div class="row">
-                    <div class="col-sm-7"><%= bask_item.product_name %></div>
-                    <div class="col-sm-2">£&nbsp;<%= bask_item.product_price.toFixed(2); %></div>
-                    <script> totalPrice = totalPrice + parseFloat(<%= bask_item.product_price %>) * parseFloat(<%= bask_item.basket_item_amount %>);</script>
-                    <div class="col-sm-1"><%= bask_item.basket_item_amount %></div>
-                    <div class="col-sm-1"><a href="" id="remove-button"><span class="glyphicon glyphicon-plus-sign" aria-hidden="true" style="color:#aa764e"></span></a></div>
-                    <div class="col-sm-1"><a href="" id="remove-button"><span class="glyphicon glyphicon-minus-sign" aria-hidden="true" style="color:#aa764e"></span></a></div>
-                </li>
+              <li class="basket-header list-group-item">
+                <div class="row">
+                  <div class="col-sm-12"><%= basket[cafe_id][0].cafe_name %></div>
+                </div>
+              </li>
+              <% basket[cafe_id].forEach(function(bask_item) { %>
+              <li class="list-group-item">
+                <div class="row">
+                  <div class="col-sm-7"><%= bask_item.name %></div>
+                  <div class="col-sm-2">£&nbsp;<%= bask_item.price.toFixed(2); %></div>
+                  <div class="col-sm-1"><%= bask_item.amount %></div>
+                  <div style="text-align: right" class="col-sm-2"><a class="remove-button" data-product-id="<%= bask_item.product_id %>" data-cafe-id="<%= bask_item.cafe_id %>"><span class="glyphicon glyphicon-remove-circle" aria-hidden="true" style="color:#aa764e"></span></a></div>
+                </div>
+              </li>
               <% }); %>
-             </ul>
-          </div>
+            </ul>
+            <% }); %>
+            <script>
+            $(".remove-button").click(function(e) {
+              // get our vars
+              var button = $(e.target).parent();
+              var product_id = button.data("product-id");
+              var cafe_id = button.data("cafe-id");
+
+              // create our data object
+              var data = {
+                amount: "0",
+                product_id: product_id,
+                cafe_id: cafe_id
+              };
+
+              // send the request
+              $.getJSON("/api/basket/edit", data, function(response) {
+                if (response.status == 1) {
+                  button.parent().parent().parent().remove();
+                } else {
+                  alert(response.message);
+                }
+              }).error(function(jqXHR, textStatus, errorThrown){
+                alert(textStatus);
+              });
+            });
+            </script>
         </div>
         <div class="row">
           <div class="col-sm-7">
@@ -60,7 +90,7 @@
             <p> Total price: </p>
           </div>
           <div class="col-sm-3">
-            <p><strong> £<script>document.write(totalPrice.toFixed(2))</script></strong></p>
+            <p><strong>£</strong></p>
           </div>
       </div>
       </div>
@@ -81,7 +111,7 @@
             <!-- Modal content-->
             <div class="modal-content">
                 <div class="modal-body">
-                  <p>Are you sure you want to complete this order and pay <strong> £<script>document.write(totalPrice)</script></strong></p>
+                  <p>Are you sure you want to complete this order and pay <strong>£<script></strong></p>
                 </div>
                 <div class="modal-footer">
                   <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>

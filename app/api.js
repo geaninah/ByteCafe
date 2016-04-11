@@ -238,7 +238,7 @@ module.exports = function (database, email) {
               basket_item = row;
             }
           });
-          console.log(basket_item);
+
           if(!basket_item) {
             old_amount = 0;
           }
@@ -249,15 +249,75 @@ module.exports = function (database, email) {
           else
             new_amount = Number(amount);
           if (new_amount < 0) new_amount = 0;
+
           res.header("Content-Type", "application/json; charset=utf-8");
-          console.log({new_amount: new_amount, cafe_id: cafe_id, user_id: req.user.user_id, product_id: product_id});
-          database.editBasketItems(new_amount, cafe_id, req.user.user_id, product_id, function(err, rows) {
-            if (err) {
-              console.log(err);
-              res.end(JSON.stringify({status: 0, old_amount: old_amount, new_amount: old_amount, message: "Failed, please try again later" }));
-            }
-            console.log(rows);
-            res.end(JSON.stringify({status: 1, old_amount: old_amount, new_amount: new_amount, message: "Added" }));
+          // if we're deleting an item
+          if (new_amount == 0) {
+            database.deleteBasketItems(req.user.user_id, product_id, function(err, rows) {
+              if (err) {
+                console.log(err);
+                return res.end(JSON.stringify({status: 1, old_amount: old_amount, new_amount: new_amount, message: "Failed, please try again later" }));
+              }
+              return res.end(JSON.stringify({status: 1, old_amount: old_amount, new_amount: 0, message: "Updated" }));
+            });
+          }
+
+          // if we're adding a new item
+          else if (old_amount == 0) {
+            database.addBasketItems(req.user.user_id, product_id, cafe_id, new_amount, function(err, rows) {
+              if (err) {
+                console.log(err);
+                return res.end(JSON.stringify({status: 0, old_amount: old_amount, new_amount: old_amount, message: "Failed, please try again later" }));
+              }
+              return res.end(JSON.stringify({status: 1, old_amount: old_amount, new_amount: new_amount, message: "Updated" }));
+            });
+          }
+
+          // if we're updating the amount of an existing item
+          else {
+            database.editBasketItems(new_amount, cafe_id, req.user.user_id, product_id, function(err, rows) {
+              if (err) {
+                console.log(err);
+                return res.end(JSON.stringify({status: 0, old_amount: old_amount, new_amount: old_amount, message: "Failed, please try again later" }));
+              }
+              return res.end(JSON.stringify({status: 1, old_amount: old_amount, new_amount: new_amount, message: "Updated" }));
+            });
+          }
+        });
+      }
+    },
+
+    // admin functions
+    admin: {
+      // used to ensure the user is an administrator
+      assert: function(req, res, next) {
+        if (req.user.user_permission_admin != 1) {
+          res.status(403);
+          res.end(JSON.stringify({status: 0, message: "Permission denied"}));
+        } else {
+          return next();
+        }
+      },
+
+      // update user information
+      updateUser: function(req, res) {
+        res.header("Content-Type", "application/json; charset=utf-8");
+        var params = req.query;
+        if (!params.id || !params.name || !params.email || !params.disabled || !params.permission_pos || !params.permission_store || !params.permission_stock || !params.permission_admin  || !params.verified_email)
+          return res.end(JSON.stringify({status: 0, message: "Invalid input, all fields must be specified" }));
+        if (isNaN(params.id) || isNaN(params.disabled) || isNaN(params.permission_pos) || isNaN(params.permission_store) || isNaN(params.permission_stock) || isNaN(params.permission_admin) || isNaN(params.verified_email))
+          return res.end(JSON.stringify({status: 0, message: "Invalid input, id, user_disabled, user_verified_email and user_permission_* must be numbers" }));
+        database.getUserByID(params.id, function(err, rows) {
+          if(err) {console.log(err); return res.end(JSON.stringify({status: 0, message: "Server side exception"}));}
+          if(!rows.length) return res.end(JSON.stringify({status: 0, message: "User does not exist"}));
+          if(!params.password) {
+            params.password = rows[0].user_password;
+          } else {
+            params.password = bcrypt.hashSync(params.password, null, null);
+          }
+          database.editUser(params.name, params.email, params.password, params.disabled, params.permission_store, params.permission_pos, params.permission_stock, params.permission_admin, params.verified_email, params.id, function(err, rows) {
+            if(err) {console.log(err); return res.end(JSON.stringify({status: 0, message: "Server side exception"}));}
+            return res.end(JSON.stringify({status: 1, message: "User updated" }));
           });
         });
       }

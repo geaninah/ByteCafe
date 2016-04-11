@@ -15,7 +15,7 @@
 #demonstration img {
 	width:100%;
 	height: auto;
-  padding-bottom: 20px
+  margin-bottom: 20px
 }
 
 #login {
@@ -165,6 +165,10 @@
 	font-weight: bold;
 }
 
+.basket-header {
+  background-color: #f5f5f5;
+}
+
 .dropdown-menu {
     max-height: 400px;
     overflow-y: scroll;
@@ -264,7 +268,6 @@
 .allergen {
 	padding-left: 5px;
 	margin-bottom: 2px;
-<<<<<<< Updated upstream
 	background-color: orange;
 	border-radius: 10px;
 	width: 100%;
@@ -274,6 +277,12 @@
 #productInforNutritional {
 	text-align: center;
 }
-=======
+
+.formrow {
+  text-align: right;
+  margin-top: 7px;
 }
->>>>>>> Stashed changes
+
+.updatedField {
+  background-color: #75C731;
+}
