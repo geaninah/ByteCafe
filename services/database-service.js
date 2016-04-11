@@ -144,13 +144,25 @@ var getUserByID = function(user_id, callback) {
     if (err) return callback(err, null);
     else return callback(null, users);
   });
-}
+};
+
+String.prototype.hashCode = function() {
+  var hash = 0, i, chr, len;
+  if (this.length === 0) return hash;
+  for (i = 0, len = this.length; i < len; i++) {
+    chr   = this.charCodeAt(i);
+    hash  = ((hash << 5) - hash) + chr;
+    hash |= 0; // Convert to 32bit integer
+  }
+  return hash;
+};
 
 // add a user to the database
 // hardcoded to add a standard permission_cafe only user
 var enrolNewUser = function(user_email, user_password, callback) {
-  var query = "insert into users ( user_email, user_password ) values (?,?)";
-  var params = [user_email, user_password];
+  var hash = user_email.hashCode();
+  var query = "insert into users ( user_email, user_password, user_token ) values (?, ?, ?)";
+  var params = [user_email, user_password, hash];
   connection.query(query, params, function(err, users) {
     if (err) return callback(err, null);
     else return callback(null, users);
@@ -694,6 +706,19 @@ var consumePasswordResetToken = function(user_id, callback) {
   });
 };
 
+var verifyEmail = function(token, callback){
+    var query = 'update users set user_verified_email = 1 where user_token = ?';
+    var parameters = [token];
+    connection.query(query, parameters, function(err, result) {
+        if(err){
+            console.log(err);
+        }
+        else {
+            callback(err);
+        }
+    });
+};
+
 module.exports = {
     end: end,
     getCafes: getCafes,
@@ -747,5 +772,6 @@ module.exports = {
     getOrdersByUserId: getOrdersByUserId,
     addPasswordResetToken: addPasswordResetToken,
     getPasswordResetToken: getPasswordResetToken,
-    consumePasswordResetToken: consumePasswordResetToken
+    consumePasswordResetToken: consumePasswordResetToken,
+    verifyEmail: verifyEmail
 };

@@ -71,6 +71,12 @@ module.exports = function(app, passport, rememberme, database, email) {
     });
   });
 
+  app.get("/verify-email/:token", function(req, res){
+    database.verifyEmail(req.params.token, function(err){
+      res.redirect("/cafes");
+    });
+  });
+
   // serve cafe products
   app.get("/cafe/:cafeId", isLoggedIn, function(req, res) {
     database.getCafes(function(err, cafes) {

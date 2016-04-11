@@ -7,9 +7,21 @@ var crypto         = require('crypto');
 var async          = require('async');
 var nodemailer     = require('nodemailer');
 var secure         = require("secure-random");
+var emailService   = require("../services/email-service");
 
 // load config
 var config         = require("../config/config");
+
+String.prototype.hashCode = function() {
+  var hash = 0, i, chr, len;
+  if (this.length === 0) return hash;
+  for (i = 0, len = this.length; i < len; i++) {
+    chr   = this.charCodeAt(i);
+    hash  = ((hash << 5) - hash) + chr;
+    hash |= 0; // Convert to 32bit integer
+  }
+  return hash;
+};
 
 // export our passport configuration function
 module.exports = function(passport, database) {
@@ -60,10 +72,12 @@ module.exports = function(passport, database) {
               user_permission_store: 1,
               user_permission_pos:   0,
               user_permission_stock: 0,
-              user_permission_admin: 0
+              user_permission_admin: 0,
+              user_token: email.hashCode
             };
             // complete user registration & log in
-            return done(null, new_user);
+            emailService.sendMailValidation(email, 'Please confirm e-mail'); 
+            return done(null, false, "Please check your email");
           });
         });
       }
