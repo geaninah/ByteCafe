@@ -97,29 +97,29 @@
                         <div class="row">
                           <div class="col-sm-6">
                             <div class="col-sm-6 formrow"><label for="disabledToggle"> Disabled </label></div>
-                            <div class="col-sm-6"><input type="checkbox" checked id="disabledToggle" cheched data-toggle="toggle"></div>
+                            <div class="col-sm-6"><input type="checkbox" id="disabledToggle" checked></div>
                           </div>
                           <div class="col-sm-6">
                             <div class="col-sm-6 formrow"><label for="verifiedToggle"> Verified Email </label></div>
-                            <div class="col-sm-6"><input type="checkbox" id="verifiedToggle" cheched data-toggle="toggle"></div>
+                            <div class="col-sm-6"><input type="checkbox" id="verifiedToggle" checked></div>
                           </div>
                           <br><br> <br>
                           <div class="col-sm-6">
                             <div class="col-sm-6 formrow"><label for="userToggle"> Store </label></div>
-                            <div class="col-sm-6"><input type="checkbox" id="userToggle" cheched data-toggle="toggle"></div>
+                            <div class="col-sm-6"><input type="checkbox" id="userToggle" checked></div>
                           </div>
                           <div class="col-sm-6">
                             <div class="col-sm-6 formrow"><label for="posToggle"> POS </label></div>
-                            <div class="col-sm-6"><input type="checkbox" id="posToggle" cheched data-toggle="toggle"></div>
+                            <div class="col-sm-6"><input type="checkbox" id="posToggle" checked></div>
                           </div>
                           <br><br>
                           <div class="col-sm-6">
                             <div class="col-sm-6 formrow"><label for="stockToggle"> Stock </label></div>
-                            <div class="col-sm-6"><input type="checkbox" id="stockToggle" cheched data-toggle="toggle"></div>
+                            <div class="col-sm-6"><input type ="checkbox" id="stockToggle" checked></div>
                           </div>
                           <div class="col-sm-6">
                             <div class="col-sm-6 formrow"><label for="adminToggle"> Admin </label></div>
-                            <div class="col-sm-6"><input type="checkbox" id="adminToggle" cheched data-toggle="toggle"></div>
+                            <div class="col-sm-6"><input type="checkbox" id="adminToggle" checked></div>
                           </div>
                         </div>
                       </form>
@@ -155,41 +155,85 @@
                     $("#userName").val(nameOfUser);   
                     $("#usrEmailField").val(emailOfUser);
 
+                    // initialize toggles
+                    $("#disabledToggle").bootstrapSwitch({
+                      'size': 'small',
+                      'labelWidth': '0'});
+                    $("#verifiedToggle").bootstrapSwitch({
+                      'size': 'small',
+                      'labelWidth': '0'});
+                    $("#userToggle").bootstrapSwitch({
+                      'size': 'small',
+                      'labelWidth': '0'});
+                    $("#posToggle").bootstrapSwitch({
+                      'size': 'small',
+                      'labelWidth': '0'});
+                    $("#stockToggle").bootstrapSwitch({
+                      'size': 'small',
+                      'labelWidth': '0'});
+                    $("#adminToggle").bootstrapSwitch({
+                      'size': 'small',
+                      'labelWidth': '0'});
+
                     // set toggles
-                    if (disabledUser ==  1) { $('#disabledToggle').bootstrapToggle("on"); }
-                    else { $('#disabledToggle').bootstrapToggle("off"); }
+                    if (disabledUser ==  1) { 
+                      $("#disabledToggle").bootstrapSwitch('state', true);
+                      $("#disabledToggle").bootstrapSwitch('offColor', 'success'); }
+                    else { 
+                      $("#disabledToggle").bootstrapSwitch('state', false);
+                      $("#disabledToggle").bootstrapSwitch('onColor', 'success'); }
 
-                    if (verifiedUser ==  1) { $('#verifiedToggle').bootstrapToggle("on"); }
-                    else { $('#verifiedToggle').bootstrapToggle("off"); }
+                    if (verifiedUser ==  1) { 
+                      $("#verifiedToggle").bootstrapSwitch('state', true);
+                      $("#verifiedToggle").bootstrapSwitch('offColor', 'success'); }
+                    else { 
+                      $("#verifiedToggle").bootstrapSwitch('state', false);
+                      $("#verifiedToggle").bootstrapSwitch('onColor', 'success'); }
 
-                    if (storeUser ==  1) { $('#userToggle').bootstrapToggle("on"); }
-                    else {  $('#userToggle').bootstrapToggle("off"); }
+                    if (storeUser ==  1) { 
+                      $("#userToggle").bootstrapSwitch('state', true);
+                      $("#userToggle").bootstrapSwitch('offColor', 'success'); }
+                    else { 
+                      $("#userToggle").bootstrapSwitch('state', false);
+                      $("#userToggle").bootstrapSwitch('onColor', 'success'); }
 
-                    if (posUser ==  1) { $('#posToggle').bootstrapToggle("on"); }
-                    else { $('#posToggle').bootstrapToggle("off");  }
+                    if (posUser ==  1) { 
+                      $("#posToggle").bootstrapSwitch('state', true);
+                      $("#posToggle").bootstrapSwitch('offColor', 'success'); }
+                    else { 
+                      $("#posToggle").bootstrapSwitch('state', false);
+                      $("#posToggle").bootstrapSwitch('onColor', 'success'); }
 
-                    if (stockUser ==  1) { $('#stockToggle').bootstrapToggle("on"); }
-                    else { $('#stockToggle').bootstrapToggle("off"); }
+                    if (stockUser ==  1) { 
+                      $("#stockToggle").bootstrapSwitch('state', true);
+                      $("#stockToggle").bootstrapSwitch('offColor', 'success'); }
+                    else { 
+                      $("#stockToggle").bootstrapSwitch('state', false);
+                      $("#stockToggle").bootstrapSwitch('onColor', 'success'); }
 
-                    if (adminUser ==  1) { $('#adminToggle').bootstrapToggle("on"); }
-                    else { $('#adminToggle').bootstrapToggle("off"); }
+                    if (adminUser ==  1) { 
+                      $("#adminToggle").bootstrapSwitch('state', true);
+                      $("#adminToggle").bootstrapSwitch('offColor', 'success'); }
+                    else { 
+                      $("#adminToggle").bootstrapSwitch('state', false);
+                      $("#adminToggle").bootstrapSwitch('onColor', 'success'); }
+
                   });
 
                   $("#updateInfo").modal("show");
 
+                  // colors the fields in green on detected change
+                  $('#usrEmailField').on("input", function () {
+                    $('#usrEmailField').addClass('updatedField');
+                  });
                   $('#userName').on("input", function () {
                     $('#userName').addClass('updatedField');
                   });
-
-                  $('#disabledToggle').change(function()
-                  {
-                    console.log("eyyy");
-                    $('#disabledToggle').bootstrapToggle({
-                      onstyle: "success",
-                      offstyle: "success"
-                    });
+                  $('#userPass').on("input", function () {
+                    $('#userPass').addClass('updatedField');
                   });
 
+                  // removes colors for fields on closing the modal - resets it
                   $("#updateInfo").on("hidden.bs.modal", function() {
                     if($('#userName').hasClass('updatedField')) { 
                       $('#userName').removeClass('updatedField');
@@ -200,22 +244,33 @@
                     if($('#userPass').hasClass('updatedField')) { 
                       $('#userPass').removeClass('updatedField');
                     }
+                    $("#disabledToggle").bootstrapSwitch('onColor', 'primary');
+                    $("#disabledToggle").bootstrapSwitch('offColor', 'default');
+                    $("#verifiedToggle").bootstrapSwitch('onColor', 'primary');
+                    $("#verifiedToggle").bootstrapSwitch('offColor', 'default');
+                    $("#userToggle").bootstrapSwitch('onColor', 'primary');
+                    $("#userToggle").bootstrapSwitch('offColor', 'default');
+                    $("#posToggle").bootstrapSwitch('onColor', 'primary');
+                    $("#posToggle").bootstrapSwitch('offColor', 'default');
+                    $("#stockToggle").bootstrapSwitch('onColor', 'primary');
+                    $("#stockToggle").bootstrapSwitch('offColor', 'default');
+                    $("#adminToggle").bootstrapSwitch('onColor', 'primary');
+                    $("#adminToggle").bootstrapSwitch('offColor', 'default');
                   });
                 });
-
 
                 $('#submitChanges').click(function () {
                   var data = {
                     id: $('#usrIDField').val(),
-                    name: $('#usrIDField').val(),
-                    email: $('#usrIDField').val(),
-                    password: $('#usrIDField').val(),
-                    disabled: $('#usrIDField').val(),
-                    permission_store: $('#usrIDField').val(),
-                    permission_pos: $('#usrIDField').val(),
-                    permission_stock: $('#usrIDField').val(),
-                    permission_admin: $('#usrIDField').val(),
-                    verified_email: $('#usrIDField').val(),
+                    name: $('#userName').val(),
+                    email: $('#usrEmailField').val(),
+                    password: $('#userPass').val(),
+                    disabled: $('#disabledToggle').bootstrapSwitch('state') == true ?  '1' : '0',
+                    permission_store: $('#userToggle').bootstrapSwitch('state') == true ?  '1' : '0',
+                    permission_pos: $('#posToggle').bootstrapSwitch('state') == true ?  '1' : '0',
+                    permission_stock: $('#stockToggle').bootstrapSwitch('state') == true ?  '1' : '0',
+                    permission_admin: $('#adminToggle').bootstrapSwitch('state') == true ?  '1' : '0',
+                    verified_email: $('#verifiedToggle').bootstrapSwitch('state') == true ?  '1' : '0'
                   };
 
                   $.getJSON("/api/admin/user/update", data, function(response) {

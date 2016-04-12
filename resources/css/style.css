@@ -286,3 +286,9 @@
 .updatedField {
   background-color: #75C731;
 }
+
+.someColor {
+  background-color: red;
+  border-color: red;
+  color:pink;
+}
