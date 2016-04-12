@@ -10,8 +10,8 @@ module.exports = {
   // https://github.com/felixge/node-mysql#pool-options
   database: {
     connectionLimit: 1,
-    acquireTimeout: 3000,
-    connectTimeout: 3000,
+    //acquireTimeout: 3000,
+    //connectTimeout: 3000,
     host: process.env.DATABASE_HOSTNAME,
     port: process.env.DATABASE_PORT,
     user: process.env.DATABASE_USERNAME,
