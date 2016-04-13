@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <% include head_incl.ejs %>
+  <title> Product Manager </title>
+</head>
+<body>
+
+  <% include nav_bar.ejs %>
+
+  <div class="container">
+    <div class="row">
+
+      <div class="jumbotron">
+        <div class="row formrow">
+          <button type="button" class="btn btn-default" data-toggle="modal" data-target="#formNewProduct" id="addNewProduct">Add new product</button>
+        </div>
+        <br>
+        <div class="row">
+        
+           <!-- TABLE FOR TAB 1 - ID IS CONTENT_1 -->
+          <div class="table-responsive" id="content_1">
+            <table id="product-table" class="table table-bordered table-hover">
+              <thead>
+                <tr>
+                  <th>Product ID</th>
+                  <th>Name</th>
+                  <th>Category ID</th>
+                  <th>Price</th>
+                  <th>Description</th>
+                  <th>Image URL</th>
+                  <th>Purchasable</th>
+                </tr>
+              </thead>
+              <tbody>
+
+              <% products.forEach(function (product) { %>
+              
+                
+                <tr data-product-id="<%= product.product_id %>" data-product-name="<%= product.product_name %>" data-product-category="<%= product.product_category_id %>" data-product-price="<%= product.product_price %>" data-product-description="<%= product.product_description %>" data-product-image="<%= product.product_image_url %>" data-product-purchasable="<%= product.product_purchasable %>">
+
+                  <td><%= product.product_id %></td>
+                  <td><%= product.product_name %></td>
+                  <td><%= product.product_category_id %></td>
+                  <td>£ <%= product.product_price %></td>
+                  <td><%= product.product_description %></td>
+                  <td><%= product.product_image_url %></td>
+                  <td><%= product.product_purchasable %></td>
+
+                </tr>
+
+              <% }); %>
+
+              </tbody>
+            </table>
+          </div>
+          <!-- END OF TABLE -->
+
+          <!-- Modal -->
+          <div class="modal fade" id="updateProductInfo" tabindex="-1" role="dialog" aria-labelledby="UpdateProductInformation">
+            <div class="modal-dialog" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <button type="button" class="close" id="closeModal" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                  <h4 class="modal-title">Update Product Details</h4>
+                </div>
+                <div class="modal-body">
+                  <div class="row">
+                    <div class="col-sm-12">
+                      <form role="form" class="form" id="updateProductInfoForm" method="post" action="/updateProductInformation">
+                        <div class="form-group has-feedback">
+                          <div class="row">
+                            <div class="col-sm-3 formrow"><label for="productIDField">Product ID</label></div>
+                            <div class="col-sm-9"><textarea readonly class="form-control" id="productIDField" rows="1" placeholder="ID"></textarea></div>
+                          </div>
+                        </div>
+                        <div class="form-group has-feedback">
+                          <div class="row">
+                            <div class="col-sm-3 formrow"><label for="productNameField">Name</label></div>
+                            <div class="col-sm-9"><textarea class="form-control" id="productNameField" rows="1" placeholder="Name"></textarea></div>
+                          </div>
+                        </div>
+                        <div class="form-group has-feedback">
+                          <div class="row">
+                            <div class="col-sm-3 formrow"><label for="productCategoryIDField">Category</label></div>
+                            <div class="col-sm-2"><textarea readonly class="form-control" id="productCategoryIDField" rows="1" placeholder="Category ID"></textarea></div>
+                            <div class="col-sm-7"><textarea class="form-control" id="productCategoryField" rows="1" placeholder="Category Name"></textarea></div>
+                          </div>
+                        </div>
+                        <div class="form-group has-feedback">
+                          <div class="row">
+                            <div class="col-sm-3 formrow"><label for="productDescriptionField">Description</label></div>
+                            <div class="col-sm-9"><textarea class="form-control" id="productDescriptionField" rows="3" placeholder="Description"></textarea></div>
+                          </div>
+                        </div>
+                        <div class="form-group has-feedback">
+                          <div class="row">
+                            <div class="col-sm-3 formrow"><label for="productImageURLField">Image URL</label></div>
+                            <div class="col-sm-9"><textarea class="form-control" id="productImageURLField" rows="1" placeholder="Image URL"></textarea></div>
+                          </div>
+                        </div>
+                        <div class="form-group has-feedback">
+                         <div class="row">
+                            <div class="col-sm-3 formrow"><label for="productPriceField">Price £ </label></div>
+                            <div class="col-sm-9"><textarea class="form-control" id="productPriceField" rows="1" placeholder="£ ">£ </textarea></div>
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="col-sm-12">
+                            <div class="col-sm-3 formrow"><label for="productPurchasableToggle"> Purchasable </label></div>
+                            <div class="col-sm-9"><input type="checkbox" id="productPurchasableToggle" checked></div>
+                          </div>
+                        </div>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-primary" data-dismiss="modal" id="submitProductChanges">Submit changes</button>
+                  <button type="button" class="btn btn-danger" data-dismiss="modal" id="removeProduct">Delete product</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+
+          <div class="modal fade" id="formNewProduct" tabindex="-1" role="dialog" aria-labelledby="CreateNewProduct">
+            <div class="modal-dialog" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <button type="button" class="close" id="closeModal" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                  <h4 class="modal-title">Create New User</h4>
+                </div>
+                <div class="modal-body">
+                  <div class="row">
+                    <div class="col-sm-12">
+                      <form role="form" class="form" id="newProductInfoForm" method="post" action="/newProductInformation">
+                        <div class="form-group has-feedback">
+                          <div class="row">
+                            <div class="col-sm-3 formrow"><label for="newProductIDField">Product ID</label></div>
+                            <div class="col-sm-9"><textarea readonly class="form-control" id="newProductIDField" rows="1" placeholder="ID"></textarea></div>
+                          </div>
+                        </div>
+                        <div class="form-group has-feedback">
+                          <div class="row">
+                            <div class="col-sm-3 formrow"><label for="newProductNameField">Name</label></div>
+                            <div class="col-sm-9"><textarea class="form-control" id="newProductNameField" rows="1" placeholder="Name"></textarea></div>
+                          </div>
+                        </div>
+                        <div class="form-group has-feedback">
+                          <div class="row">
+                            <div class="col-sm-3 formrow"><label for="newProductCategoryIDField">Category</label></div>
+                            <div class="col-sm-2"><textarea class="form-control" id="newProductCategoryIDField" rows="1" placeholder="Category ID"></textarea></div>
+                            <div class="col-sm-7"><textarea class="form-control" id="newProductCategoryField" rows="1" placeholder="Category Name"></textarea></div>
+                          </div>
+                        </div>
+                        <div class="form-group has-feedback">
+                          <div class="row">
+                            <div class="col-sm-3 formrow"><label for="newProductDescriptionField">Description</label></div>
+                            <div class="col-sm-9"><textarea class="form-control" id="newProductDescriptionField" rows="3" placeholder="Description"></textarea></div>
+                          </div>
+                        </div>
+                        <div class="form-group has-feedback">
+                          <div class="row">
+                            <div class="col-sm-3 formrow"><label for="newProductImageURLField">Image URL</label></div>
+                            <div class="col-sm-9"><textarea class="form-control" id="newProductImageURLField" rows="1" placeholder="Image URL"></textarea></div>
+                          </div>
+                        </div>
+                        <div class="form-group has-feedback">
+                         <div class="row">
+                            <div class="col-sm-3 formrow"><label for="newProductPriceField">Price £ </label></div>
+                            <div class="col-sm-9"><textarea class="form-control" id="newProductPriceField" rows="1" placeholder="£ ">£ </textarea></div>
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="col-sm-12">
+                            <div class="col-sm-3 formrow"><label for="newProductPurchasableToggle"> Purchasable </label></div>
+                            <div class="col-sm-9"><input type="checkbox" id="newProductPurchasableToggle" checked></div>
+                          </div>
+                        </div>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-primary" data-dismiss="modal" id="submitNewProduct">Create New Product</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <script>
+
+                $('#product-table > tbody > tr').click(function(a) {
+                  // clear the modal handlers
+                  $("#updateProductInfo").off();
+
+                  $("#updateProductInfo").on("show.bs.modal", function() {
+                    // get user data from dom
+                    var idOfProduct = $(a.currentTarget).data("product-id");
+                    var nameOfProduct = $(a.currentTarget).data("product-name"); 
+                    var categoryIDofProduct = $(a.currentTarget).data("product-category");
+                    var priceOfProduct = $(a.currentTarget).data("product-price");
+                    var descriptionofProduct = $(a.currentTarget).data("product-description");
+                    var purchasableProduct = $(a.currentTarget).data("product-purchasable");
+                    var imageOfProduct = $(a.currentTarget).data("product-image");
+
+                    // fill text boxes
+                    $("#productIDField").val(idOfProduct);
+                    $("#productNameField").val(nameOfProduct);   
+                    $("#productCategoryIDField").val(categoryIDofProduct);
+                    $("#productPriceField").val(priceOfProduct);
+                    $("#productDescriptionField").val(descriptionofProduct);
+                    $("#productImageURLField").val(imageOfProduct);
+
+                    // initialize toggles
+                    $("#productPurchasableToggle").bootstrapSwitch({
+                      'size': 'small',
+                      'labelWidth': '0'});
+
+                    // set toggles
+                    if (purchasableProduct ==  1) { 
+                      $("#productPurchasableToggle").bootstrapSwitch('state', true);
+                      $("#productPurchasableToggle").bootstrapSwitch('offColor', 'success'); }
+                    else { 
+                      $("#productPurchasableToggle").bootstrapSwitch('state', false);
+                      $("#productPurchasableToggle").bootstrapSwitch('onColor', 'success'); }
+
+                  });
+
+                  $("#updateProductInfo").modal("show");
+
+                  // colors the fields in green on detected change
+                  $('#productNameField').on("input", function () {
+                    $('#productNameField').addClass('updatedField');
+                  });
+                  $('#productCategoryIDField').on("input", function () {
+                    $('#productCategoryIDField').addClass('updatedField');
+                  });
+                  $('#productPriceField').on("input", function () {
+                    $('#productPriceField').addClass('updatedField');
+                  });
+                  $('#productDescriptionField').on("input", function () {
+                    $('#productDescriptionField').addClass('updatedField');
+                  });
+                  $('#productImageURLField').on("input", function () {
+                    $('#productImageURLField').addClass('updatedField');
+                  });
+
+                  // removes colors for fields on closing the modal - resets it
+                  $("#updateProductInfo").on("hidden.bs.modal", function() {
+                    if($('#productNameField').hasClass('updatedField')) { 
+                      $('#productNameField').removeClass('updatedField');
+                    }
+                    if($('#productCategoryIDField').hasClass('updatedField')) { 
+                      $('#productCategoryIDField').removeClass('updatedField');
+                    }
+                    if($('#productPriceField').hasClass('updatedField')) { 
+                      $('#productPriceField').removeClass('updatedField');
+                    }
+                     if($('#productDescriptionField').hasClass('updatedField')) { 
+                      $('#productDescriptionField').removeClass('updatedField');
+                    }
+                     if($('#productImageURLField').hasClass('updatedField')) { 
+                      $('#productImageURLField').removeClass('updatedField');
+                    }
+                    $("#productPurchasableToggle").bootstrapSwitch('onColor', 'primary');
+                    $("#productPurchasableToggle").bootstrapSwitch('offColor', 'default');
+                  });
+                });
+
+                $('#submitProductChanges').click(function () {
+                  var data = {
+                    id: $('#productIDField').val(),
+                    name: $('#productNameField').val(),
+                    category_id: $('#productCategoryIDField').val(),
+                    imageURL: $('#productImageURLField').val(),
+                    productDescription: $('#productDescriptionField').val(),
+                    product_price: $('#productPriceField').val(),
+                    permission_purchasable: $('#productPurchasableToggle').bootstrapSwitch('state') == true ?  '1' : '0'
+                  };
+
+                  $.getJSON("/api/productManager/products/update", data, function(response) {
+                    if(response.status == 1) {
+                      //success
+                      console.log(response.message);
+                    } else {
+                      // fail
+                      console.log(response.message);
+                    }
+                  });
+                });
+
+                $("#formNewProduct").on("show.bs.modal", function() {
+
+                    // initialize toggles
+                    $("#newProductPurchasableToggle").bootstrapSwitch({
+                      'size': 'small',
+                      'labelWidth': '0'});
+
+                    $("#newProductPurchasableToggle").bootstrapSwitch('state', true);
+                  });
+
+                  $("#formNewProduct").on("hidden.bs.modal", function() {
+
+                    $("#newProductPurchasableToggle").bootstrapSwitch('state', false);
+                    $("#newProductIDField").val("");
+                    $("#newProductNameField").val("");
+                    $("#newProductCategoryIDField").val("");
+                    $("#newProductDescriptionField").val("");
+                    $("#newProductImageURLField").val("");
+                    $("#newProductPriceField").val("");
+
+                  });
+
+                $('#submitNewProduct').click(function () {
+                  var data = {
+                    name: $('#newProductNameField').val(),
+                    category_id: $('#newProductCategoryIDField').val(),
+                    imageURL: $('#productImageURLField').val(),
+                    productDescription: $('#productDescriptionField').val(),
+                    product_price: $('#productPriceField').val(),
+                    permission_purchasable: $('#productPurchasableToggle').bootstrapSwitch('state') == true ?  '1' : '0'
+                  };
+
+                  $.getJSON("/api/productManager/product/create", data, function(response) {
+                    if(response.status == 1) {
+                      //success
+                      console.log(response.message);
+                    } else {
+                      // fail
+                      console.log(response.message);
+                    }
+                  });
+                });
+
+                $('#removeProduct').click(function () {
+                  var data = {
+                    id: $('#productIDField').val()
+                  };
+
+                  $.getJSON("/api/productManager/product/delete", data, function(response) {
+                    if(response.status == 1) {
+                      //success
+                      console.log(response.message);
+                    } else {
+                      // fail
+                      console.log(response.message);
+                    }
+                  });
+                });
+                
+
+              </script>
+
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <% include footer.ejs %>
+</body>
+</html>

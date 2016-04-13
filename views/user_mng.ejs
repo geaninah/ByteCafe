@@ -12,6 +12,10 @@
     <div class="row">
 
       <div class="jumbotron">
+        <div class="row formrow">
+          <button type="button" class="btn btn-default" data-toggle="modal" data-target="#formNewUser" id="addNewUser">Add new user</button>
+        </div>
+        <br>
         <div class="row">
         
            <!-- TABLE FOR TAB 1 - ID IS CONTENT_1 -->
@@ -55,7 +59,9 @@
 
               </tbody>
             </table>
+
           </div>
+        </div>
           <!-- END OF TABLE -->
 
           <!-- Modal -->
@@ -91,7 +97,7 @@
                         <div class="form-group has-feedback">
                          <div class="row">
                             <div class="col-sm-2 formrow"><label for="userPass">Password</label></div>
-                            <div class="col-sm-10"><textarea class="form-control" id="userPass" rows="1" placeholder="(unchanged)"></textarea></div>
+                            <div class="col-sm-10"><input type="password" class="form-control" id="userPass" rows="1" placeholder="(unchanged)"></input></div>
                           </div>
                         </div>
                         <div class="row">
@@ -127,7 +133,83 @@
                   </div>
                 </div>
                 <div class="modal-footer">
-                  <button type="button" class="btn btn-default" data-dismiss="modal" id="submitChanges">Submit changes</button>
+                  <button type="button" class="btn btn-primary" data-dismiss="modal" id="submitChanges">Submit changes</button>
+                  <button type="button" class="btn btn-danger" data-dismiss="modal" id="removeUser">Delete user</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+
+          <div class="modal fade" id="formNewUser" tabindex="-1" role="dialog" aria-labelledby="CreateNewUser">
+            <div class="modal-dialog" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <button type="button" class="close" id="closeModal" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                  <h4 class="modal-title">Create New User</h4>
+                </div>
+                <div class="modal-body">
+                  <div class="row">
+                    <div class="col-sm-12">
+                      <form role="form" class="form" id="createUser" method="post" action="/createuser">
+                        <div class="form-group has-feedback">
+                          <div class="row">
+                            <div class="col-sm-2 formrow"><label for="newUsrID">User ID</label></div>
+                            <div class="col-sm-10"><textarea readonly class="form-control" id="newUsrID" rows="1" placeholder="ID"></textarea></div>
+                          </div>
+                        </div>
+                        <div class="form-group has-feedback">
+                          <div class="row">
+                            <div class="col-sm-2 formrow"><label for="newUsrEmail">Email</label></div>
+                            <div class="col-sm-10"><textarea type="email" class="form-control" id="newUsrEmail" rows="1" placeholder="Email"></textarea></div>
+                          </div>
+                        </div>
+                        <div class="form-group has-feedback">
+                          <div class="row">
+                            <div class="col-sm-2 formrow"><label for="newUsrName">Name</label></div>
+                            <div class="col-sm-10"><textarea class="form-control" id="newUsrName" rows="1" placeholder="Name"></textarea></div>
+                          </div>
+                        </div>
+                        <div class="form-group has-feedback">
+                         <div class="row">
+                            <div class="col-sm-2 formrow"><label for="newUsrPass">Password</label></div>
+                            <div class="col-sm-10"><input type="password" class="form-control" id="newUsrPass" rows="1" placeholder="Password"></input></div>
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="col-sm-6">
+                            <div class="col-sm-6 formrow"><label for="newUsrDisabled"> Disabled </label></div>
+                            <div class="col-sm-6"><input type="checkbox" id="newUsrDisabled" checked></div>
+                          </div>
+                          <div class="col-sm-6">
+                            <div class="col-sm-6 formrow"><label for="newUsrVerified"> Verified Email </label></div>
+                            <div class="col-sm-6"><input type="checkbox" id="newUsrVerified" checked></div>
+                          </div>
+                          <br><br> <br>
+                          <div class="col-sm-6">
+                            <div class="col-sm-6 formrow"><label for="newUsrStore"> Store </label></div>
+                            <div class="col-sm-6"><input type="checkbox" id="newUsrStore" checked></div>
+                          </div>
+                          <div class="col-sm-6">
+                            <div class="col-sm-6 formrow"><label for="newUsrPOS"> POS </label></div>
+                            <div class="col-sm-6"><input type="checkbox" id="newUsrPOS" checked></div>
+                          </div>
+                          <br><br>
+                          <div class="col-sm-6">
+                            <div class="col-sm-6 formrow"><label for="newUsrStock"> Stock </label></div>
+                            <div class="col-sm-6"><input type ="checkbox" id="newUsrStock" checked></div>
+                          </div>
+                          <div class="col-sm-6">
+                            <div class="col-sm-6 formrow"><label for="newUsrAdmin"> Admin </label></div>
+                            <div class="col-sm-6"><input type="checkbox" id="newUsrAdmin" checked></div>
+                          </div>
+                        </div>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-primary" data-dismiss="modal" id="submitNewUser">Create New User</button>
                 </div>
               </div>
             </div>
@@ -283,13 +365,96 @@
                     }
                   });
                 });
+
+                  $("#formNewUser").on("show.bs.modal", function() {
+
+                    // initialize toggles
+                    $("#newUsrDisabled").bootstrapSwitch({
+                      'size': 'small',
+                      'labelWidth': '0'});
+                    $("#newUsrVerified").bootstrapSwitch({
+                      'size': 'small',
+                      'labelWidth': '0'});
+                    $("#newUsrStore").bootstrapSwitch({
+                      'size': 'small',
+                      'labelWidth': '0'});
+                    $("#newUsrPOS").bootstrapSwitch({
+                      'size': 'small',
+                      'labelWidth': '0'});
+                    $("#newUsrStock").bootstrapSwitch({
+                      'size': 'small',
+                      'labelWidth': '0'});
+                    $("#newUsrAdmin").bootstrapSwitch({
+                      'size': 'small',
+                      'labelWidth': '0'});
+
+                    $("#newUsrDisabled").bootstrapSwitch('state', false);
+                    $("#newUsrVerified").bootstrapSwitch('disabled', true);
+                    $("#newUsrStore").bootstrapSwitch('state', false);
+                    $("#newUsrPOS").bootstrapSwitch('state', false);
+                    $("#newUsrStock").bootstrapSwitch('state', false);
+                    $("#newUsrAdmin").bootstrapSwitch('state', false);
+
+                  });
+
+                  $("#formNewUser").on("hidden.bs.modal", function() {
+
+                    $("#newUsrDisabled").bootstrapSwitch('state', false);
+                    $("#newUsrVerified").bootstrapSwitch('disabled', true);
+                    $("#newUsrStore").bootstrapSwitch('state', false);
+                    $("#newUsrPOS").bootstrapSwitch('state', false);
+                    $("#newUsrStock").bootstrapSwitch('state', false);
+                    $("#newUsrAdmin").bootstrapSwitch('state', false);
+                    $("#newUsrEmail").val("");
+                    $("#newUsrName").val("");
+                    $("#newUsrPass").val("");
+
+                  });
+
+                  $('#submitNewUser').click(function () {
+                  var data = {
+                    name: $('#newUsrName').val(),
+                    email: $('#newUsrEmail').val(),
+                    password: $('#newUsrPass').val(),
+                    disabled: $('#newUsrDisabled').bootstrapSwitch('state') == true ?  '1' : '0',
+                    permission_store: $('#newUsrStore').bootstrapSwitch('state') == true ?  '1' : '0',
+                    permission_pos: $('#newUsrPOS').bootstrapSwitch('state') == true ?  '1' : '0',
+                    permission_stock: $('#newUsrStock').bootstrapSwitch('state') == true ?  '1' : '0',
+                    permission_admin: $('#newUsrAdmin').bootstrapSwitch('state') == true ?  '1' : '0'
+                  };
+
+                  $.getJSON("/api/admin/user/create", data, function(response) {
+                    if(response.status == 1) {
+                      //success
+                      console.log(response.message);
+                    } else {
+                      // fail
+                      console.log(response.message);
+                    }
+                  });
+                });
+
+                $('#removeUser').click(function () {
+                  var data = {
+                    id: $('#usrIDField').val()
+                  };
+
+                  $.getJSON("/api/admin/user/delete", data, function(response) {
+                    if(response.status == 1) {
+                      //success
+                      console.log(response.message);
+                    } else {
+                      // fail
+                      console.log(response.message);
+                    }
+                  });
+                });
                 
 
               </script>
 
         </div>
       </div>
-    </div>
   </div>
   
   <% include footer.ejs %>

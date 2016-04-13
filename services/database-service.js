@@ -78,17 +78,13 @@ var getProducts = function(callback, cafeId){
 
 // returns information about a product
 // TODO: refine query getProductInfo
-var getProductInfo = function(callback, productId){
-    var query = 'select * from products where product_id = ?';
+var getProductInfo = function(productId, callback){
+    var query = 'select * from products where products.product_id = ?';
     var parameters = [productId];
 
-    connection.query(query, parameters, function(err, products){
-        if(err){
-            console.log(err);
-        }else{
-            var product = products[0];
-            callback(err, product);
-        }
+    connection.query(query, parameters, function(err, result){
+        if(err){ console.log(err); }
+        else { return callback(err, result); }
     });
 };
 
@@ -301,6 +297,18 @@ var editProduct = function(name, categoryId, price, description, image_url, purc
         }
     });
 };
+
+var getAllProducts = function(callback){
+    var query = 'select * from products';
+
+    connection.query(query, function(err, products){
+        if(err){
+            console.log(err);
+        } else {
+            callback(err, products);
+        }
+    });
+}
 
 var addCafe = function(name, description, mapLocation, address, openingTimes, imageUrl, available, callback){
     var query = 'insert into cafes (cafe_name, cafe_description, cafe_map_location, cafe_address, cafe_opening_times, cafe_image_url, cafe_avaliable) values (?, ?, ?, ?, ?, ?, ?)';
@@ -763,6 +771,7 @@ module.exports = {
     addProduct: addProduct,
     deleteProduct: deleteProduct,
     editProduct: editProduct,
+    getAllProducts: getAllProducts,
     addCafe: addCafe,
     deleteCafe: deleteCafe,
     editCafe: editCafe,

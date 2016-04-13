@@ -320,6 +320,99 @@ module.exports = function (database, email) {
             return res.end(JSON.stringify({status: 1, message: "User updated" }));
           });
         });
+      },
+
+      // create new user
+      createUser: function(req, res) {
+        res.header("Content-Type", "application/json; charset=utf-8");
+        var params = req.query;
+        if (!params.name || !params.email || !params.disabled || !params.permission_pos || !params.permission_store || !params.permission_stock || !params.permission_admin)
+          return res.end(JSON.stringify({status: 0, message: "Invalid input, all fields must be specified" }));
+        if (isNaN(params.disabled) || isNaN(params.permission_pos) || isNaN(params.permission_store) || isNaN(params.permission_stock) || isNaN(params.permission_admin))
+          return res.end(JSON.stringify({status: 0, message: "Invalid input, user_disabled, user_verified_email and user_permission_* must be numbers" }));
+        params.password = bcrypt.hashSync(params.password, null, null);
+        database.addUser(params.name, params.email, params.password, params.disabled, params.permission_store, params.permission_pos, params.permission_stock, params.permission_admin, function(err, rows) {
+          if(err) {console.log(err); return res.end(JSON.stringify({status: 0, message: "Server side exception"}));}
+          return res.end(JSON.stringify({status: 1, message: "User created" }));
+        });
+      },
+
+      // remove user
+      removeUser: function(req, res) {
+        res.header("Content-Type", "application/json; charset=utf-8");
+        var params = req.query;
+        if (!params.id)
+          return res.end(JSON.stringify({status: 0, message: "Invalid input, id must be specified" }));
+        if (isNaN(params.id))
+          return res.end(JSON.stringify({status: 0, message: "Invalid input, id must be a number" }));
+        database.getUserByID(params.id, function(err, rows) {
+          if(err) {console.log(err); return res.end(JSON.stringify({status: 0, message: "Server side exception"}));}
+          if(!rows.length) return res.end(JSON.stringify({status: 0, message: "User does not exist"}));
+          database.deleteUser(params.id, function(err, rows) {
+            if(err) {console.log(err); return res.end(JSON.stringify({status: 0, message: "Server side exception"}));}
+            return res.end(JSON.stringify({status: 1, message: "User deleted" }));
+          });
+        });
+      }
+    },
+
+     // product manager functions
+    productManager: {
+      // used to ensure the user is an a product manager or an admin
+      assert: function(req, res, next) {
+        if (req.user.user_permission_product != 1 && req.user.user_permission_admin != 1) {
+          res.status(403);
+          res.end(JSON.stringify({status: 0, message: "Permission denied"}));
+        } else {
+          return next();
+        }
+      },
+
+      // update product information
+      updateProduct: function(req, res) {
+        res.header("Content-Type", "application/json; charset=utf-8");
+        var params = req.query;
+        if (!params.id || !params.name || !params.category_id || !params.imageURL || !params.productDescription || !params.product_price || !params.permission_purchasable)
+          return res.end(JSON.stringify({status: 0, message: "Invalid input, all fields must be specified" }));
+        if (isNaN(params.id) || isNaN(params.category_id) || isNaN(params.product_price) || isNaN(params.permission_purchasable))
+          return res.end(JSON.stringify({status: 0, message: "Invalid input, id, category_id, product_price and permission_purchasable must be numbers" }));
+        database.getProductInfo(params.id, function(err, rows) {
+          if(err) {console.log(err); return res.end(JSON.stringify({status: 0, message: "Server side exception"}));}
+          if(!rows.length) return res.end(JSON.stringify({status: 0, message: "Product does not exist"}));
+          database.editProduct(params.name, params.category_id, params.product_price, params.productDescription, params.imageURL, params.permission_purchasable, params.id, function(err, rows) {
+            if(err) {console.log(err); return res.end(JSON.stringify({status: 0, message: "Server side exception"}));}
+            return res.end(JSON.stringify({status: 1, message: "Product updated" }));
+          });
+        });
+      },
+
+      // create new product
+      createProduct: function(req, res) {
+        res.header("Content-Type", "application/json; charset=utf-8");
+        var params = req.query;
+        if (!params.name || !params.category_id || !params.imageURL || !params.productDescription || !params.product_price || !params.permission_purchasable)
+          return res.end(JSON.stringify({status: 0, message: "Invalid input, all fields must be specified" }));
+        if (isNaN(params.category_id) || isNaN(params.product_price) || isNaN(params.permission_purchasable))
+          return res.end(JSON.stringify({status: 0, message: "Invalid input, category_id, product_price and permission_purchasable must be numbers" }));
+        database.addProduct(params.name, params.category_id, params.product_price, params.productDescription, params.imageURL, params.permission_purchasable, function(err, rows) {
+          if(err) {console.log(err); return res.end(JSON.stringify({status: 0, message: "Server side exception"}));}
+          return res.end(JSON.stringify({status: 1, message: "Product created" }));
+        });
+      },
+
+      // remove user
+      removeProduct: function(req, res) {
+        res.header("Content-Type", "application/json; charset=utf-8");
+        var params = req.query;
+        if (!params.id)
+          return res.end(JSON.stringify({status: 0, message: "Invalid input, id must be specified" }));
+        if (isNaN(params.id))
+          return res.end(JSON.stringify({status: 0, message: "Invalid input, id must be a number" }));
+        database.deleteProduct(params.id, function(err, rows) {
+          if(err) {console.log(err); return res.end(JSON.stringify({status: 0, message: "Server side exception"}));}
+          if(!rows.length) return res.end(JSON.stringify({status: 0, message: "User does not exist"}));
+          return res.end(JSON.stringify({status: 1, message: "Product deleted" }));
+        });
       }
     },
 

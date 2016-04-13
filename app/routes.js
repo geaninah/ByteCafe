@@ -23,8 +23,13 @@ module.exports = function(app, passport, rememberme, database, email) {
   app.get("/api/basket/edit",                   isLoggedInAPI, api.editBasket);
 
   // admin panel calls
+  app.get("/api/account/update",                isLoggedInAPI, api.updateAccount);
   app.get("/api/admin/user/update",             isLoggedInAPI, api.admin.assert, api.admin.updateUser);
-  app.get("/api/account/update",          isLoggedInAPI, api.updateAccount);
+  app.get("/api/productManager/products/update",isLoggedInAPI, api.productManager.assert, api.productManager.updateProduct);
+  app.get("/api/admin/user/create",             isLoggedInAPI, api.admin.assert, api.admin.createUser);
+  app.get("/api/admin/user/delete",             isLoggedInAPI, api.admin.assert, api.admin.removeUser);
+  app.get("/api/productManager/product/create", isLoggedInAPI, api.productManager.assert, api.productManager.createProduct);
+  app.get("/api/productManager/product/delete", isLoggedInAPI, api.productManager.assert, api.productManager.removeProduct);
 
   // serve static content
   app.use("/images",                            express.static("resources/images"));
@@ -143,6 +148,16 @@ module.exports = function(app, passport, rememberme, database, email) {
     database.getCafes(function(err, cafes) {
       database.getAllUsers(function(err, users){
         res.render("user_mng.ejs", {users: users, cafes: cafes, user: req.user});
+      });
+    });
+  });
+
+  app.get("/product_mng", isLoggedIn, function(req, res) {
+    database.getCafes(function(err, cafes) {
+      database.getAllProducts(function(err, products){
+        database.getCategory(function(err, categories){
+          res.render("product_mng.ejs", {categories: categories, products: products, cafes: cafes, user: req.user});
+        });
       });
     });
   });

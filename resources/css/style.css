@@ -299,3 +299,11 @@
   color: #fff;
   font-size: 1.3em;
 }
+
+#addNewUser, #addNewProduct {
+  width: 220px;
+  border-radius: 10px;
+  background-color: #aa764e;
+  color: #fff;
+  font-size: 1.3em;
+}
