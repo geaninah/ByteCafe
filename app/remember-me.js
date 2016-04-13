@@ -9,6 +9,7 @@ module.exports.init = function(database) {
       // try to find our guy in the database
       database.getRememberMeToken(selector, function(err, rows){
         // fail if no token found (and delete cookie)
+        if (!rows) { res.clearCookie("rememberme"); return next(); }
         if (!rows.length) { res.clearCookie("rememberme"); return next(); }
         // ensure the validator is correct
         if (validator == rows[0].remember_me_token_validator) {
