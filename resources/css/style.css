@@ -292,3 +292,10 @@
   border-color: red;
   color:pink;
 }
+
+#submitAccountChanges {
+  border-radius: 10px;
+  background-color: #aa764e;
+  color: #fff;
+  font-size: 1.3em;
+}

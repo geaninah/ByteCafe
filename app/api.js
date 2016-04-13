@@ -321,6 +321,29 @@ module.exports = function (database, email) {
           });
         });
       }
+    },
+
+    // update user information
+    updateAccount: function(req, res) {
+      res.header("Content-Type", "application/json; charset=utf-8");
+      var params = req.query;
+      if (!params.id || !params.name || !params.email || !params.disabled || !params.permission_pos || !params.permission_store || !params.permission_stock || !params.permission_admin  || !params.verified_email)
+        return res.end(JSON.stringify({status: 0, message: "Invalid input, all fields must be specified" }));
+      if (isNaN(params.id) || isNaN(params.disabled) || isNaN(params.permission_pos) || isNaN(params.permission_store) || isNaN(params.permission_stock) || isNaN(params.permission_admin) || isNaN(params.verified_email))
+        return res.end(JSON.stringify({status: 0, message: "Invalid input, id, user_disabled, user_verified_email and user_permission_* must be numbers" }));
+      database.getUserByID(params.id, function(err, rows) {
+        if(err) {console.log(err); return res.end(JSON.stringify({status: 0, message: "Server side exception"}));}
+        if(!rows.length) return res.end(JSON.stringify({status: 0, message: "User does not exist"}));
+        if(!params.password) {
+          params.password = rows[0].user_password;
+        } else {
+          params.password = bcrypt.hashSync(params.password, null, null);
+        }
+        database.editUser(params.name, params.email, params.password, params.disabled, params.permission_store, params.permission_pos, params.permission_stock, params.permission_admin, params.verified_email, params.id, function(err, rows) {
+          if(err) {console.log(err); return res.end(JSON.stringify({status: 0, message: "Server side exception"}));}
+          return res.end(JSON.stringify({status: 1, message: "User updated" }));
+        });
+      });
     }
   }
 };

@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+	<% include head_incl.ejs %>
+	<title>Account Details</title>
+
+</head>
+<body>
+
+  <!-- NAVIGATION BAR -->
+
+	<% include nav_bar.ejs %>
+
+  <!-- END OF NAVIGATION BAR -->
+
+  <!-- MAIN CONTENT OF THE PAGE -->
+
+  <div class="container">
+    <div class="row">
+
+      <div class="jumbotron">
+        <div class="row"><h2> Hello, <%= user.user_name %>!</h2><br></div>
+        <div class="row">
+          <div class="col-sm-12">
+            <form role="form" class="form" id="updateAccountForm" method="post" action="/updateAccountSettings">
+              <div class="form-group has-feedback">
+                <div class="row">
+                  <div class="col-sm-2 formrow"><label for="changeEmailField">Email</label></div>
+                  <div class="col-sm-10"><textarea type="email" class="form-control" id="changeEmailField" rows="1" placeholder="Email"><%= user.user_email %></textarea></div>
+                </div>
+              </div>
+              <div class="form-group has-feedback">
+                <div class="row">
+                  <div class="col-sm-2 formrow"><label for="changeNameField">Name</label></div>
+                  <div class="col-sm-10"><textarea class="form-control" id="changeNameField" rows="1" placeholder="Name"><%= user.user_name %></textarea></div>
+                </div>
+              </div>
+              <div class="form-group has-feedback">
+                <div class="row">
+                  <div class="col-sm-2 formrow"><label for="changePassField">Password</label></div>
+                   <div class="col-sm-10"><input type="password" class="form-control" id="changePassField"  placeholder="(unchanged)"></input></div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-sm-4">
+                  <div class="col-sm-6 formrow"><label for="deactivateAccountToggle"> Deactivate Account </label></div>
+                  <div class="col-sm-6"><input type="checkbox" id="deactivateAccountToggle" checked></div>
+                </div>
+              </div>
+              <br>
+              <div class="row">
+                <div class="col-sm-12">
+                  <div class="col-sm-5"></div>
+                  <div class="col-sm-7">
+                    <button type="button" class="btn btn-default" data-dismiss="modal" id="submitAccountChanges" data-user-id="<%= user.user_id %>" data-user-name="<%= user.user_name %>" data-user-email="<%= user.user_email %>" data-user-disabled="<%= user.user_disabled %>" data-user-verified="<%= user.user_verified_email %>" data-user-store="<%= user.user_permission_store %>" data-user-pos="<%= user.user_permission_pos %>" data-user-stock="<%= user.user_permission_stock %>" data-user-admin="<%= user.user_permission_admin %>">Submit changes</button>
+                  </div>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      <script>
+        $("#deactivateAccountToggle").bootstrapSwitch({
+                      'size': 'small',
+                      'labelWidth': '0'});
+        $("#deactivateAccountToggle").bootstrapSwitch('state', false);
+
+        // colors the fields in green on detected change
+        $('#changeEmailField').on("input", function () {
+          $('#changeEmailField').addClass('updatedField');
+        });
+        $('#changeNameField').on("input", function () {
+          $('#changeNameField').addClass('updatedField');
+        });
+        $('#changePassField').on("input", function () {
+          $('#changePassField').addClass('updatedField');
+        });
+
+         $('#submitAccountChanges').click(function (a) {
+          var idOfUser = $(a.currentTarget).data("user-id");
+          var verifiedUser = $(a.currentTarget).data("user-verified");
+          var storeUser = $(a.currentTarget).data("user-store");
+          var posUser = $(a.currentTarget).data("user-pos");
+          var stockUser = $(a.currentTarget).data("user-stock");
+          var adminUser = $(a.currentTarget).data("user-admin");
+
+          console.log(idOfUser);
+          
+          var data = {
+            id: idOfUser,
+            name: $('#changeNameField').val(),
+            email: $('#changeEmailField').val(),
+            password: $('#changePassField').val(),
+            disabled: $('#deactivateAccountToggle').bootstrapSwitch('state') == true ?  '1' : '0',
+            permission_store: storeUser,
+            permission_pos: posUser,
+            permission_stock: stockUser,
+            permission_admin: adminUser,
+            verified_email: verifiedUser
+          };
+
+          $.getJSON("/api/account/update", data, function(response) {
+            if(response.status == 1) {
+              //success
+              console.log(response.message);
+            } else {
+              // fail
+              console.log(response.message);
+            }
+          });
+        });
+        
+      </script>
+
+    </div>
+  </div>
+
+  <!-- FOOTER OF PAGE -->
+
+  <% include footer.ejs %>
+
+  <!-- END OF FOOTER OF PAGE -->
+
+
+</body>
+</html>

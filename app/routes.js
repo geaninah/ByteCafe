@@ -24,6 +24,7 @@ module.exports = function(app, passport, rememberme, database, email) {
 
   // admin panel calls
   app.get("/api/admin/user/update",             isLoggedInAPI, api.admin.assert, api.admin.updateUser);
+  app.get("/api/account/update",          isLoggedInAPI, api.updateAccount);
 
   // serve static content
   app.use("/images",                            express.static("resources/images"));
@@ -134,7 +135,7 @@ module.exports = function(app, passport, rememberme, database, email) {
 
   app.get("/account", isLoggedIn, function(req, res) {
     database.getCafes(function(err, cafes) {
-      res.render("account-details.ejs", {cafes: cafes, user: req.user});
+      res.render("account_details.ejs", {cafes: cafes, user: req.user});
     });
   });
 
