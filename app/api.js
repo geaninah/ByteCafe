@@ -253,7 +253,7 @@ module.exports = function (database, email) {
           res.header("Content-Type", "application/json; charset=utf-8");
           // if we're deleting an item
           if (new_amount == 0) {
-            database.deleteBasketItems(req.user.user_id, product_id, function(err, rows) {
+            database.deleteBasketItems(req.user.user_id, product_id, cafe_id, function(err, rows) {
               if (err) {
                 console.log(err);
                 return res.end(JSON.stringify({status: 1, old_amount: old_amount, new_amount: new_amount, message: "Failed, please try again later" }));

@@ -583,9 +583,9 @@ var addBasketItems = function(userId, productId, cafeId, amount, callback){
     });
 };
 
-var deleteBasketItems = function(userId, productId, callback){
-    var query = 'delete from basket_items where basket_item_user_id = ? and basket_item_product_id = ?';
-    var parameters = [userId, productId];
+var deleteBasketItems = function(userId, productId, cafeId, callback){
+    var query = 'delete from basket_items where basket_item_user_id = ? and basket_item_product_id = ? and basket_item_cafe_id = ?';
+    var parameters = [userId, productId, cafeId];
     connection.query(query, parameters, function(err, result){
         if(err){
             console.log(err);
