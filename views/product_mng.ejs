@@ -102,7 +102,7 @@
                         <div class="form-group has-feedback">
                          <div class="row">
                             <div class="col-sm-3 formrow"><label for="productPriceField">Price £ </label></div>
-                            <div class="col-sm-9"><textarea class="form-control" id="productPriceField" rows="1" placeholder="£ ">£ </textarea></div>
+                            <div class="col-sm-9"><textarea class="form-control" id="productPriceField" rows="1" placeholder="£ "></textarea></div>
                           </div>
                         </div>
                         <div class="row">
@@ -150,7 +150,7 @@
                         <div class="form-group has-feedback">
                           <div class="row">
                             <div class="col-sm-3 formrow"><label for="newProductCategoryIDField">Category</label></div>
-                            <div class="col-sm-2"><textarea class="form-control" id="newProductCategoryIDField" rows="1" placeholder="Category ID"></textarea></div>
+                            <div class="col-sm-2"><textarea class="form-control" id="newProductCategoryIDField" rows="1" placeholder="ID"></textarea></div>
                             <div class="col-sm-7"><textarea class="form-control" id="newProductCategoryField" rows="1" placeholder="Category Name"></textarea></div>
                           </div>
                         </div>
@@ -169,7 +169,7 @@
                         <div class="form-group has-feedback">
                          <div class="row">
                             <div class="col-sm-3 formrow"><label for="newProductPriceField">Price £ </label></div>
-                            <div class="col-sm-9"><textarea class="form-control" id="newProductPriceField" rows="1" placeholder="£ ">£ </textarea></div>
+                            <div class="col-sm-9"><textarea class="form-control" id="newProductPriceField" rows="1" placeholder="£ "></textarea></div>
                           </div>
                         </div>
                         <div class="row">
@@ -317,10 +317,10 @@
                   var data = {
                     name: $('#newProductNameField').val(),
                     category_id: $('#newProductCategoryIDField').val(),
-                    imageURL: $('#productImageURLField').val(),
-                    productDescription: $('#productDescriptionField').val(),
-                    product_price: $('#productPriceField').val(),
-                    permission_purchasable: $('#productPurchasableToggle').bootstrapSwitch('state') == true ?  '1' : '0'
+                    imageURL: $('#newProductImageURLField').val(),
+                    productDescription: $('#newProductDescriptionField').val(),
+                    product_price: $('#newProductPriceField').val(),
+                    permission_purchasable: $('#newProductPurchasableToggle').bootstrapSwitch('state') == true ?  '1' : '0'
                   };
 
                   $.getJSON("/api/productManager/product/create", data, function(response) {

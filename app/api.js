@@ -410,7 +410,7 @@ module.exports = function (database, email) {
           return res.end(JSON.stringify({status: 0, message: "Invalid input, id must be a number" }));
         database.deleteProduct(params.id, function(err, rows) {
           if(err) {console.log(err); return res.end(JSON.stringify({status: 0, message: "Server side exception"}));}
-          if(!rows.length) return res.end(JSON.stringify({status: 0, message: "User does not exist"}));
+          
           return res.end(JSON.stringify({status: 1, message: "Product deleted" }));
         });
       }

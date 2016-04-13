@@ -155,9 +155,7 @@ module.exports = function(app, passport, rememberme, database, email) {
   app.get("/product_mng", isLoggedIn, function(req, res) {
     database.getCafes(function(err, cafes) {
       database.getAllProducts(function(err, products){
-        database.getCategory(function(err, categories){
-          res.render("product_mng.ejs", {categories: categories, products: products, cafes: cafes, user: req.user});
-        });
+        res.render("product_mng.ejs", {products: products, cafes: cafes, user: req.user});
       });
     });
   });
