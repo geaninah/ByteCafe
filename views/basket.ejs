@@ -37,7 +37,8 @@
           </div>
           <div class="col-sm-7">
             <!-- List group -->
-            <% Object.keys(basket).forEach(function(cafe_id) { %>
+            <% var running_total = 0;
+               Object.keys(basket).forEach(function(cafe_id) { %>
             <ul class="list-group">
               <li class="basket-header list-group-item">
                 <div class="row">
@@ -50,10 +51,15 @@
                   <div class="col-sm-7"><%= bask_item.name %></div>
                   <div class="col-sm-2">£&nbsp;<%= bask_item.price.toFixed(2); %></div>
                   <div class="col-sm-1"><%= bask_item.amount %></div>
-                  <div style="text-align: right" class="col-sm-2"><a class="remove-button" data-product-id="<%= bask_item.product_id %>" data-cafe-id="<%= bask_item.cafe_id %>"><span class="glyphicon glyphicon-remove-circle" aria-hidden="true" style="color:#aa764e"></span></a></div>
+                  <div style="text-align: right" class="col-sm-2">
+                    <a class="remove-button" data-product-id="<%= bask_item.product_id %>" data-cafe-id="<%= bask_item.cafe_id %>" data-entry-cost="<%= bask_item.amount * bask_item.price %>">
+                      <span class="glyphicon glyphicon-remove-circle" aria-hidden="true" style="color:#aa764e"></span>
+                    </a>
+                  </div>
                 </div>
               </li>
-              <% }); %>
+              <% running_total += bask_item.amount * bask_item.price;
+                 }); %>
             </ul>
             <% }); %>
             <script>
@@ -62,6 +68,7 @@
               var button = $(e.target).parent();
               var product_id = button.data("product-id");
               var cafe_id = button.data("cafe-id");
+              var entry_cost = button.data("entry-cost");
 
               // create our data object
               var data = {
@@ -72,6 +79,8 @@
 
               // send the request
               $.getJSON("/api/basket/edit", data, function(response) {
+                total_price = Math.abs(total_price - entry_cost);
+                $(".total-price").html(total_price.toFixed(2));
                 if (response.status == 1) {
                   button.parent().parent().parent().remove();
                 } else {
@@ -90,9 +99,9 @@
             <p> Total price: </p>
           </div>
           <div class="col-sm-3">
-            <p><strong>£</strong></p>
+            <p><strong>£<span class="total-price"></span></strong></p>
           </div>
-      </div>
+        </div>
       </div>
     </div>
 
@@ -111,7 +120,7 @@
             <!-- Modal content-->
             <div class="modal-content">
                 <div class="modal-body">
-                  <p>Are you sure you want to complete this order and pay <strong>£<script></strong></p>
+                  <p>Are you sure you want to complete this order and pay <strong>£<span class="total-price"></span></strong></p>
                 </div>
                 <div class="modal-footer">
                   <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
@@ -121,6 +130,10 @@
             </div>
         </div>
 
+        <script>
+          var total_price = <%= running_total.toFixed(2) %>;
+          $(".total-price").html(total_price.toFixed(2));
+        </script>
 
   <!-- FOOTER OF PAGE -->
 
