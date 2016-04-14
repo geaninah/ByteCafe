@@ -466,9 +466,9 @@ var getOrder = function(orderId, callback){
     });
 };
 
-var addCategory = function(name, parentId, callback){
-    var query = 'insert into categories(category_name, category_parent_id) values (?, ?)';
-    var parameters = [name, parentId];
+var addCategory = function(name, callback){
+    var query = 'insert into categories(category_name) values (?)';
+    var parameters = [name];
     connection.query(query, parameters, function(err, result){
         if(err){
             console.log(err);

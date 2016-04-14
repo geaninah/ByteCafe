@@ -283,6 +283,11 @@
   margin-top: 7px;
 }
 
+.buttonrow {
+  text-align: center;
+  margin-top: 7px;
+}
+
 .updatedField {
   background-color: #75C731;
 }
@@ -300,7 +305,7 @@
   font-size: 1.3em;
 }
 
-#addNewUser, #addNewProduct {
+#addNewUser, #addNewProduct, #addNewCategory, #delCategory{
   width: 220px;
   border-radius: 10px;
   background-color: #aa764e;

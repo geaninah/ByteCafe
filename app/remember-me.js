@@ -15,6 +15,8 @@ module.exports.init = function(database) {
         if (validator == rows[0].remember_me_token_validator) {
           // load the user from the database
           database.getUserByID(rows[0].remember_me_token_user_id, function(err, users) {
+            if(!users) { return next(); }
+            if(!users.length) { return next(); }
             var user = users[0];
             // log the user in
             req.login(user, function(err) {

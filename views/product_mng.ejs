@@ -12,8 +12,14 @@
     <div class="row">
 
       <div class="jumbotron">
-        <div class="row formrow">
-          <button type="button" class="btn btn-default" data-toggle="modal" data-target="#formNewProduct" id="addNewProduct">Add new product</button>
+        <div class="row">
+          <div class="col-sm-12">
+          <div class="col-sm-4 buttonrow">
+          <button type="button" class="btn btn-default" data-toggle="modal" data-target="#formNewProduct" id="addNewProduct">Add new product</button></div>
+          <div class="col-sm-4 buttonrow">
+           <button type="button" class="btn btn-default" data-toggle="modal" data-target="#formNewCategory" id="addNewCategory">Add new category</button></div>
+           <div class="col-sm-4 buttonrow">
+           <button type="button" class="btn btn-default" data-toggle="modal" data-target="#formDelCategory" id="delCategory">Delete existing category</button></div></div>
         </div>
         <br>
         <div class="row">
@@ -56,6 +62,7 @@
           </div>
           <!-- END OF TABLE -->
 
+
           <!-- Modal -->
           <div class="modal fade" id="updateProductInfo" tabindex="-1" role="dialog" aria-labelledby="UpdateProductInformation">
             <div class="modal-dialog" role="document">
@@ -83,8 +90,16 @@
                         <div class="form-group has-feedback">
                           <div class="row">
                             <div class="col-sm-3 formrow"><label for="productCategoryIDField">Category</label></div>
-                            <div class="col-sm-2"><textarea readonly class="form-control" id="productCategoryIDField" rows="1" placeholder="Category ID"></textarea></div>
-                            <div class="col-sm-7"><textarea class="form-control" id="productCategoryField" rows="1" placeholder="Category Name"></textarea></div>
+                            <div class="col-sm-3"><textarea readonly class="form-control" id="productCategoryIDField" rows="1" placeholder="Category ID"></textarea></div>
+                            <div class="col-sm-6">
+                              <div class="form-group ">
+                                <select class="form-control" id="categorySelector">
+                                  <% categories.forEach(function(category) { %>
+                                    <option value="<%= category.category_id %>"><%= category.category_name %></option>
+                                  <% }); %>
+                                </select>
+                              </div>
+                            </div>
                           </div>
                         </div>
                         <div class="form-group has-feedback">
@@ -129,7 +144,7 @@
               <div class="modal-content">
                 <div class="modal-header">
                   <button type="button" class="close" id="closeModal" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                  <h4 class="modal-title">Create New User</h4>
+                  <h4 class="modal-title">Create New Product</h4>
                 </div>
                 <div class="modal-body">
                   <div class="row">
@@ -150,8 +165,16 @@
                         <div class="form-group has-feedback">
                           <div class="row">
                             <div class="col-sm-3 formrow"><label for="newProductCategoryIDField">Category</label></div>
-                            <div class="col-sm-2"><textarea class="form-control" id="newProductCategoryIDField" rows="1" placeholder="ID"></textarea></div>
-                            <div class="col-sm-7"><textarea class="form-control" id="newProductCategoryField" rows="1" placeholder="Category Name"></textarea></div>
+                            <div class="col-sm-3"><textarea class="form-control" id="newProductCategoryIDField" rows="1" placeholder="ID"></textarea></div>
+                            <div class="col-sm-6">
+                              <div class="form-group">
+                                <select class="form-control" id="newCategorySelector" title="Choose a category:">
+                                  <% categories.forEach(function(category) { %>
+                                    <option value="<%= category.category_id %>"><%= category.category_name %></option>
+                                  <% }); %>
+                                </select>
+                              </div>
+                            </div>
                           </div>
                         </div>
                         <div class="form-group has-feedback">
@@ -189,6 +212,82 @@
             </div>
           </div>
 
+          <div class="modal fade" id="formNewCategory" tabindex="-1" role="dialog" aria-labelledby="CreateNewCategory">
+            <div class="modal-dialog" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <button type="button" class="close" id="closeModal" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                  <h4 class="modal-title">Create New Category</h4>
+                </div>
+                <div class="modal-body">
+                  <div class="row">
+                    <div class="col-sm-12">
+                      <form role="form" class="form" id="newCategoryInfoForm" method="post" action="/newCategoryInformation">
+                        <div class="form-group has-feedback">
+                          <div class="row">
+                            <div class="col-sm-3 formrow"><label for="newCategoryIDField">Product ID</label></div>
+                            <div class="col-sm-9"><textarea readonly class="form-control" id="newCategoryIDField" rows="1" placeholder="ID"></textarea></div>
+                          </div>
+                        </div>
+                        <div class="form-group has-feedback">
+                          <div class="row">
+                            <div class="col-sm-3 formrow"><label for="newCategoryNameField">Name</label></div>
+                            <div class="col-sm-9"><textarea class="form-control" id="newCategoryNameField" rows="1" placeholder="Name"></textarea></div>
+                          </div>
+                        </div>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-primary" data-dismiss="modal" id="submitNewCategory">Create New Category</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="modal fade" id="formDelCategory" tabindex="-1" role="dialog" aria-labelledby="DeleteExistingCategory">
+            <div class="modal-dialog" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <button type="button" class="close" id="closeModal" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                  <h4 class="modal-title">Delete Existing Category</h4>
+                </div>
+                <div class="modal-body">
+                  <div class="row">
+                    <div class="col-sm-12">
+                      <form role="form" class="form" id="delCategoryInfoForm" method="post" action="/delCategoryInformation">
+                        <div class="form-group has-feedback">
+                          <div class="row">
+                            <div class="col-sm-3 formrow"><label for="delCategoryIDField">Category ID</label></div>
+                            <div class="col-sm-9"><textarea readonly class="form-control" id="delCategoryIDField" rows="1" placeholder="ID"></textarea></div>
+                          </div>
+                        </div>
+                        <div class="form-group has-feedback">
+                          <div class="row">
+                            <div class="col-sm-3 formrow"><label for="delCategoryNameField">Name</label></div>
+                            <div class="col-sm-9">
+                              <div class="form-group">
+                                <select class="form-control" id="delCategorySelector" title="Choose a category:">
+                                  <% categories.forEach(function(category) { %>
+                                    <option value="<%= category.category_id %>"><%= category.category_name %></option>
+                                  <% }); %>
+                                </select>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-primary" data-dismiss="modal" id="submitDelCategory">Delete Existing Category</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
           <script>
 
                 $('#product-table > tbody > tr').click(function(a) {
@@ -209,6 +308,7 @@
                     $("#productIDField").val(idOfProduct);
                     $("#productNameField").val(nameOfProduct);   
                     $("#productCategoryIDField").val(categoryIDofProduct);
+                    $("#categorySelector").val(categoryIDofProduct);
                     $("#productPriceField").val(priceOfProduct);
                     $("#productDescriptionField").val(descriptionofProduct);
                     $("#productImageURLField").val(imageOfProduct);
@@ -225,6 +325,8 @@
                     else { 
                       $("#productPurchasableToggle").bootstrapSwitch('state', false);
                       $("#productPurchasableToggle").bootstrapSwitch('onColor', 'success'); }
+
+
 
                   });
 
@@ -313,6 +415,19 @@
 
                   });
 
+                  $("#formDelCategory").on("show.bs.modal", function(){
+                    $("#delCategoryIDField").val($("#delCategorySelector").val());
+                  })
+
+                  $('#categorySelector').on('change', function(){
+                    var selected = $("#categorySelector").find("option:selected").val();
+                  });
+                  $('#newCategorySelector').on('change', function(){
+                    var selected = $("#newCategorySelector").find("option:selected").val();
+                  });
+
+
+
                 $('#submitNewProduct').click(function () {
                   var data = {
                     name: $('#newProductNameField').val(),
@@ -350,6 +465,37 @@
                   });
                 });
                 
+                $('#submitNewCategory').click(function () {
+                  var data = {
+                    name: $('#newCategoryNameField').val()
+                  };
+
+                  $.getJSON("/api/productManager/category/create", data, function(response) {
+                    if(response.status == 1) { console.log(response.message); }
+                    else { console.log(response.message); }
+                  });
+                });
+
+                $('#submitDelCategory').click(function () {
+                  var data = {
+                    id: $('#delCategoryIDField').val()
+                  };
+
+                  $.getJSON("/api/productManager/category/delete", data, function(response) {
+                    if(response.status == 1) { console.log(response.message); }
+                    else { console.log(response.message); }
+                  });
+                });
+
+                $("#categorySelector").on("change", function(e) {
+                  $("#productCategoryIDField").val(this.value);
+                });
+
+                $("#delCategorySelector").on("change", function(e) {
+                  $("#delCategoryIDField").val(this.value);
+                });
+
+
 
               </script>
 

@@ -30,6 +30,8 @@ module.exports = function(app, passport, rememberme, database, email) {
   app.get("/api/admin/user/delete",             isLoggedInAPI, api.admin.assert, api.admin.removeUser);
   app.get("/api/productManager/product/create", isLoggedInAPI, api.productManager.assert, api.productManager.createProduct);
   app.get("/api/productManager/product/delete", isLoggedInAPI, api.productManager.assert, api.productManager.removeProduct);
+  app.get("/api/productManager/category/create",isLoggedInAPI, api.productManager.assert, api.productManager.createCategory);
+  app.get("/api/productManager/category/delete",isLoggedInAPI, api.productManager.assert, api.productManager.removeCategory);
 
   // serve static content
   app.use("/images",                            express.static("resources/images"));
@@ -155,7 +157,9 @@ module.exports = function(app, passport, rememberme, database, email) {
   app.get("/product_mng", isLoggedIn, function(req, res) {
     database.getCafes(function(err, cafes) {
       database.getAllProducts(function(err, products){
-        res.render("product_mng.ejs", {products: products, cafes: cafes, user: req.user});
+        database.getAllCategories(function(err, categories){
+          res.render("product_mng.ejs", {categories: categories, products: products, cafes: cafes, user: req.user});
+        });
       });
     });
   });
