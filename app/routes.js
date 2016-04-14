@@ -63,12 +63,6 @@ module.exports = function(app, passport, rememberme, database, email) {
   });
   app.post("/auth/reset", api.verifyResetTokenPost, api.updatePassword);
 
-  app.post("/forgot", passport.authenticate("local-forgot",{
-    successRedirect: "/",
-    failureRedirect: "/",
-    failureFlash: true
-  }));
-
   // serve the main pages
   app.get("/", function(req, res) {
     if(req.isAuthenticated()) { res.redirect("/cafes"); return }
@@ -128,24 +122,109 @@ module.exports = function(app, passport, rememberme, database, email) {
     }, req.user.user_id);
   });
 
+  // fetches the basket, calculates total and renders fake paypal screen
+  app.get("/checkout/paypal", isLoggedIn, function(req, res) {
+    database.getBasket(function(err, basket) {
+      var total_price = 0;
+      basket.forEach(function(basket_item) {
+        console.log(total_price)
+        total_price += basket_item.basket_item_amount * basket_item.product_price;
+      });
+      res.render("fake_paypal.ejs", {themoney: total_price, basket: basket});
+    }, req.user.user_id);
+  });
+
+  // confims the order, and adds the basket contents to the
+  app.get("/checkout/paypal/success", isLoggedIn, function(req, res){
+    database.getBasket(function(err, basket) {
+      var total_price = 0;
+      basket.forEach(function(basket_item) {
+        total_price += basket_item.basket_item_amount * basket_item.product_price;
+      });
+      total_price = total_price.toFixed(2);
+      database.addOrder(req.user.user_id, 2, "paypalStringGoesHere", total_price, function(err, rows) {
+        // our order id
+        var order_id = rows.insertId;
+        res.redirect("/checkout/success/" + order_id);
+        basket.forEach(function(item) {
+          database.addOrderItems(order_id, item.basket_item_product_id, item.basket_item_cafe_id, item.basket_item_amount, function(err, rows){});
+          database.deleteBasketItems(req.user.user_id, item.basket_item_product_id, item.basket_item_cafe_id, function(err, rows){});
+        });
+      });
+    }, req.user.user_id);
+  });
+
+  // paypal process has failed, do nothing
+  app.get("/checkout/paypal/fail", isLoggedIn, function(req, res) {
+    database.getCafes(function(err, cafes) {
+      res.render("order_failed.ejs", {cafes: cafes, user: req.user, error: req.query.error || 3});
+    });
+  });
+
+  app.get("/checkout/success/:orderId", isLoggedIn, function(req, res) {
+    database.getCafes(function(err, cafes) {
+      res.render("order_completed.ejs", {cafes: cafes, user: req.user, order_id: req.params.orderId});
+    });
+  });
+
+  app.get("/orders", isLoggedIn, function(req, res) {
+    database.getCafes(function(err, cafes){
+      database.getOrdersByUserId(req.user.user_id, function(err, orders) {
+        console.log(orders);
+        res.render("order_list.ejs", {cafes: cafes, orders: orders, user: req.user});
+      });
+    });
+  });
+
+  app.get("/order/:orderId", isLoggedIn, function(req, res) {
+    database.getCafes(function(err, cafes) {
+      database.getOrder(req.params.orderId, function(err, order) {
+        // make sure the user is allowed to view the basket
+        if (order[0].order_user_id != req.user.user_id) {
+          res.status(403);
+          console.log("User check failed: " + order[0].order_user_id + " - " + req.user.user_id)
+          return res.end("Sorry, you are not allowed to see this order");
+        }
+        database.getOrderItemsExtraData(req.params.orderId, function(err, items) {
+          var order_contents = {};
+          items.forEach(function(item) {
+            order_contents[item.order_item_cafe_id] = order_contents[item.order_item_cafe_id] || [];
+            order_contents[item.order_item_cafe_id].push({
+              product_id: item.order_item_product_id,
+              name: item.product_name,
+              price: item.product_price,
+              cafe_id: item.order_item_cafe_id,
+              cafe_name: item.cafe_name,
+              amount: item.order_item_amount
+            });
+          });
+          res.render("order.ejs", {cafes: cafes, order: order[0], order_items: order_contents, user: req.user});
+        });
+      });
+    });
+  });
+
   app.get("/tables", isLoggedIn, function(req, res) {
     database.getCafes(function(err, cafes) {
       res.render("table_html.ejs", {cafes: cafes, user: req.user});
     });
   });
 
+  // route for point of sale interface
   app.get("/pos", isLoggedIn, function(req, res) {
     database.getCafes(function(err, cafes) {
       res.render("POS_side.ejs", {cafes: cafes, user: req.user});
     });
   });
 
+  // account management page
   app.get("/account", isLoggedIn, function(req, res) {
     database.getCafes(function(err, cafes) {
       res.render("account_details.ejs", {cafes: cafes, user: req.user});
     });
   });
 
+  // administrators user management page
   app.get("/usr_mng", isLoggedIn, function(req, res) {
     database.getCafes(function(err, cafes) {
       database.getAllUsers(function(err, users){

@@ -414,11 +414,11 @@ var getNutritionalFlags = function(productId, callback){
     });
 };
 
-var addOrder = function(cafeId, userId, orderStatus, paypal, cost, callback){
-    var query = 'insert into orders (order_cafe_id, order_user_id, order_date , order_status, order_paypal_transaction, order_cost) values (?, ?, now(), ?, ?, ?)';
-    var parameters = [cafeId, userId, orderStatus, paypal, cost];
+var addOrder = function(userId, orderStatus, paypal, cost, callback){
+    var query = 'insert into orders (order_user_id, order_date , order_status, order_paypal_transaction, order_cost) values (?, now(), ?, ?, ?)';
+    var parameters = [userId, orderStatus, paypal, cost];
     connection.query(query, parameters, function(err, result){
-        if(err){
+        if(err) {
             console.log(err);
         }
         else{
@@ -679,6 +679,22 @@ var getOrderItems = function(orderId, callback){
     });
 };
 
+var getOrderItemsExtraData = function(orderId, callback){
+  var query = "select order_items.order_item_cafe_id, order_items.order_item_product_id,"
+  + " products.product_name, products.product_price, cafes.cafe_name, order_items.order_item_amount"
+  + " from order_items, products, cafes where order_item_order_id = ?"
+  + " and order_items.order_item_product_id = products.product_id and order_items.order_item_cafe_id = cafes.cafe_id";
+  var parameters = [orderId];
+  connection.query(query, parameters, function(err, result){
+      if(err){
+          console.log(err);
+      }
+      else{
+          callback(err, result);
+      }
+  });
+}
+
 var getOrdersByUserId = function(userId, callback){
     var query = 'select * from orders where order_user_id = ?';
     var parameters = [userId];
@@ -760,6 +776,7 @@ module.exports = {
     getBasket: getBasket,
     getUserByEmail: getUserByEmail,
     getUserByID: getUserByID,
+    getOrderItemsExtraData: getOrderItemsExtraData,
     enrolNewUser: enrolNewUser,
     addRememberMeToken: addRememberMeToken,
     getRememberMeToken: getRememberMeToken,

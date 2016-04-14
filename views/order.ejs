@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+  <% include head_incl.ejs %>
+  <title>Your Order</title>
+
+</head>
+<body>
+
+  <!-- NAVIGATION BAR -->
+  <% include nav_bar.ejs %>
+
+  <!-- MAIN CONTENT OF THE PAGE -->
+  <div class="container">
+    <div class="row">
+
+      <div class="panel panel-default">
+      <!-- Default panel contents -->
+        <div class="panel-heading" id="order-heading">Your order:</div>
+        <div class="panel-body">
+          <div class="row">
+          <div class="col-sm-5">
+            <p>
+              This order includes the listed items.
+              <br><br>
+              Note that the items listed are shown at their current price, not the price when purchased
+              <%
+                var order_strings = {
+                  0: "Finished",
+                  1: "Prepared",
+                  2: "Pending",
+                  3: "Cancelled",
+                }
+              %>
+              <div role="button" class="well" id="orderStatus">
+                Order status: <%= order_strings[order.order_status] %>
+              </div>
+              <script>
+              var order_strings = {
+                0: "Finished",
+                1: "Prepared",
+                2: "Pending",
+                3: "Cancelled",
+              };
+
+              $("#orderStatus").click(function(e) {
+                $("#orderStatus").html("<i class=\"fa fa-circle-o-notch fa-spin\"></i>");
+                $.getJSON("/api/orders/<%= order.order_id %>", function(response) {
+                  $("#orderStatus").html("Order status: " + order_strings[response.order_status]);
+                });
+              });
+              </script>
+            </p>
+          </div>
+          <div class="col-sm-7">
+            <!-- List group -->
+            <% Object.keys(order_items).forEach(function(cafe_id) { %>
+            <ul class="list-group">
+              <a class="list-group-item" href="/cafe/<%= cafe_id %>" style="background-color: #f5f5f5;"><%= order_items[cafe_id][0].cafe_name %></a>
+              <% order_items[cafe_id].forEach(function(bask_item) { %>
+              <li class="list-group-item">
+                <div class="row">
+                  <div class="col-sm-8"><%= bask_item.name %></div>
+                  <div class="col-sm-1"><%= bask_item.amount %></div>
+                  <div class="col-sm-1">£<%= bask_item.price.toFixed(2) %></div>
+                  <div class="col-sm-1">£<%= (bask_item.amount * bask_item.price).toFixed(2) %></div>
+                </div>
+              </li>
+              <% }); %>
+            </ul>
+            <% }); %>
+        </div>
+        <div class="row">
+          <div class="col-sm-7">
+          </div>
+          <div class="col-sm-2" align="right">
+            <p> Total price: </p>
+          </div>
+          <div class="col-sm-3">
+            <p><strong>£<%= order.order_cost.toFixed(2) %></strong></p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  <!-- FOOTER OF PAGE -->
+  <% include footer.ejs %>
+</body>
+</html>

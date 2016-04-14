@@ -49,9 +49,10 @@
               <li class="list-group-item">
                 <div class="row">
                   <div class="col-sm-7"><%= bask_item.name %></div>
-                  <div class="col-sm-2">£&nbsp;<%= bask_item.price.toFixed(2); %></div>
+                  <div class="col-sm-2">£<%= bask_item.price.toFixed(2); %></div>
                   <div class="col-sm-1"><%= bask_item.amount %></div>
-                  <div style="text-align: right" class="col-sm-2">
+                  <div class="col-sm-1">£<%= (bask_item.amount*bask_item.price).toFixed(2); %></div>
+                  <div style="text-align: right" class="col-sm-1">
                     <a class="remove-button" data-product-id="<%= bask_item.product_id %>" data-cafe-id="<%= bask_item.cafe_id %>" data-entry-cost="<%= bask_item.amount * bask_item.price %>">
                       <span class="glyphicon glyphicon-remove-circle" aria-hidden="true" style="color:#aa764e"></span>
                     </a>
@@ -109,7 +110,7 @@
       <div class="col-sm-8">
       </div>
       <div class="col-sm-4">
-        <button type="submit" class="btn btn-default btn-block" id="goToPayment" data-toggle="modal" data-target="#AcceptPayment">Procede to payment</button>
+        <button type="submit" class="btn btn-default btn-block" id="goToPayment" data-toggle="modal" data-target="#AcceptPayment">Proceed to payment</button>
       </div>
     </div>
 
@@ -124,7 +125,7 @@
                 </div>
                 <div class="modal-footer">
                   <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                  <button type="button" class="btn btn-primary" data-dismiss="modal">Procede to Paypal</button>
+                  <button id="payment_proceed" type="button" class="btn btn-primary" data-dismiss="modal">Proceed to Paypal</button>
                 </div>
             </div>
             </div>
@@ -133,6 +134,21 @@
         <script>
           var total_price = <%= running_total.toFixed(2) %>;
           $(".total-price").html(total_price.toFixed(2));
+
+          $("#AcceptPayment").on("shown.bs.modal", function(e) {
+            if (total_price < 0.01) {
+              $("#payment_proceed").attr("disabled", "disabled");
+            } else {
+              $("#payment_proceed").removeAttr("disabled");
+            }
+          });
+
+          // set up the proceed to payment button
+          $("#payment_proceed").click(function(e) {
+            if (total_price >= 0.01) {
+              window.location = "/checkout/paypal";
+            }
+          });
         </script>
 
   <!-- FOOTER OF PAGE -->

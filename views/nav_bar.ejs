@@ -7,10 +7,27 @@
       <!-- CONTENT ON THE RIGHT (FROM LEFT TO RIGHT) -->
 
         <ul class="nav navbar-nav navbar-right">
+          <% if (user.user_permission_admin) { %>
+            <li class="dropdown">
+              <a href="" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="glyphicon glyphicon-pencil glyphicon-large" aria-hidden="true" style="color:#aa764e"><span class="caret"></span></span></a>
+              <ul class="dropdown-menu">
+                <li><a href="/usr_mng">User Manager</a></li>
+                <li><a href="/product_mng">Product Manager</a></li>
+                <li><a href="/cafe_mng">Cafe Manager</a></li>
+              </ul>
+            </li>
+          <% } %>
 
+          <% if (user.user_permission_pos) { %>
+            <li>
+              <a href="/pos" role="button" aria-haspopup="true"><span class="glyphicon glyphicon-credit-card glyphicon-large" aria-hidden="true" style="color:#aa764e"></span></a>
+            </li>
+          <% } %>
+
+          <% if (user.user_permission_store) { %>
           <!-- LIST ITEM -->
           <li class="dropdown">
-            <a href="" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="glyphicon glyphicon-cutlery glyphicon-larges" aria-hidden="true" style="color:#aa764e"><span class="caret"></span></span></a>
+            <a href="" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="glyphicon glyphicon-cutlery glyphicon-large" aria-hidden="true" style="color:#aa764e"><span class="caret"></span></span></a>
             <ul class="dropdown-menu">
               <% cafes.forEach(function(cafe) { %>
                 <li><a href="/cafe/<%= cafe.cafe_id %>"><%= cafe.cafe_name %></a></li>
@@ -20,8 +37,9 @@
 
           <!-- LIST ITEM -->
           <li>
-            <a href="/basket" role="button" aria-haspopup="true"><span class="glyphicon glyphicon-shopping-cart glyphicon-larges" aria-hidden="true" style="color:#aa764e"></span></a>
+            <a href="/basket" role="button" aria-haspopup="true"><span class="glyphicon glyphicon-shopping-cart glyphicon-large" aria-hidden="true" style="color:#aa764e"></span></a>
           </li>
+          <% } %>
 
           <!-- LIST ITEM -->
 

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+  <% include head_incl.ejs %>
+  <title>Your Order</title>
+
+</head>
+<body>
+
+<!-- Navigation bar -->
+<% include nav_bar.ejs %>
+
+<!-- Main content -->
+<div class="container">
+  <div class="row">
+
+    <div class="panel panel-default">
+    <!-- Default panel contents -->
+      <div class="panel-heading" id="order-heading">Thank you</div>
+        <div class="panel-body">
+          <div class="row">
+            <div class="col-sm-5">
+              <p>
+                Your order has been submitted
+              </p>
+            </div>
+            <div class="col-sm-7" style="text-align: right">
+              <a href="/order/<%= order_id %>"><button class="btn btn-primary">Go to your order</button></a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Page footer -->
+  <% include footer.ejs %>
+</body>
+</html>

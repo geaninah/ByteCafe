@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <% include head_incl.ejs %>
+  <title>Confirm Payment</title>
+  <style>
+    body {
+
+    }
+
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="jumbotron">
+      <div class="jumbo-contents">
+        <div style="text-align: center;"><h1>Payment Provider</h1></div>
+        <!-- split jumbotron into two halves -->
+        <div class="row">
+          <div class="lhs col-lg-6">
+            <ul class="list-group">
+              <li class="basket-header list-group-item">
+                <div class="row">
+                  <div class="col-sm-12">Order summary:</div>
+                </div>
+              </li>
+              <% basket.forEach(function(bask_item) { %>
+              <li class="list-group-item">
+                <div class="row">
+                  <div class="col-xs-3"><%= bask_item.cafe_name %></div>
+                  <div class="col-xs-4"><%= bask_item.product_name %></div>
+                  <div class="col-xs-2" style="text-align: right">£<%= bask_item.product_price.toFixed(2); %></div>
+                  <div class="col-xs-1" style="text-align: right"><%= bask_item.basket_item_amount %></div>
+                  <div class="col-xs-2" style="text-align: right">£<%= (bask_item.basket_item_amount * bask_item.product_price) .toFixed(2); %></div>
+                </div>
+              </li>
+              <% }); %>
+              <li class="list-group-item">
+                <div class="row">
+                  <div class="col-xs-6"></div>
+                  <div class="col-xs-4" style="text-align: right">Total: </div>
+                  <div class="col-xs-2" style="text-align: right">£<%= themoney.toFixed(2); %></div>
+                </div>
+              </li>
+            </ul>
+          </div>
+          <div class="rhs col-lg-6">
+            <!-- https://developers.braintreepayments.com/guides/transactions/node#settlement -->
+            <div class="h4">To pay: £<%= themoney.toFixed(2); %></div>
+            <!-- Transaction events -->
+            <!-- Fail -->
+            <div class="btn-group">
+              <button type="button" class="btn btn-danger" onclick="window.location = '/checkout/paypal/fail?error=3'">Fail Transaction</button>
+              <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="caret"></span></button>
+              <ul class="dropdown-menu">
+                <li><a href="/checkout/paypal/fail?error=4">AVS/CVV/Dup/Fraud Fail (gateway reject)</a></li>
+                <li><a href="/checkout/paypal/fail?error=5">Void Transaction</a></li>
+              </ul>
+            </div>
+            <!-- (not as bad of a) Fail -->
+            <div class="btn-group">
+              <button type="button" class="btn btn-warning" onclick="window.location = '/checkout/paypal/fail?error=1'">Cancel Transaction</button>
+              <button type="button" class="btn btn-warning dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="caret"></span></button>
+              <ul class="dropdown-menu">
+                <li><a href="/checkout/paypal/fail?error=2">Decline Transaction</a></li>
+              </ul>
+            </div>
+
+            <!-- Success! -->
+            <button class="btn btn-success" onclick="window.location = '/checkout/paypal/success'">Clear Transaction</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

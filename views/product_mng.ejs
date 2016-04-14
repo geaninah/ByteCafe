@@ -23,7 +23,7 @@
         </div>
         <br>
         <div class="row">
-        
+
            <!-- TABLE FOR TAB 1 - ID IS CONTENT_1 -->
           <div class="table-responsive" id="content_1">
             <table id="product-table" class="table table-bordered table-hover">
@@ -41,14 +41,14 @@
               <tbody>
 
               <% products.forEach(function (product) { %>
-              
-                
-                <tr data-product-id="<%= product.product_id %>" data-product-name="<%= product.product_name %>" data-product-category="<%= product.product_category_id %>" data-product-price="<%= product.product_price %>" data-product-description="<%= product.product_description %>" data-product-image="<%= product.product_image_url %>" data-product-purchasable="<%= product.product_purchasable %>">
+
+
+                <tr data-product-id="<%= product.product_id %>" data-product-name="<%= product.product_name %>" data-product-category="<%= product.product_category_id %>" data-product-price="<%= product.product_price.toFixed(2) %>" data-product-description="<%= product.product_description %>" data-product-image="<%= product.product_image_url %>" data-product-purchasable="<%= product.product_purchasable %>">
 
                   <td><%= product.product_id %></td>
                   <td><%= product.product_name %></td>
                   <td><%= product.product_category_id %></td>
-                  <td>£ <%= product.product_price %></td>
+                  <td>£ <%= product.product_price.toFixed(2) %></td>
                   <td><%= product.product_description %></td>
                   <td><%= product.product_image_url %></td>
                   <td><%= product.product_purchasable %></td>
@@ -297,7 +297,7 @@
                   $("#updateProductInfo").on("show.bs.modal", function() {
                     // get user data from dom
                     var idOfProduct = $(a.currentTarget).data("product-id");
-                    var nameOfProduct = $(a.currentTarget).data("product-name"); 
+                    var nameOfProduct = $(a.currentTarget).data("product-name");
                     var categoryIDofProduct = $(a.currentTarget).data("product-category");
                     var priceOfProduct = $(a.currentTarget).data("product-price");
                     var descriptionofProduct = $(a.currentTarget).data("product-description");
@@ -306,7 +306,7 @@
 
                     // fill text boxes
                     $("#productIDField").val(idOfProduct);
-                    $("#productNameField").val(nameOfProduct);   
+                    $("#productNameField").val(nameOfProduct);
                     $("#productCategoryIDField").val(categoryIDofProduct);
                     $("#categorySelector").val(categoryIDofProduct);
                     $("#productPriceField").val(priceOfProduct);
@@ -319,10 +319,10 @@
                       'labelWidth': '0'});
 
                     // set toggles
-                    if (purchasableProduct ==  1) { 
+                    if (purchasableProduct ==  1) {
                       $("#productPurchasableToggle").bootstrapSwitch('state', true);
                       $("#productPurchasableToggle").bootstrapSwitch('offColor', 'success'); }
-                    else { 
+                    else {
                       $("#productPurchasableToggle").bootstrapSwitch('state', false);
                       $("#productPurchasableToggle").bootstrapSwitch('onColor', 'success'); }
 
@@ -351,19 +351,19 @@
 
                   // removes colors for fields on closing the modal - resets it
                   $("#updateProductInfo").on("hidden.bs.modal", function() {
-                    if($('#productNameField').hasClass('updatedField')) { 
+                    if($('#productNameField').hasClass('updatedField')) {
                       $('#productNameField').removeClass('updatedField');
                     }
-                    if($('#productCategoryIDField').hasClass('updatedField')) { 
+                    if($('#productCategoryIDField').hasClass('updatedField')) {
                       $('#productCategoryIDField').removeClass('updatedField');
                     }
-                    if($('#productPriceField').hasClass('updatedField')) { 
+                    if($('#productPriceField').hasClass('updatedField')) {
                       $('#productPriceField').removeClass('updatedField');
                     }
-                     if($('#productDescriptionField').hasClass('updatedField')) { 
+                     if($('#productDescriptionField').hasClass('updatedField')) {
                       $('#productDescriptionField').removeClass('updatedField');
                     }
-                     if($('#productImageURLField').hasClass('updatedField')) { 
+                     if($('#productImageURLField').hasClass('updatedField')) {
                       $('#productImageURLField').removeClass('updatedField');
                     }
                     $("#productPurchasableToggle").bootstrapSwitch('onColor', 'primary');
@@ -464,7 +464,7 @@
                     }
                   });
                 });
-                
+
                 $('#submitNewCategory').click(function () {
                   var data = {
                     name: $('#newCategoryNameField').val()
@@ -503,7 +503,7 @@
       </div>
     </div>
   </div>
-  
+
   <% include footer.ejs %>
 </body>
 </html>

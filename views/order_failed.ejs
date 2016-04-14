@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+  <% include head_incl.ejs %>
+  <title>Your Order</title>
+
+</head>
+<body>
+
+<!-- Navigation bar -->
+<% include nav_bar.ejs %>
+
+<!-- Main content -->
+<div class="container">
+  <div class="row">
+
+    <div class="panel panel-default">
+    <!-- Default panel contents -->
+      <div class="panel-heading" id="order-heading">Error processing transaction</div>
+        <div class="panel-body">
+          <div class="row">
+            <div class="col-sm-5">
+              <p>
+                <%
+                  var error_string = {
+                    1: "Transaction was canceled by user",
+                    2: "Bank did not authorise transaction",
+                    3: "Transaction failed",
+                    4: "Transaction failed due to address check / cvv check / duplicate check / fraud check",
+                    5: "Transaction was voided"
+                  }
+                %>
+                <div>An error has occured when processing your transaction:</div><br />
+                <div class="alert alert-danger"><%= error_string[error] %></div>
+                <div>You have not been charged, and your basket has been restored.</div>
+              </p>
+            </div>
+            <div class="col-sm-7" style="text-align: right">
+              <a href="/basket"><button class="btn btn-primary">Go to basket</button></a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Page footer -->
+  <% include footer.ejs %>
+</body>
+</html>
