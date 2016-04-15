@@ -20,43 +20,47 @@
         <div class="panel-heading" id="order-heading">Your order:</div>
         <div class="panel-body">
           <div class="row">
-          <div class="col-sm-5">
-            <p>
-              This is a list of the past orders on this account, click
-              for more details.
-            </p>
-          </div>
-          <div class="col-sm-7">
+            <div class="col-sm-5">
+              <p>
+                This is a list of the past orders on this account, click
+                for more details.
+              </p>
+            </div>
+            <div class="col-sm-7">
             <!-- List group -->
-            <%
-              var order_strings = {
-                0: "Finished",
-                1: "Prepared",
-                2: "Pending",
-                3: "Cancelled",
-              }
-            %>
+              <%
+                var order_strings = {
+                  0: "Finished",
+                  1: "Prepared",
+                  2: "Pending",
+                  3: "Cancelled",
+                }
+              %>
 
-            <div class="list-group">
-              <div class="list-group-item">
-                <div class="row">
-                  <div class="col-sm-8">Order Date</div>
-                  <div class="col-sm-2">Status</div>
-                  <div class="col-sm-2">Total</div>
+              <div class="list-group">
+                <div class="list-group-item">
+                  <div class="row">
+                    <div class="col-sm-8">Order Date</div>
+                    <div class="col-sm-2">Status</div>
+                    <div class="col-sm-2">Total</div>
+                  </div>
                 </div>
+                <% orders.forEach(function(order) { %>
+                  <a class="list-group-item" href="/order/<%= order.order_id %>">
+                    <div class="row">
+                      <div class="col-sm-8"><%= order.order_date %></div>
+                      <div class="col-sm-2"><%= order_strings[order.order_status] %></div>
+                      <div class="col-sm-2">£<%= order.order_cost.toFixed(2) %></div>
+                    </div>
+                  </a>
+                <% }); %>
               </div>
-              <% orders.forEach(function(order) { %>
-              <a class="list-group-item" href="/order/<%= order.order_id %>">
-                <div class="row">
-                  <div class="col-sm-8"><%= order.order_date %></div>
-                  <div class="col-sm-2"><%= order_strings[order.order_status] %></div>
-                  <div class="col-sm-2">£<%= order.order_cost.toFixed(2) %></div>
-                </div>
-              </a>
-              <% }); %>
-            </ul>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
+  </div>
 
   <!-- Page footer -->
   <% include footer.ejs %>
