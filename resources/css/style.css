@@ -1,74 +1,11 @@
-body {
-  background-color: #db4d00;
-}
-
-label {
-  color: #f4df9d;
-}
-
-/*#header {
-  text-align: center;
-  border-color: #f4df9d;
-}
-
-.navbar-fixed-top {
-  background-color: #5a3b2f;
-  height: 4em;
-}
-
 #header img {
-  margin-top: 0.2em;
-	max-width: 250px;
-  height: 2em;
-  margin-bottom: -2em;
-  background-color: #5a3b2f;
-  border-radius: 100%;
-  border: solid #f4df9d 0.1em;
-}*/
-
-.btn-primary {
-  border-color: #aaa;
-  background-color: #ddd;
-}
-
-.btn-primary.focus,
-.btn-primary:focus {
-  background-color: #fff;
-  border-color: #aaa;
-}
-
-.btn.focus {
-  outline: none;
-}
-
-.btn.active {
-  background-color: #fff;
-}
-
-.btn-primary:hover {
-  background-color: #fff;
-}
-
-#remeberAndForget {
-  padding: 0;
-  text-align: center;
-}
-
-#remeberAndForget > li {
-  width: 49%;
-  display: inline-block;
-}
-
-#terms {
-  padding-top: 1em;
-}
-
-#loginContainer {
-  padding-top: 8%;
+	max-width: 95px;
+	height: auto;
 }
 
 .container {
-	padding-top: 2.9em;
+	padding-top: 100px;
+  padding-bottom: 140px;
 }
 
 .navbar-fixed-bottom {
@@ -76,10 +13,9 @@ label {
 }
 
 #demonstration img {
-  margin-top: -9em;
-  padding-bottom: -20em;
-	width:80%;
-  height: 80%;
+	width:100%;
+	height: auto;
+  margin-bottom: 20px
 }
 
 #login {
@@ -101,7 +37,7 @@ label {
 
 #error-message {
 	text-align: center;
-	color: darkred;`
+	color: darkred;
 	font-weight: bold;
 }
 
@@ -137,6 +73,7 @@ label {
 }
 
 #reg-type button {
+	background-color: #fff;
 	color:black;
 	width:50%;
 }
@@ -150,7 +87,7 @@ label {
     max-width:80px;
 }
 
-.glyphicon-cog, .glyphicon-shopping-cart, .glyphicon-cutlery {
+.glyphicon-cog, .glyphicon-shopping-cart, .glyphicon-cutlery, .glyphicon-credit-card, .glyphicon-pencil {
 	font-size: 30px;
 	margin: 0.3em auto 0px;
 }
@@ -346,10 +283,32 @@ label {
   margin-top: 7px;
 }
 
+.buttonrow {
+  text-align: center;
+  margin-top: 7px;
+}
+
 .updatedField {
   background-color: #75C731;
 }
 
+.someColor {
+  background-color: red;
+  border-color: red;
+  color:pink;
+}
 
+#submitAccountChanges {
+  border-radius: 10px;
+  background-color: #aa764e;
+  color: #fff;
+  font-size: 1.3em;
+}
 
-
+#addNewUser, #addNewProduct, #addNewCategory, #delCategory{
+  width: 220px;
+  border-radius: 10px;
+  background-color: #aa764e;
+  color: #fff;
+  font-size: 1.3em;
+}
