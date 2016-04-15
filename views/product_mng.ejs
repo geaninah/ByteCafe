@@ -326,8 +326,6 @@
                       $("#productPurchasableToggle").bootstrapSwitch('state', false);
                       $("#productPurchasableToggle").bootstrapSwitch('onColor', 'success'); }
 
-
-
                   });
 
                   $("#updateProductInfo").modal("show");
@@ -348,14 +346,17 @@
                   $('#productImageURLField').on("input", function () {
                     $('#productImageURLField').addClass('updatedField');
                   });
+                  $('#categorySelector').on("change", function () {
+                    $('#categorySelector').addClass('updatedField');
+                  });
 
                   // removes colors for fields on closing the modal - resets it
                   $("#updateProductInfo").on("hidden.bs.modal", function() {
                     if($('#productNameField').hasClass('updatedField')) {
                       $('#productNameField').removeClass('updatedField');
                     }
-                    if($('#productCategoryIDField').hasClass('updatedField')) {
-                      $('#productCategoryIDField').removeClass('updatedField');
+                    if($('#categorySelector').hasClass('updatedField')) {
+                      $('#categorySelector').removeClass('updatedField');
                     }
                     if($('#productPriceField').hasClass('updatedField')) {
                       $('#productPriceField').removeClass('updatedField');
