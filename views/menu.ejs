@@ -29,9 +29,9 @@
             <!-- BOX REFERRING TO A NEW CAFE -->
             <% cafes.forEach(function(cafe) { %>
               <a href="/cafe/<%= cafe.cafe_id %>">
-              <div class="col-sm-6 col-md-4">
+              <div class="col-sm-6 col-md-4 cafeWindow">
                 <div class="thumbnail">
-                  <img src="<%= cafe.cafe_image_url %>" alt="<%= cafe.cafe_name %>">
+                  <img class="cafeIMG" src="<%= cafe.cafe_image_url %>" alt="<%= cafe.cafe_name %>">
                   <div class="caption">
                     <h3><%= cafe.cafe_name %></h3>
                   </div>

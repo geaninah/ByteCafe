@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <% include head_incl.ejs %>
+  <title> Terms and Conditions </title>
+</head>
+<body>
+
+  <% include nav_bar.ejs %>
+
+  <div class="container">
+    <div class="row">
+
+      <div class="jumbotron">
+        <div class="row"><h2> Terms and Conditions</h2><br></div>
+        <!-- Each Question -->
+        <div class="row">
+          <div class="col-sm-12">
+            <p id="placeTC">
+            </p>
+          </div>
+        </div>
+        <!-- End of Question -->
+
+      </div>
+    </div>
+  </div>
+
+  <script>
+    $(document).ready(function() {
+    // populate the terms and conditions modal
+      $.get('/api/terms', function(data) {
+        $('#placeTC').removeClass("text-center").html(data);
+      });
+    });
+  </script>
+
+  <% include footer.ejs %>
+</body>
+</html>

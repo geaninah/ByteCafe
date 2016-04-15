@@ -255,6 +255,24 @@ module.exports = function(app, passport, rememberme, database, email) {
       res.render("cafe_mng.ejs", {cafes: cafes, user: req.user});
     });
   });
+
+  app.get("/help", isLoggedIn, function(req, res) {
+    database.getCafes(function(err, cafes) {
+      res.render("help_info.ejs", {cafes: cafes, user: req.user});
+    });
+  });
+
+  app.get("/terms", isLoggedIn, function(req, res) {
+    database.getCafes(function(err, cafes) {
+      res.render("termsAndCond.ejs", {cafes: cafes, user: req.user});
+    });
+  });
+
+  app.get("/contacts", isLoggedIn, function(req, res) {
+    database.getCafes(function(err, cafes) {
+      res.render("contacts.ejs", {cafes: cafes, user: req.user});
+    });
+  });
 };
 
 // perform valid user check for serving browsers

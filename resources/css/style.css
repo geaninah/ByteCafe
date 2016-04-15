@@ -319,4 +319,18 @@
 
 .productIMGIMG {
   max-height: 130px;
+  min-height: 130px;
+}
+
+.cafeIMG {
+  max-height: 200px;
+  min-height: 200px;
+}
+
+.cafeWindow {
+  height: 320px;
+}
+
+#placeTC {
+  font-size:1em;
 }

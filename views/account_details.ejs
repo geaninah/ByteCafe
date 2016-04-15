@@ -87,6 +87,16 @@
           var stockUser = $(a.currentTarget).data("user-stock");
           var adminUser = $(a.currentTarget).data("user-admin");
 
+          if($('#changeEmailField').hasClass('updatedField')) {
+            $('#changeEmailField').removeClass('updatedField');
+          }
+          if($('#changeNameField').hasClass('updatedField')) {
+            $('#changeNameField').removeClass('updatedField');
+          }
+          if($('#changePassField').hasClass('updatedField')) {
+            $('#changePassField').removeClass('updatedField');
+          }
+
           console.log(idOfUser);
           
           var data = {
@@ -120,7 +130,7 @@
 
   <!-- FOOTER OF PAGE -->
 
-  <% include footer.ejs %>
+  <% include bottom_nav.ejs %>
 
   <!-- END OF FOOTER OF PAGE -->
 
