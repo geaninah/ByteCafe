@@ -46,6 +46,22 @@ function sendMailValidation(email, subject) {
     });
 }
 
+var debug_sendMailValidation = function(email, subject) {
+    var payload = {
+        to: email,
+        from: 'noreply@bytecafe.com',
+        subject: subject,
+        text: "Thank you for signing up! Here is the link to validate your email: http://bytecafe.azurewebsites.net/verify-email/" + email.hashCode()
+    };
+
+  console.log("");
+  console.log("To:  " + payload.to);
+  console.log("Sub: " + payload.subject);
+  if(!emailIsValid(email)) console.log("== ADDRESS NOT VALID ==");
+  console.log(payload.text);
+  console.log("");
+}
+
 var real_sendmessage_function = function(email, subject, message) {
     if (!emailIsValid(email)) {
         return 'Email address "' + email + '" is not valid.';
@@ -65,7 +81,10 @@ var debug_sendmessage_function = function(email, subject, message) {
   console.log("");
 }
 
-if (config.debug_email) module.exports = { sendMessage: debug_sendmessage_function };
-else                    module.exports = { sendMessage: real_sendmessage_function, 
-                                           sendMailValidation: sendMailValidation
-                                          };
+if (config.debug_email)
+  module.exports = {
+    sendMessage: debug_sendmessage_function,
+    sendMailValidation: debug_sendMailValidation
+  };
+else
+ module.exports = { sendMessage: real_sendmessage_function, sendMailValidation: sendMailValidation };

@@ -305,7 +305,16 @@
   font-size: 1.3em;
 }
 
-#addNewUser, #addNewProduct, #addNewCategory, #delCategory, #addNewCafe{
+.indexImage {
+  max-height: 550px;
+  max-width: 500px;
+}
+
+.indexContainer {
+  background: #d9531e;
+}
+
+#addNewUser, #addNewProduct, #addNewCategory, #delCategory, #addNewCafe, #backToBasket, #backToOrder{
   width: 220px;
   border-radius: 10px;
   background-color: #aa764e;

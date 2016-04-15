@@ -7,7 +7,6 @@ var crypto         = require('crypto');
 var async          = require('async');
 var nodemailer     = require('nodemailer');
 var secure         = require("secure-random");
-var emailService   = require("../services/email-service");
 
 // load config
 var config         = require("../config/config");
@@ -24,7 +23,7 @@ String.prototype.hashCode = function() {
 };
 
 // export our passport configuration function
-module.exports = function(passport, database) {
+module.exports = function(passport, database, email_service) {
 
   // turn a user into an id
   passport.serializeUser(function(user, done) {
@@ -76,7 +75,7 @@ module.exports = function(passport, database) {
               user_token: email.hashCode
             };
             // complete user registration & log in
-            emailService.sendMailValidation(email, 'Please confirm e-mail'); 
+            email_service.sendMailValidation(email, 'Please confirm e-mail'); 
             return done(null, false, "Please check your email");
           });
         });

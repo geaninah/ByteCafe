@@ -40,7 +40,7 @@ death(function(signal, err) {
 });
 
 // setup passport
-require("./app/passport")(passport, database);
+require("./app/passport")(passport, database, email);
 
 
 
