@@ -5,9 +5,14 @@
   <% include head_incl.ejs %>
   <title>INDEX</title>
 
+  <style>
+  body {
+    background: #d9531e;
+  }
+  </style>
 </head>
 <body>
-  
+
 
   <!-- main content -->
   <div class="container-fluid indexContainer">
@@ -21,7 +26,7 @@
 
 
       <!-- right hand login forms -->
-      <div class="col-sm-4">
+      <div id="right-hand-container" class="col-sm-4">
         <!-- login / signup form switch buttons -->
         <div class="col-sm-12 btn-group" id="reg-type">
           <button type="button" class="btn btn-primary" id="loginTab">Log In</button>
@@ -37,6 +42,7 @@
 
           // setup signup/login buttons
           $('#loginTab').click(function () {
+            $('#right-hand-container').css("margin-top", "130px");
             $('#signUpForm').hide();
             $('#loginForm').show();
             $('#loginTab').addClass('focus');
@@ -45,6 +51,7 @@
 
           // setup signup/login buttons
           $('#signupTab').click(function () {
+            $('#right-hand-container').css("margin-top", "50px");
             $('#loginForm').hide();
             $('#signUpForm').show();
             $('#signupTab').addClass('focus');
@@ -82,7 +89,7 @@
               <input type="password" class="form-control" id="passwordField" name="password" placeholder="Password">
               <span class="glyphicon form-control-feedback glyphicon-lock"></span>
             </div>
-            <div>
+            <div style="text-align: center">
               <label><input type="checkbox" name="remember_me_box"> Remember me</label>
             </div>
             <div class="col-sm-12" id="FP_link">
