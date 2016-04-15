@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <% include head_incl.ejs %>
+  <title> Product Manager </title>
+</head>
+<body>
+
+  <% include nav_bar.ejs %>
+
+  <div class="container">
+    <div class="row">
+
+      <div class="jumbotron">
+        <div class="row">
+          <div class="col-sm-12">
+          <div class="col-sm-4 formrow">
+          <button type="button" class="btn btn-default" data-toggle="modal" data-target="#newCafeInfo" id="addNewCafe">Add new cafe</button></div>
+        <br>
+        <div class="row">
+
+           <!-- TABLE FOR TAB 1 - ID IS CONTENT_1 -->
+          <div class="table-responsive" id="content_1">
+            <table id="cafe-table" class="table table-bordered table-hover">
+              <thead>
+                <tr>
+                  <th>Cafe ID</th>
+                  <th>Name</th>
+                  <th>Description</th>
+                  <th>Map Location</th>
+                  <th>Address</th>
+                  <th>Opening Times</th>
+                  <th>Image URL</th>
+                  <th>Availability</th>
+                </tr>
+              </thead>
+              <tbody>
+
+              <% cafes.forEach(function (cafe) { %>
+
+
+                <tr data-cafe-id="<%= cafe.cafe_id %>" data-cafe-name="<%= cafe.cafe_name %>" data-cafe-description="<%= cafe.cafe_description %>" data-cafe-map-loc="<%= cafe.cafe_map_location %>" data-cafe-address="<%= cafe.cafe_address %>" data-cafe-opening="<%= cafe.cafe_opening_times %>" data-cafe-image="<%= cafe.cafe_image_url %>" data-cafe-available="<%= cafe.cafe_avaliable %>">
+
+                  <td><%= cafe.cafe_id %></td>
+                  <td><%= cafe.cafe_name %></td>
+                  <td><%= cafe.cafe_description %></td>
+                  <td><%= cafe.cafe_map_location %></td>
+                  <td><%= cafe.cafe_address %></td>
+                  <td><%= cafe.cafe_opening_times %></td>
+                  <td><%= cafe.cafe_image_url %></td>
+                  <td><%= cafe.cafe_avaliable %></td>
+
+                </tr>
+
+              <% }); %>
+
+              </tbody>
+            </table>
+          </div>
+          <!-- END OF TABLE -->
+
+
+          <!-- Modal -->
+          <div class="modal fade" id="updateCafeInfo" tabindex="-1" role="dialog" aria-labelledby="UpdateCafeInformation">
+            <div class="modal-dialog" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <button type="button" class="close" id="closeModal" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                  <h4 class="modal-title">Update Cafe Details</h4>
+                </div>
+                <div class="modal-body">
+                  <div class="row">
+                    <div class="col-sm-12">
+                      <form role="form" class="form" id="updateCafeInfoForm" method="post" action="/updateCafeInformation">
+                        <div class="form-group has-feedback">
+                          <div class="row">
+                            <div class="col-sm-3 formrow"><label for="cafeIDField">Cafe ID</label></div>
+                            <div class="col-sm-9"><textarea readonly class="form-control" id="cafeIDField" rows="1" placeholder="ID"></textarea></div>
+                          </div>
+                        </div>
+                        <div class="form-group has-feedback">
+                          <div class="row">
+                            <div class="col-sm-3 formrow"><label for="cafeNameField">Name</label></div>
+                            <div class="col-sm-9"><textarea class="form-control" id="cafeNameField" rows="1" placeholder="Name"></textarea></div>
+                          </div>
+                        </div>
+                        <div class="form-group has-feedback">
+                          <div class="row">
+                            <div class="col-sm-3 formrow"><label for="cafeDescriptionField">Description</label></div>
+                            <div class="col-sm-9"><textarea class="form-control" id="cafeDescriptionField" rows="3" placeholder="Description"></textarea></div>
+                          </div>
+                        </div>
+                        <div class="form-group has-feedback">
+                          <div class="row">
+                            <div class="col-sm-3 formrow"><label for="cafeMapLocField">Map Location</label></div>
+                            <div class="col-sm-9"><textarea class="form-control" id="cafeMapLocField" rows="1" placeholder="Map Location"></textarea></div>
+                          </div>
+                        </div>
+                        <div class="form-group has-feedback">
+                          <div class="row">
+                            <div class="col-sm-3 formrow"><label for="cafeAddressField">Address</label></div>
+                            <div class="col-sm-9"><textarea class="form-control" id="cafeAddressField" rows="3" placeholder="Address"></textarea></div>
+                          </div>
+                        </div>
+                        <div class="form-group has-feedback">
+                          <div class="row">
+                            <div class="col-sm-3 formrow"><label for="cafeOpenField">Opening Times</label></div>
+                            <div class="col-sm-9"><textarea class="form-control" id="cafeOpenField" rows="1" placeholder="Opening Times"></textarea></div>
+                          </div>
+                        </div>
+                        <div class="form-group has-feedback">
+                          <div class="row">
+                            <div class="col-sm-3 formrow"><label for="cafeImageURLField">Image URL</label></div>
+                            <div class="col-sm-9"><textarea class="form-control" id="cafeImageURLField" rows="1" placeholder="Image URL"></textarea></div>
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="col-sm-12">
+                            <div class="col-sm-3 formrow"><label for="cafeAvailableToggle"> Availability </label></div>
+                            <div class="col-sm-9"><input type="checkbox" id="cafeAvailableToggle" checked></div>
+                          </div>
+                        </div>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-primary" data-dismiss="modal" id="submitCafeChanges">Submit changes</button>
+                  <button type="button" class="btn btn-danger" data-dismiss="modal" id="removeCafe">Delete product</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+
+         <!-- Modal -->
+          <div class="modal fade" id="newCafeInfo" tabindex="-1" role="dialog" aria-labelledby="newCafeInformation">
+            <div class="modal-dialog" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <button type="button" class="close" id="closeModal" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                  <h4 class="modal-title">New Cafe Details</h4>
+                </div>
+                <div class="modal-body">
+                  <div class="row">
+                    <div class="col-sm-12">
+                      <form role="form" class="form" id="newCafeInfoForm" method="post" action="/newCafeInformation">
+                        <div class="form-group has-feedback">
+                          <div class="row">
+                            <div class="col-sm-3 formrow"><label for="newCafeIDField">Cafe ID</label></div>
+                            <div class="col-sm-9"><textarea readonly class="form-control" id="newCafeIDField" rows="1" placeholder="ID"></textarea></div>
+                          </div>
+                        </div>
+                        <div class="form-group has-feedback">
+                          <div class="row">
+                            <div class="col-sm-3 formrow"><label for="newCafeNameField">Name</label></div>
+                            <div class="col-sm-9"><textarea class="form-control" id="newCafeNameField" rows="1" placeholder="Name"></textarea></div>
+                          </div>
+                        </div>
+                        <div class="form-group has-feedback">
+                          <div class="row">
+                            <div class="col-sm-3 formrow"><label for="newCafeDescriptionField">Description</label></div>
+                            <div class="col-sm-9"><textarea class="form-control" id="newCafeDescriptionField" rows="3" placeholder="Description"></textarea></div>
+                          </div>
+                        </div>
+                        <div class="form-group has-feedback">
+                          <div class="row">
+                            <div class="col-sm-3 formrow"><label for="newCafeMapLocField">Map Location</label></div>
+                            <div class="col-sm-9"><textarea class="form-control" id="newCafeMapLocField" rows="1" placeholder="Map Location"></textarea></div>
+                          </div>
+                        </div>
+                        <div class="form-group has-feedback">
+                          <div class="row">
+                            <div class="col-sm-3 formrow"><label for="newCafeAddressField">Address</label></div>
+                            <div class="col-sm-9"><textarea class="form-control" id="newCafeAddressField" rows="3" placeholder="Address"></textarea></div>
+                          </div>
+                        </div>
+                        <div class="form-group has-feedback">
+                          <div class="row">
+                            <div class="col-sm-3 formrow"><label for="newCafeOpenField">Opening Times</label></div>
+                            <div class="col-sm-9"><textarea class="form-control" id="newCafeOpenField" rows="1" placeholder="Opening Times"></textarea></div>
+                          </div>
+                        </div>
+                        <div class="form-group has-feedback">
+                          <div class="row">
+                            <div class="col-sm-3 formrow"><label for="newCafeImageURLField">Image URL</label></div>
+                            <div class="col-sm-9"><textarea class="form-control" id="newCafeImageURLField" rows="1" placeholder="Image URL"></textarea></div>
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="col-sm-12">
+                            <div class="col-sm-3 formrow"><label for="newCafeAvailableToggle"> Availability </label></div>
+                            <div class="col-sm-9"><input type="checkbox" id="newCafeAvailableToggle" checked></div>
+                          </div>
+                        </div>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-default" data-dismiss="modal" id="submitNewCafe">Add cafe</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <script>
+
+                $('#cafe-table > tbody > tr').click(function(a) {
+                  // clear the modal handlers
+                  $("#updateCafeInfo").off();
+
+                  $("#updateCafeInfo").on("show.bs.modal", function() {
+                    // get user data from dom
+                    var idOfCafe = $(a.currentTarget).data("cafe-id");
+                    var nameOfCafe = $(a.currentTarget).data("cafe-name");
+                    var descriptionOfCafe = $(a.currentTarget).data("cafe-description");
+                    var mapLocOfCafe = $(a.currentTarget).data("cafe-map-loc");
+                    var addressOfCafe = $(a.currentTarget).data("cafe-address");
+                    var openingOfCafe = $(a.currentTarget).data("cafe-opening");
+                    var imageOfCafe = $(a.currentTarget).data("cafe-image");
+                    var availabilityOfCafe = $(a.currentTarget).data("cafe-available");
+
+                    // fill text boxes
+                    $("#cafeIDField").val(idOfCafe);
+                    $("#cafeNameField").val(nameOfCafe);
+                    $("#cafeDescriptionField").val(descriptionOfCafe);
+                    $("#cafeMapLocField").val(mapLocOfCafe);
+                    $("#cafeAddressField").val(addressOfCafe);
+                    $("#cafeOpenField").val(openingOfCafe);
+                    $("#cafeImageURLField").val(imageOfCafe);
+
+                    // initialize toggles
+                    $("#cafeAvailableToggle").bootstrapSwitch({
+                      'size': 'small',
+                      'labelWidth': '0'});
+
+                    // set toggles
+                    if (availabilityOfCafe ==  1) {
+                      $("#cafeAvailableToggle").bootstrapSwitch('state', true);
+                      $("#cafeAvailableToggle").bootstrapSwitch('offColor', 'success'); }
+                    else {
+                      $("#cafeAvailableToggle").bootstrapSwitch('state', false);
+                      $("#cafeAvailableToggle").bootstrapSwitch('onColor', 'success'); }
+
+                  });
+
+                  $("#updateCafeInfo").modal("show");
+
+                  // colors the fields in green on detected change
+                  $('#cafeNameField').on("input", function () {
+                    $('#cafeNameField').addClass('updatedField');
+                  });
+                  $('#cafeDescriptionField').on("input", function () {
+                    $('#cafeDescriptionField').addClass('updatedField');
+                  });
+                  $('#cafeMapLocField').on("input", function () {
+                    $('#cafeMapLocField').addClass('updatedField');
+                  });
+                  $('#cafeAddressField').on("input", function () {
+                    $('#cafeAddressField').addClass('updatedField');
+                  });
+                  $('#cafeOpenField').on("input", function () {
+                    $('#cafeOpenField').addClass('updatedField');
+                  });
+                  $('#cafeImageURLField').on("input", function () {
+                    $('#cafeImageURLField').addClass('updatedField');
+                  });
+
+                  // removes colors for fields on closing the modal - resets it
+                  $("#updateCafeInfo").on("hidden.bs.modal", function() {
+                    if($('#cafeNameField').hasClass('updatedField')) {
+                      $('#cafeNameField').removeClass('updatedField');
+                    }
+                    if($('#cafeDescriptionField').hasClass('updatedField')) {
+                      $('#cafeDescriptionField').removeClass('updatedField');
+                    }
+                    if($('#cafeMapLocField').hasClass('updatedField')) {
+                      $('#cafeMapLocField').removeClass('updatedField');
+                    }
+                     if($('#cafeAddressField').hasClass('updatedField')) {
+                      $('#cafeAddressField').removeClass('updatedField');
+                    }
+                     if($('#cafeOpenField').hasClass('updatedField')) {
+                      $('#cafeOpenField').removeClass('updatedField');
+                    }
+                    if($('#cafeImageURLField').hasClass('updatedField')) {
+                      $('#cafeImageURLField').removeClass('updatedField');
+                    }
+                    $("#cafeAvailableToggle").bootstrapSwitch('onColor', 'primary');
+                    $("#cafeAvailableToggle").bootstrapSwitch('offColor', 'default');
+                  });
+                });
+
+                $('#submitCafeChanges').click(function () {
+                  var data = {
+                    id: $('#cafeIDField').val(),
+                    name: $('#cafeNameField').val(),
+                    cafeDescription: $('#cafeDescriptionField').val(),
+                    mapLocation: $('#cafeMapLocField').val(),
+                    address: $('#cafeAddressField').val(),
+                    openTimes: $('#cafeOpenField').val(),
+                    imageURL: $('#cafeImageURLField').val(),
+                    if_available: $('#cafeAvailableToggle').bootstrapSwitch('state') == true ?  '1' : '0'
+                  };
+
+                  $.getJSON("/api/admin/cafes/update", data, function(response) {
+                    if(response.status == 1) {
+                      //success
+                      console.log(response.message);
+                    } else {
+                      // fail
+                      console.log(response.message);
+                    }
+                  });
+                });
+
+                $("#newCafeInfo").on("show.bs.modal", function() {
+
+                    // initialize toggles
+                    $("#newCafeAvailableToggle").bootstrapSwitch({
+                      'size': 'small',
+                      'labelWidth': '0'});
+
+                    $("#newCafeAvailableToggle").bootstrapSwitch('state', true);
+                  });
+
+                  $("#newCafeInfo").on("hidden.bs.modal", function() {
+
+                    $("#newCafeAvailableToggle").bootstrapSwitch('state', false);
+                    $("#newCafeIDField").val("");
+                    $("#newCafeNameField").val("");
+                    $("#newCafeDescriptionField").val("");
+                    $("#newCafeMapLocField").val("");
+                    $("#newCafeAddressField").val("");
+                    $("#newCafeOpenField").val("");
+                    $("#newCafeImageURLField").val("");
+
+                  });
+
+                $('#submitNewCafe').click(function () {
+                  var data = {
+                    name: $('#newCafeNameField').val(),
+                    cafeDescription: $('#newCafeDescriptionField').val(),
+                    mapLocation: $('#newCafeMapLocField').val(),
+                    address: $('#newCafeAddressField').val(),
+                    openTimes: $('#newCafeOpenField').val(),
+                    imageURL: $('#newCafeImageURLField').val(),
+                    if_available: $('#newCafeAvailableToggle').bootstrapSwitch('state') == true ?  '1' : '0'
+                  };
+
+                  $.getJSON("/api/admin/cafes/create", data, function(response) {
+                    if(response.status == 1) {
+                      //success
+                      console.log(response.message);
+                    } else {
+                      // fail
+                      console.log(response.message);
+                    }
+                  });
+                });
+
+                $('#removeCafe').click(function () {
+                  var data = {
+                    id: $('#cafeIDField').val()
+                  };
+
+                  $.getJSON("/api/admin/cafes/delete", data, function(response) {
+                    if(response.status == 1) {
+                      //success
+                      console.log(response.message);
+                    } else {
+                      // fail
+                      console.log(response.message);
+                    }
+                  });
+                });
+
+              </script>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <% include footer.ejs %>
+</body>
+</html>

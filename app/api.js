@@ -353,6 +353,52 @@ module.exports = function (database, email) {
             return res.end(JSON.stringify({status: 1, message: "User deleted" }));
           });
         });
+      },
+
+      // update cafe information
+      updateCafe: function(req, res) {
+        res.header("Content-Type", "application/json; charset=utf-8");
+        var params = req.query;
+        if (!params.id || !params.name || !params.cafeDescription || !params.mapLocation || !params.address || !params.openTimes || !params.imageURL || !params.if_available )
+          return res.end(JSON.stringify({status: 0, message: "Invalid input, all fields must be specified" }));
+        if (isNaN(params.id) || isNaN(params.mapLocation) || isNaN(params.if_available))
+          return res.end(JSON.stringify({status: 0, message: "Invalid input, id, mapLocation and if_available must be numbers" }));
+        database.getCafeInfo(params.id, function(err, rows) {
+          if(err) {console.log(err); return res.end(JSON.stringify({status: 0, message: "Server side exception"}));}
+          if(!rows.length) return res.end(JSON.stringify({status: 0, message: "Cafe does not exist"}));
+          database.editCafe(params.name, params.cafeDescription, params.mapLocation, params.address, params.openTimes, params.imageURL, params.if_available, params.id, function(err, rows) {
+            if(err) {console.log(err); return res.end(JSON.stringify({status: 0, message: "Server side exception"}));}
+            return res.end(JSON.stringify({status: 1, message: "Cafe updated" }));
+          });
+        });
+      },
+
+      // create new cafe
+      createCafe: function(req, res) {
+        res.header("Content-Type", "application/json; charset=utf-8");
+        var params = req.query;
+        if (!params.name || !params.cafeDescription || !params.mapLocation || !params.address || !params.openTimes || !params.imageURL || !params.if_available )
+          return res.end(JSON.stringify({status: 0, message: "Invalid input, all fields must be specified" }));
+        if (isNaN(params.mapLocation) || isNaN(params.if_available))
+          return res.end(JSON.stringify({status: 0, message: "Invalid input, mapLocation and if_available must be numbers" }));
+        database.addCafe(params.name, params.cafeDescription, params.mapLocation, params.address, params.openTimes, params.imageURL, params.if_available, function(err, rows) {
+          if(err) {console.log(err); return res.end(JSON.stringify({status: 0, message: "Server side exception"}));}
+          return res.end(JSON.stringify({status: 1, message: "Cafe created" }));
+        });
+      },
+
+      // remove cafe
+      removeCafe: function(req, res) {
+        res.header("Content-Type", "application/json; charset=utf-8");
+        var params = req.query;
+        if (!params.id)
+          return res.end(JSON.stringify({status: 0, message: "Invalid input, id must be specified" }));
+        if (isNaN(params.id))
+          return res.end(JSON.stringify({status: 0, message: "Invalid input, id must be a number" }));
+        database.deleteCafe(params.id, function(err, rows) {
+            if(err) {console.log(err); return res.end(JSON.stringify({status: 0, message: "Server side exception"}));}
+            return res.end(JSON.stringify({status: 1, message: "Cafe deleted" }));
+        });
       }
     },
 

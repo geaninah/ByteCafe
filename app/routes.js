@@ -28,6 +28,9 @@ module.exports = function(app, passport, rememberme, database, email) {
   app.get("/api/productManager/products/update",isLoggedInAPI, api.productManager.assert, api.productManager.updateProduct);
   app.get("/api/admin/user/create",             isLoggedInAPI, api.admin.assert, api.admin.createUser);
   app.get("/api/admin/user/delete",             isLoggedInAPI, api.admin.assert, api.admin.removeUser);
+  app.get("/api/admin/cafes/update",            isLoggedInAPI, api.admin.assert, api.admin.updateCafe);
+  app.get("/api/admin/cafes/delete",            isLoggedInAPI, api.admin.assert, api.admin.removeCafe);
+  app.get("/api/admin/cafes/create",            isLoggedInAPI, api.admin.assert, api.admin.createCafe);
   app.get("/api/productManager/product/create", isLoggedInAPI, api.productManager.assert, api.productManager.createProduct);
   app.get("/api/productManager/product/delete", isLoggedInAPI, api.productManager.assert, api.productManager.removeProduct);
   app.get("/api/productManager/category/create",isLoggedInAPI, api.productManager.assert, api.productManager.createCategory);
@@ -240,6 +243,12 @@ module.exports = function(app, passport, rememberme, database, email) {
           res.render("product_mng.ejs", {categories: categories, products: products, cafes: cafes, user: req.user});
         });
       });
+    });
+  });
+
+  app.get("/cafe_mng", isLoggedIn, function(req, res) {
+    database.getAllCafes(function(err, cafes){
+      res.render("cafe_mng.ejs", {cafes: cafes, user: req.user});
     });
   });
 };

@@ -67,13 +67,13 @@
 
         <% products.forEach(function (product) { %>
         <!-- BOX REFERRING TO A PRODUCT -->
-        <div data-product-id="<%= product.product_id %>" data-category-id="<%= product.product_category_id %>" class="col-sm-6 col-md-4">
+        <div data-product-id="<%= product.product_id %>" data-category-id="<%= product.product_category_id %>" class="col-md-4 col-sm-6 productIMG">
           <a style="display:block" data-toggle="modal" data-target="#productInfo" data-product-description="<%= product.product_description %>" data-product-image-url="<%= product.product_image_url %>" data-product-name="<%= product.product_name %>" data-product-id="<%= product.product_id%>" data-category-id="<%= product.product_category_id%>">
             <div class="thumbnail">
               <div class="caption" id="lessSpace">
               <h3 align="center"><%= product.product_name%></h3>
               </div>
-              <img class="img-rounded" src="<%= product.product_image_url %>" alt="<%= product.product_name %>">
+              <img class="productIMGIMG img-rounded" src="<%= product.product_image_url %>" alt="<%= product.product_name %>">
               <div class="caption">
                 <a class="btn btn-default btn-add-cart" data-product-id="<%= product.product_id%>" role="button">£<%= product.product_price.toFixed(2) %> - Add to Cart &nbsp;&nbsp;<span class="glyphicon glyphicon-shopping-cart" id="buttonIcon" aria-hidden="true"></span></a>
               </div>

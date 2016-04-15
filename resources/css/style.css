@@ -305,10 +305,18 @@
   font-size: 1.3em;
 }
 
-#addNewUser, #addNewProduct, #addNewCategory, #delCategory{
+#addNewUser, #addNewProduct, #addNewCategory, #delCategory, #addNewCafe{
   width: 220px;
   border-radius: 10px;
   background-color: #aa764e;
   color: #fff;
   font-size: 1.3em;
+}
+
+.productIMG {
+  height: 300px;
+}
+
+.productIMGIMG {
+  max-height: 130px;
 }

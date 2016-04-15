@@ -37,6 +37,19 @@ var getCafes = function(callback){
     });
 };
 
+// returns all cafes and info
+var getAllCafes = function(callback){
+    var query = 'select * from cafes';
+
+    connection.query(query, function(err, cafes){
+        if(err){
+            console.log(err);
+        } else {
+            callback(err, cafes);
+        }
+    });
+};
+
 // returns all the users and all their information
 var getAllUsers = function(callback){
     var query = 'select * from users';
@@ -52,15 +65,15 @@ var getAllUsers = function(callback){
 
 // returns information about a cafe
 // TODO: refine query getCafeInfo
-var getCafeInfo = function(callback, cafeId){
-    var query = 'select * from cafes where cafe_id = ?';
+var getCafeInfo = function(cafeId, callback){
+    var query = 'select * from cafes where cafes.cafe_id = ?';
     var parameters = [cafeId];
     connection.query(query, parameters, function(err, cafes){
         if(err)           return callback(err, null);
-        if(!cafes.length) return callback(null, null);
-        else              return callback(null, cafes[0]);
+        else              return callback(null, cafes);
     });
 };
+
 
 // returns the products at a cafe
 var getProducts = function(callback, cafeId){
@@ -310,9 +323,9 @@ var getAllProducts = function(callback){
     });
 }
 
-var addCafe = function(name, description, mapLocation, address, openingTimes, imageUrl, available, callback){
+var addCafe = function(name, description, mapLocation, address, openingTimes, imageUrl, avaliable, callback){
     var query = 'insert into cafes (cafe_name, cafe_description, cafe_map_location, cafe_address, cafe_opening_times, cafe_image_url, cafe_avaliable) values (?, ?, ?, ?, ?, ?, ?)';
-    var parameters = [name, description, mapLocation, address, openingTimes, imageUrl, available];
+    var parameters = [name, description, mapLocation, address, openingTimes, imageUrl, avaliable];
     connection.query(query, parameters, function(err, result){
         if(err){
             console.log(err);
@@ -336,9 +349,9 @@ var deleteCafe = function(cafe_id, callback){
     });
 };
 
-var editCafe = function(name, description, mapLocation, address, openingTimes, imageUrl, available, cafeId, callback){
+var editCafe = function(name, description, mapLocation, address, openingTimes, imageUrl, avaliable, cafeId, callback){
     var query = 'update cafes set cafe_name = ?, cafe_description = ?, cafe_map_location = ?, cafe_address = ?, cafe_opening_times = ?, cafe_image_url = ?, cafe_avaliable = ? where cafe_id = ?';
-    var parameters = [name, description, mapLocation, address, openingTimes, imageUrl, available, cafeId];
+    var parameters = [name, description, mapLocation, address, openingTimes, imageUrl, avaliable, cafeId];
     connection.query(query, parameters, function(err, result){
         if(err){
             console.log(err);
@@ -767,6 +780,7 @@ var verifyEmail = function(token, callback){
 module.exports = {
     end: end,
     getCafes: getCafes,
+    getAllCafes: getAllCafes,
     getAllUsers: getAllUsers,
     getCafeInfo: getCafeInfo,
     getProducts: getProducts,
