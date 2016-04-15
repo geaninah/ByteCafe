@@ -196,7 +196,7 @@
 	pointer-events: none;
 }
 
-#cancel-order, #wait-order, #finish-order {
+#cancel-order, #complete-order, #finish-order {
 	width: 100%;
 }
 

@@ -103,8 +103,8 @@ var getProductInfo = function(productId, callback){
 
 // gets the queued orders at a cafe
 // TODO: refine query getOrders
-var getOrders = function(callback, cafeId){
-    var query = 'select * from orders where order_cafe_id = ?';
+var getOrders = function(cafeId, callback){
+    var query = 'select * from orders, order_items, products, users where order_item_cafe_id = ? and order_id = order_item_order_id and order_user_id = user_id and product_id = order_item_product_id order by order_date desc';
     var parameters = [cafeId];
 
     connection.query(query, parameters, function(err, orders){
@@ -466,6 +466,19 @@ var editOrder = function(cafeId, userId, orderStatus, paypal, cost, orderId, cal
     });
 };
 
+var editOrderStatus = function(status, orderId, callback){
+    var query = 'update orders set order_status = ? where order_id = ?';
+    var parameters = [status, orderId];
+    connection.query(query, parameters, function(err, result){
+        if(err){
+            console.log(err);
+        }
+        else{
+            callback(err, result);
+        }
+    });
+};
+
 var getOrder = function(orderId, callback){
     var query = 'select * from orders where order_id = ?';
     var parameters = [orderId];
@@ -814,6 +827,7 @@ module.exports = {
     addOrder: addOrder,
     deleteOrder: deleteOrder,
     editOrder: editOrder,
+    editOrderStatus: editOrderStatus,
     getOrder: getOrder,
     addCategory: addCategory,
     deleteCategory: deleteCategory,

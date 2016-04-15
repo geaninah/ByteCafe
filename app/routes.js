@@ -15,12 +15,15 @@ module.exports = function(app, passport, rememberme, database, email) {
   app.get("/api/cafes",                         isLoggedInAPI, api.getCafes);
   app.get("/api/cafes/:cafeId",                 isLoggedInAPI, api.getCafeInfo);
   app.get("/api/cafes/:cafeId/products",        isLoggedInAPI, api.getProducts);
-  app.get("/api/cafes/:cafeId/orders",          isLoggedInAPI, api.getOrders);
   app.get("/api/products/:productId",           isLoggedInAPI, api.getProductInfo);
   app.get("/api/products/:productId/nutrition", isLoggedInAPI, api.getNutrition);
   app.get("/api/orders/:orderId",               isLoggedInAPI, api.getOrderInfo);
   app.get("/api/basket",                        isLoggedInAPI, api.getBasket);
   app.get("/api/basket/edit",                   isLoggedInAPI, api.editBasket);
+
+  // pos calls
+  app.get("/api/cafes/:cafeId/orders",          isLoggedInAPI, api.pos.assert, api.pos.getOrders);
+  app.get("/api/orders/:orderId/update",        isLoggedInAPI, api.pos.assert, api.pos.updateOrder);
 
   // admin panel calls
   app.get("/api/account/update",                isLoggedInAPI, api.updateAccount);
@@ -88,11 +91,12 @@ module.exports = function(app, passport, rememberme, database, email) {
   // serve cafe products
   app.get("/cafe/:cafeId", isLoggedIn, function(req, res) {
     database.getCafes(function(err, cafes) {
-      database.getCafeInfo(function(err, infos) {
+      database.getCafeInfo(req.params.cafeId, function(err, infos) {
         database.getProducts(function(err, products) {
           database.getAllCategories(function(err, categories) {
+            console.log(infos);
             res.render("cafe.ejs", {
-              cafe: infos,
+              cafe: infos[0],
               cafes: cafes,
               user: req.user,
               categories: categories,
@@ -100,7 +104,7 @@ module.exports = function(app, passport, rememberme, database, email) {
             });
           });
         }, req.params.cafeId);
-      }, req.params.cafeId);
+      });
     });
   });
 
@@ -214,9 +218,9 @@ module.exports = function(app, passport, rememberme, database, email) {
   });
 
   // route for point of sale interface
-  app.get("/pos", isLoggedIn, function(req, res) {
+  app.get("/pos/:cafeId", isLoggedIn, function(req, res) {
     database.getCafes(function(err, cafes) {
-      res.render("POS_side.ejs", {cafes: cafes, user: req.user});
+      res.render("POS_side.ejs", {cafes: cafes, user: req.user, cafe_id: req.params.cafeId});
     });
   });
 

@@ -3,9 +3,30 @@
   <head>
 
     <% include head_incl.ejs %>
-    <title> POS SIDE </title>
+    <title>CafNetArea Pos</title></title>
 
   </head>
+  <style>
+  .order-selected {
+    border: 5px solid #aa764e !important;
+  }
+  .Pending {
+    border: 1px solid #a56262;
+    background-color: #48D148;
+    font-weight: bold;
+  }
+  .Prepared {
+    border: 1px solid #a56262;
+    font-weight: bold;
+    background-color: orange;
+  }
+  .Finished {
+    background-color: #CEEECE;
+  }
+  .Cancelled {
+    background-color: #EEC1C1;
+  }
+  </style>
   <body>
 
   <% include nav_bar.ejs %>
@@ -15,13 +36,9 @@
 
       <!-- STATIC SIDEBAR WITH DIFFERENT CATEGORIES -->
       <div class="col-sm-3">
-          <div class="list-group">
-            <a href="#" class="list-group-item">user email 1</a>
-            <a href="#" class="list-group-item active">user email 2</a>
-            <a href="#" class="list-group-item">user email 3</a>
-            <a href="#" class="list-group-item list-group-item-warning">user email 4</a>
-            <a href="#" class="list-group-item">user email 5</a>
-          </div>
+        <div class="list-group" id="order-list">
+          <a role="button" style="text-align: center;" href="#" class="list-group-item"><i class="fa fa-circle-o-notch fa-spin"></i></a>
+        </div>
       </div>
 
       <!-- DYNAMIC CONTENT OF THE PAGE - STOCK ITEMS-->
@@ -30,33 +47,101 @@
         <div class="row">
 
           <div class="jumbotron">
-            <h2>user email 2</h2>
-            <p>time of order: 14:57</p>
+            <!-- order information -->
+            <p id="user-email"></h2>
+            <p id="order-date"></p>
 
-              <div class="row">
-              <!-- List group -->
-                <ul class="list-group">
-                  <li class="list-group-item">Coffee</li>
-                  <li class="list-group-item">Sandwich</li>
-                  <li class="list-group-item">Juice</li>
-                </ul>
-              </div>
-
+            <!-- buttons to alter order state -->
             <div class="row">
               <div class="col-sm-4">
-                <input class="btn btn-danger" type="submit" value="CANCEL" id="cancel-order">
+                <input class="btn btn-danger disabled" type="submit" value="CANCEL" id="cancel-order">
               </div>
               <div class="col-sm-4">
-                <input class="btn btn-warning" type="submit" value="COMPLETE" id="wait-order">
+                <input class="btn btn-warning disabled" type="submit" value="COMPLETE" id="complete-order">
               </div>
               <div class="col-sm-4">
-                <input class="btn btn-success" type="submit" value="FINISH" id="finish-order">
+                <input class="btn btn-success disabled" type="submit" value="FINISH" id="finish-order">
               </div>
             </div>
-          </div>
+            <br />
 
+            <!-- container for item contents -->
+            <div class="row">
+              <ul id="order-items" class="list-group">
+              </ul>
+            </div>
+          </div>
         </div>
       </div>
+
+      <script>
+      var order_strings = {
+        0: "Finished",
+        1: "Prepared",
+        2: "Pending",
+        3: "Cancelled",
+      }
+      var orders = {};
+      var selected_order = null;
+
+      var update_data = function() {
+        $.getJSON("/api/cafes/<%= cafe_id %>/orders", function(response) {
+          orders = response;
+          update_dom();
+        });
+      };
+
+      var update_dom = function() {
+        console.log(orders);
+        $("#order-list").html("");
+        orders.forEach(function(order) {
+          var button = $('<a role="button" style="text-align: center;" class="list-group-item">');
+          if (selected_order == order.order_id) button.addClass("order-selected");
+          button.addClass(order_strings[order.order_status]).html(order.items.length + " - " + order.user_name);
+          button.click(function() {
+            $("#cancel-order").removeClass("disabled").off("click");
+            $("#complete-order").removeClass("disabled").off("click");
+            $("#finish-order").removeClass("disabled").off("click");
+            selected_order = order.order_id;
+            $(this).addClass("order-selected").siblings().removeClass("order-selected");
+            $("#user-email").html(order.user_email);
+            $("#order-date").html(order.order_date);
+            $("#order-items").html("");
+            order.items.forEach(function(item){
+              var item_html = $('<div class="row">');
+              item_html.append($('<div class="col-sm-1">').html(item.amount));
+              item_html.append($('<div class="col-sm-11">').html(item.product_name));
+              $("#order-items").append($('<li class="list-group-item">').html(item_html));
+            });
+            $("#cancel-order").click(function(){
+              $("#cancel-order").addClass("disabled").html('<i class="fa fa-circle-o-notch fa-spin">');
+              $.getJSON("/api/orders/" + order.order_id + "/update", {status: 3}, function(){
+                $("#cancel-order").removeClass("disabled").html("CANCEL");
+                update_data();
+              });
+            });
+            $("#complete-order").click(function(){
+              $("#complete-order").addClass("disabled").html('<i class="fa fa-circle-o-notch fa-spin">');
+              $.getJSON("/api/orders/" + order.order_id + "/update", {status: 1}, function(){
+                $("#complete-order").removeClass("disabled").html("CANCEL");
+                update_data();
+              });
+            });
+            $("#finish-order").click(function(){
+              $("#finish-order").addClass("disabled").html('<i class="fa fa-circle-o-notch fa-spin">');
+              $.getJSON("/api/orders/" + order.order_id + "/update", {status: 0}, function(){
+                $("#finish-order").removeClass("disabled").html("CANCEL");
+                update_data();
+              });
+            });
+          });
+          $("#order-list").prepend(button)
+        })
+      };
+      update_data();
+      window.setInterval(update_data, 5000);
+
+      </script>
 
 
     </div>

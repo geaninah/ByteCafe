@@ -185,15 +185,7 @@ module.exports = function (database, email) {
       });
     },
 
-    // returns queued orders at a cafe
-    getOrders: function(req, res) {
-      database.getOrders(function(err, orders){
-        if(!err){
-          res.header("Content-Type", "application/json; charset=utf-8");
-          res.end(JSON.stringify(orders));
-        }
-      }, req.params.cafeId);
-    },
+
 
     // returns information about a specific order
     getOrderInfo: function(req, res) {
@@ -509,6 +501,58 @@ module.exports = function (database, email) {
           return res.end(JSON.stringify({status: 1, message: "User updated" }));
         });
       });
+    },
+    pos: {
+      // used to ensure the user is allowed to access these calls
+      assert: function(req, res, next) {
+        if (req.user.user_permission_pos != 1) {
+          res.status(403);
+          res.end(JSON.stringify({status: 0, message: "Permission denied"}));
+        } else {
+          return next();
+        }
+      },
+      // returns queued orders at a cafe
+      getOrders: function(req, res) {
+        database.getOrders(req.params.cafeId, function(err, orders) {
+          if(!err){
+            var order_data = {};
+            orders.forEach(function(order) {
+              order_data[order.order_id] = order_data[order.order_id] || {
+                order_id: order.order_id,
+                order_date: order.order_date.toUTCString(),
+                order_status: order.order_status,
+                order_cost: order.order_cost,
+                user_id: order.user_id,
+                user_name: order.user_name || order.user_email.split("@")[0],
+                user_email: order.user_email,
+                items: []
+              };
+              order_data[order.order_id].items.push({
+                product_id: order.product_id,
+                product_name: order.product_name,
+                product_image_url: order.product_image_url,
+                amount: order.order_item_amount
+              });
+            });
+            var final_order_data = [];
+            Object.keys(order_data).forEach(function(key){
+              final_order_data.push(order_data[key]);
+            });
+            res.header("Content-Type", "application/json; charset=utf-8");
+            res.end(JSON.stringify(final_order_data));
+          }
+        });
+      },
+      // update an orders status
+      updateOrder: function(req, res) {
+        res.header("Content-Type", "application/json; charset=utf-8");
+        var order_id = req.params.orderId;
+        if(!req.query.status) return res.end(JSON.stringify({status: 0, message: "Invalid arguments"}));
+        database.editOrderStatus(req.query.status, order_id, function(err, rows) {
+          res.end(JSON.stringify({status: 1, message: "Order updated"}));
+        });
+      }
     }
   }
 };
