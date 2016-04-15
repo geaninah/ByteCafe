@@ -45,9 +45,9 @@
               };
 
               $("#orderStatus").click(function(e) {
-                $("#orderStatus").html("<i class=\"fa fa-circle-o-notch fa-spin\"></i>");
+                $("#orderStatus").html("<i class=\"fa fa-circle-o-notch fa-spin\"></i>").css("text-align", "center");
                 $.getJSON("/api/orders/<%= order.order_id %>", function(response) {
-                  $("#orderStatus").html("Order status: " + order_strings[response.order_status]);
+                  $("#orderStatus").html("Order status: " + order_strings[response.order_status]).css("text-align", "");
                 });
               });
               </script>
@@ -61,10 +61,10 @@
               <% order_items[cafe_id].forEach(function(bask_item) { %>
               <li class="list-group-item">
                 <div class="row">
-                  <div class="col-sm-8"><%= bask_item.name %></div>
-                  <div class="col-sm-1"><%= bask_item.amount %></div>
-                  <div class="col-sm-1">£<%= bask_item.price.toFixed(2) %></div>
-                  <div class="col-sm-1">£<%= (bask_item.amount * bask_item.price).toFixed(2) %></div>
+                  <div class="col-xs-7"><%= bask_item.name %></div>
+                  <div class="col-xs-1"><%= bask_item.amount %></div>
+                  <div class="col-xs-2">£<%= bask_item.price.toFixed(2) %></div>
+                  <div class="col-xs-1">£<%= (bask_item.amount * bask_item.price).toFixed(2) %></div>
                 </div>
               </li>
               <% }); %>
@@ -72,12 +72,12 @@
             <% }); %>
         </div>
         <div class="row">
-          <div class="col-sm-7">
+          <div class="col-xs-7">
           </div>
-          <div class="col-sm-2" align="right">
+          <div class="col-xs-2" align="right">
             <p> Total price: </p>
           </div>
-          <div class="col-sm-3">
+          <div class="col-xs-3">
             <p><strong>£<%= order.order_cost.toFixed(2) %></strong></p>
           </div>
         </div>
