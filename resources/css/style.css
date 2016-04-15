@@ -355,3 +355,10 @@
 #placeTC {
   font-size:1em;
 }
+
+@media (max-width: 767px) {
+  #header img {
+    max-width: 60px;
+    height: auto;
+  }
+}
